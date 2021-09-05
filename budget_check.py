@@ -1,4 +1,4 @@
-def budget_check(remaining_budget, options, Nc, Nc_, n_subrem):
+def budget_check(options, function_calls, remaining_nodes):
     """
     :param total_budget: Maximum Number of Evaluations (T)
     :param initialization_budget: Budget for sampling points
@@ -10,20 +10,26 @@ def budget_check(remaining_budget, options, Nc, Nc_, n_subrem):
     :return: Total Budget remaining after the iteration
     """
 
-    total_budget = remaining_budget
+    max_budget = options.max_budget
+    budget_exhausted = function_calls
+    budget_available = max_budget - budget_exhausted
+
     initialization_budget = options.initialization_budget
     number_of_BO_samples = options.number_of_BO_samples[0]
     continued_sampling_budget = options.continued_sampling_budget
-    budget_for_iter =  max((Nc*n_subrem)-(number_of_BO_samples+initialization_budget),0)+max((Nc_)-(continued_sampling_budget),0)
-    print("Budget for iteration = {}".format(budget_for_iter))
-    if total_budget >= budget_for_iter:
-        
-        ##Execute BO, Quatile Estimations,Classification
-        total_budget = total_budget - (number_of_BO_samples+initialization_budget)
-        ##Allocate continued_sampling_budget to the classified subregions(+,-) propotionally
-        total_budget = total_budget - (continued_sampling_budget)
+
+    remaining_regions_count = len(remaining_nodes)*options.test_function_dimension
+
+    # classified_region_count = len(classified_nodes)
+    budget_for_iter =  remaining_regions_count * (initialization_budget + number_of_BO_samples) + continued_sampling_budget
+    print("*******************************************************************")
+    print("Budget Available = {}".format(budget_available))
+    print("Estimated Budget for iteration = {}".format(budget_for_iter))
+    if budget_available >= budget_for_iter:
+        print("Going ahead with normal flow")
+        print("*******************************************************************")
         return True
     else:
-        ##Allocate subregions proprotionally to the volume
-        ##Evaluate the function at the sampled point and update the Gaussian processes
+        print("breaking loop and going for the last act")
+        print("*******************************************************************")
         return False
