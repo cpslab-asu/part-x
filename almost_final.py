@@ -53,6 +53,8 @@ if region_class == 'r' or region_class == 'r+' or region_class == 'r-':
     remaining_regions_list.append(id)
 elif region_class == '+' or region_class == '-':
     classified_regions_list.append(id)
+elif region_class == 'u':
+    queueLeaves_u.append(id)
 
 
 
@@ -91,7 +93,7 @@ while budget_check(options, test_function.callCount, remaining_regions_list):
                 classified_regions_list.append(id)
             elif region_class == 'u':
                 queueLeaves_u.append(id)
-    # print(remaining_regions_list)
+    
 ############################################################################################################
 # classified Region reclassification
     if len(classified_regions_list) != 0:
@@ -132,7 +134,9 @@ while budget_check(options, test_function.callCount, remaining_regions_list):
                         queueLeaves_u.append(parent)
 
             # print("check here {}".format(test_function.callCount))
-        # print(classified_regions_list)
+    print("Classified regions = {}".format(len(classified_regions_list)))
+    print("Unclassified regions = {}".format(len(remaining_regions_list)))
+    print("Unidentified regions = {}".format(len(queueLeaves_u)))
         
 
 ############################################################################################################
@@ -208,6 +212,9 @@ print("******************")
 # plt.ion()
 
 print("*******************************************************")
+points_in_list = []
+node_id = []
+points_class = []
 for x,i in enumerate(leaves):
     # fig = plt.figure()
     x_1, y_1, x_2,y_2,x_3,y_3,x_4,y_4 = plotRegion(i.data.region_support)
@@ -215,8 +222,9 @@ for x,i in enumerate(leaves):
     plt.plot(x_2,y_2)
     plt.plot(x_3,y_3)
     plt.plot(x_4,y_4)
-
-    
+    points_class.append(i.data.region_class)
+    points_in_list.append((i.data.samples_in).shape[1])
+    node_id.append(i.identifier)
     if i.data.region_class == "+":
         plt.plot(i.data.samples_in[0,:,0], i.data.samples_in[0,:,1], 'g.')
     elif i.data.region_class == "-":
@@ -225,3 +233,11 @@ plt.title("Rosenbrock Function Budget = {} -- BO Grid {} x {}".format(options.ma
 plt.show()
 
 print("final budget check = {}".format(test_function.callCount))
+
+print(points_in_list)
+print("*****************************")
+print(node_id)
+print("*****************************")
+print(points_class)
+print("*****************************")
+print(sum(points_in_list))

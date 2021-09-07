@@ -14,6 +14,7 @@ class partx_node(object):
         self.region_class = region_class
         self.samples_in = samples_in
         self.samples_out = samples_out
+        self.bo_samples = []
         
     def samples_management_unclassified(self, options):
         number_of_samples_present = self.samples_out.shape[1]
@@ -34,9 +35,11 @@ class partx_node(object):
             new_samples_out = self.samples_out
         # print(new_samples_in)
         # print(new_samples_out)
-        final_new_samples_in, final_new_samples_out = bayesian_optimization(new_samples_in, new_samples_out, options.number_of_BO_samples, options.test_function_dimension, self.region_support, options.number_of_samples_gen_GP)
+        final_new_samples_in, final_new_samples_out, bo_samples = bayesian_optimization(new_samples_in, new_samples_out, options.number_of_BO_samples, options.test_function_dimension, self.region_support, options.number_of_samples_gen_GP)
         self.samples_in = final_new_samples_in[0]
         self.samples_out = final_new_samples_out[0]
+        self.bo_samples = bo_samples[0]
+        # self.bo_samples = []
         return final_new_samples_in, final_new_samples_out
     
     def samples_management_classified(self, options, number_of_samples):
@@ -49,7 +52,7 @@ class partx_node(object):
 
     def calculate_and_classifiy(self, options):
         
-        self.lower_bound, self.upper_bound = estimate_quantiles(self.samples_in, self.samples_out, self.region_support, options.test_function_dimension, options.alpha,options.R,options.M)
+        self.lower_bound, self.upper_bound = estimate_quantiles(self.samples_in, self.samples_out, self.bo_samples, self.region_support, options.test_function_dimension, options.alpha,options.R,options.M)
         
         self.region_class = classification(self.region_support, self.region_class, options.min_volume, self.lower_bound, self.upper_bound)
         return self.region_class

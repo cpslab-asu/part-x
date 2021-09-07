@@ -37,7 +37,7 @@ def calculateQuantile(y_pred, sigma_st, alpha):
 
 
 #########################################MC-Estimates and CONFIDENCE INTERVAL###############################
-def mc_Step(samples_in, samples_out, region_support, regionDimensions, alpha, R, M): #3
+def mc_Step(samples_in, samples_out, samples_from_bo, region_support, regionDimensions, alpha, R, M): #3
     """Function to run the MCStep algorithm in the paper. The idea is to take the exisitng samples
     and create a GP. Use this GP to predict the mean and the std_dev and calculate quantiles for
     region classification.
@@ -47,6 +47,7 @@ def mc_Step(samples_in, samples_out, region_support, regionDimensions, alpha, R,
     Args:
         samples_in (np.array): The exisitng input samples (points).
         samples_out (np.array): The output of the samples_in point (robustness values).
+        samples_from_bo (list): Array of RxM points from BO. empty if region is already classified
         region_support (np.array): The bounds of a region.
         regionDimensions (int): Dimensionality of the region.
         alpha (list): List of confidence interval values (alpha) at which the quantiles are to calculated
@@ -60,6 +61,7 @@ def mc_Step(samples_in, samples_out, region_support, regionDimensions, alpha, R,
     
     minQuantile = np.zeros((R, len(alpha)))
     maxQuantile = np.zeros((R, len(alpha)))
+    do_uniform_sampling = samples_from_bo == []
     for iterate in range(R):
         X = samples_in[0]
         Y = np.transpose(samples_out)
@@ -67,12 +69,13 @@ def mc_Step(samples_in, samples_out, region_support, regionDimensions, alpha, R,
         model.fit(X, Y)
 
 
-        # for eval_per_iter in range(M):
-        samples = uniformSampling(M, region_support, regionDimensions)
-            # print(samples[0].shape)
-            # Refer to example from
+        if do_uniform_sampling:
+            samples = uniformSampling(M, region_support, regionDimensions)
+        else:
+            
+            samples = samples_from_bo[iterate]
+        
             # https://scikit-learn.org/stable/auto_examples/gaussian_process/plot_gpr_noisy_targets.html#sphx-glr-auto-examples-gaussian-process-plot-gpr-noisy-targets-py
-        # print(samples[0])
         y_pred, sigma_st = model.predict(samples[0], return_std=True)
         for alpha_iter in range(len(alpha)):
             minq, maxq = calculateQuantile(y_pred, sigma_st, alpha[alpha_iter])
@@ -108,12 +111,13 @@ def estimateMC(lower_quantile: list, upper_quantile: list):
 
 
 
-def estimate_quantiles(samples_in: np.array, samples_out: np.array, region_support:np.array, regionDimensions:int, alpha:list, R:int, M:int)->list:
+def estimate_quantiles(samples_in: np.array, samples_out: np.array, samples_from_bo:list, region_support:np.array, regionDimensions:int, alpha:list, R:int, M:int)->list:
     """Main driver function for estimating the lower and upper bounds from samples
 
     Args:
         samples_in (np.array): The exisitng input samples (points).
         samples_out (np.array): The output of the samples_in point (robustness values).
+        samples_from_bo (list): Array of RxM points from BO. empty if region is already classified
         region_support (np.array): The bounds of a region.
         regionDimensions (int): Dimensionality of the region.
         alpha (list): List of confidence interval values (alpha) at which the quantiles are to calculated
@@ -123,7 +127,7 @@ def estimate_quantiles(samples_in: np.array, samples_out: np.array, region_suppo
     Returns:
         list: lower and upper bounds
     """
-    lower_quantile, upper_quantile = mc_Step(samples_in, samples_out, region_support, regionDimensions, alpha, R, M)
+    lower_quantile, upper_quantile = mc_Step(samples_in, samples_out, samples_from_bo, region_support, regionDimensions, alpha, R, M)
     mcEstimate_minimum_mean, mcEstimate_minimum_variance, mcEstimate_maximum_mean, mcEstimate_maximum_variance = estimateMC(lower_quantile, upper_quantile)
     # print(mcEstimate_minimum_mean)
     # print(mcEstimate_minimum_variance)

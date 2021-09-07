@@ -69,6 +69,7 @@ def opt_acquisition(X: np.array, y: np.array, model, num_points_to_construct_gp:
 
     Returns:
         [np.array]: the new sample points by BO
+        [np.array]: random uniform samples for reuse later
     """
 
     region_support = np.array(region_support.reshape((1,region_support.shape[0],region_support.shape[1])))
@@ -76,7 +77,7 @@ def opt_acquisition(X: np.array, y: np.array, model, num_points_to_construct_gp:
     scores = acquisition(X, sbo, model)
     ix = argmax(scores)
     min_bo = sbo[0,ix,:]
-    return np.array(min_bo)
+    return np.array(min_bo), sbo
     
 
 
@@ -102,27 +103,30 @@ def bayesian_optimization(samples_in: np.array, corresponding_robustness: np.arr
                         M = number of regions
                         N = number_of_samples
                         O = test_function_dimension (Dimensionality of the test function) )
+        list: corresponding robustness
+        list: samples from acquisition function for reuse in classification
     """
 
     samples_in_new = []
-    s_bo_all = []
+    acquisition_fun_final_samples = []
     corresponding_robustness_new = []
     for i in range(samples_in.shape[0]):
         X = samples_in[i,:,:]
         Y = corresponding_robustness[i,:].reshape((corresponding_robustness.shape[1],1))
-
+        acquisition_fun_sample_region = []
         for j in range(number_of_samples_to_generate[i]):
             model = GaussianProcessRegressor()
             model.fit(X, Y)
             
-            min_bo = opt_acquisition(X, Y, model, num_points_to_construct_gp, test_function_dimension, region_support[i,:,:])
+            min_bo, samples_acquistion = opt_acquisition(X, Y, model, num_points_to_construct_gp, test_function_dimension, region_support[i,:,:])
             actual = calculate_robustness(np.array(min_bo))
+            acquisition_fun_sample_region.append(samples_acquistion)
             X = np.vstack((X, np.array(min_bo)))
             Y = np.vstack((Y, np.array(actual)))
-
+        acquisition_fun_final_samples.append(acquisition_fun_sample_region)
         samples_in_new.append(np.expand_dims(X, axis = 0))
         corresponding_robustness_new.append(np.transpose(Y))
-    return samples_in_new, corresponding_robustness_new
+    return samples_in_new, corresponding_robustness_new, acquisition_fun_final_samples
 
 
 # region_support = np.array([[[-1, 1], [-1, 1]], [[-0.5,0.5],[-0.5,0.2]]])
@@ -133,11 +137,14 @@ def bayesian_optimization(samples_in: np.array, corresponding_robustness: np.arr
 # y = calculate_robustness(x)
 
 
-# x_new, y_new = bayesian_optimization(x, y, [10,20], test_function_dimension, region_support, 10)
-# print(x.shape)
-# print(y.shape)
-# print(x_new[0].shape)
-# print(y_new[0].shape)
-# print(x_new[1].shape)
-# print(y_new[1].shape)
-# print(test_function.callCount)
+# x_new, y_new, s = bayesian_optimization(x, y, [10,20], test_function_dimension, region_support, 10)
+# # print(x.shape)
+# # print(y.shape)
+# # print(x_new[0].shape)
+# # print(y_new[0].shape)
+# # print(x_new[1].shape)
+# # print(y_new[1].shape)
+# # print(test_function.callCount)
+# print(s[0][0])
+# print("*********************")
+# print(s[0][1])
