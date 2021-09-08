@@ -71,8 +71,7 @@ def mc_Step(samples_in, samples_out, samples_from_bo, region_support, regionDime
 
         if do_uniform_sampling:
             samples = uniformSampling(M, region_support, regionDimensions)
-        else:
-            
+        else: 
             samples = samples_from_bo[iterate]
         
             # https://scikit-learn.org/stable/auto_examples/gaussian_process/plot_gpr_noisy_targets.html#sphx-glr-auto-examples-gaussian-process-plot-gpr-noisy-targets-py

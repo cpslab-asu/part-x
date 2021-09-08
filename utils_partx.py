@@ -146,6 +146,7 @@ def testPointInSubRegion(regionSamples, regionBounds, subRegionBounds):
             plt.plot(subregionPoints[0,:,0], subregionPoints[0,:,1], listStyle_marker[i])
     plt.show()
 
+
 def assign_budgets(vol_probablity_distribution, continued_sampling_budget):
 
     cumu_sum = np.cumsum(np.insert(vol_probablity_distribution, 0,0))

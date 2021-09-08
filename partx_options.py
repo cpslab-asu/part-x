@@ -4,7 +4,7 @@ class partx_options:
     def __init__(self, initial_region_support, branching_factor, test_function_dimension,
                 number_of_BO_samples, number_of_samples_gen_GP, alpha, M, R, 
                 delta, uniform_partitioning, initialization_budget, max_budget, 
-                continued_sampling_budget):
+                continued_sampling_budget, nugget_mean, nugget_std_dev):
                 
         self.initial_region_support = initial_region_support
         self.test_function_dimension = test_function_dimension
@@ -20,3 +20,5 @@ class partx_options:
         self.number_of_BO_samples = number_of_BO_samples
         self.continued_sampling_budget = continued_sampling_budget
         self.branching_factor = branching_factor
+        self.nugget_mean = nugget_mean
+        self.nugget_std_dev = nugget_std_dev

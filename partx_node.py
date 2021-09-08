@@ -38,8 +38,8 @@ class partx_node(object):
         final_new_samples_in, final_new_samples_out, bo_samples = bayesian_optimization(new_samples_in, new_samples_out, options.number_of_BO_samples, options.test_function_dimension, self.region_support, options.number_of_samples_gen_GP)
         self.samples_in = final_new_samples_in[0]
         self.samples_out = final_new_samples_out[0]
-        self.bo_samples = bo_samples[0]
-        # self.bo_samples = []
+        # self.bo_samples = bo_samples[0]
+        self.bo_samples = []
         return final_new_samples_in, final_new_samples_out
     
     def samples_management_classified(self, options, number_of_samples):

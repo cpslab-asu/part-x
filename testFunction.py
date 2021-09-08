@@ -9,8 +9,8 @@ class callCounter:
 
 @callCounter
 def test_function(X):  ##CHANGE
-    # return (X[0]**2 + X[1] - 11)**2 + (X[1]**2 + X[0] - 7)**2 - 40
-    # return (100 * (X[1] - X[0] **2)**2 + ((1 - X[0])**2)) - 20
+    # return (X[0]**2 + X[1] - 11)**2 + (X[1]**2 + X[0] - 7)**2 - 40 # Himmelblau's
+    # return (100 * (X[1] - X[0] **2)**2 + ((1 - X[0])**2)) - 20 # Rosenbrock
     return (1 + (X[0] + X[1] + 1) ** 2 * (
                 19 - 14 * X[0] + 3 * X[0] ** 2 - 14 * X[1] + 6 * X[0] * X[1] + 3 * X[1] ** 2)) * (
                        30 + (2 * X[0] - 3 * X[1]) ** 2 * (
