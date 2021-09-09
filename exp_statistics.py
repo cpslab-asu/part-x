@@ -7,6 +7,7 @@ from classification import calculate_volume
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sampling import uniformSampling
 from scipy import stats
+from calculate_robustness import calculate_robustness
 
 def load_tree(tree_name):
     f = open(tree_name, "rb")
@@ -31,8 +32,7 @@ def falsification_volume(ftree, options):
     volumes = calculate_volume(region_supports)
     return np.sum(volumes)
 
-
-def falsification_volume_using_gp(ftree, options, quantiles_at):
+def falsification_volume_using_gp(ftree, options, quantiles_at, exp_name):
     leaves = ftree.leaves()
     region_supports = []
     falsification_volumes = []
@@ -48,49 +48,81 @@ def falsification_volume_using_gp(ftree, options, quantiles_at):
             samples = uniformSampling(options.M, node_data.region_support, options.test_function_dimension)
             y_pred, sigma_st = model.predict(samples[0], return_std=True)
             quantile_values_m = []
-            for x in range(M):
-                
-                quantiles_values = [(stats.norm.ppf(quantile,y_pred[x],sigma_st[x]))[0] for quantile in quantiles_at]
-                quantile_values_m.append(quantiles_values)
+            for x in range(options.M):
+                quantiles_values_alp = []
+                for alp in quantiles_at:
+                    
+                    quantiles_values = (stats.norm.ppf(alp,y_pred[x][0],sigma_st[x]))
+                    print(quantiles_values)
+                    quantiles_values_alp.append(quantiles_values)
+                quantile_values_m.append(quantiles_values_alp)
             quantile_values_r.extend(quantile_values_m)
-        # print(quantile_values_r)
         falsified_volume_region = ((np.array(quantile_values_r) < 0).sum(axis=0) / (options.R*options.M)) * calculate_volume(node_data.region_support)
-        # print("******************************")
-        # print(falsified_regions)
-        # print("****************************************************************")
         falsification_volumes.append(falsified_volume_region)
         print("{} of {} done".format(iterate, len(leaves)))
+    print(np.sum(np.array(falsification_volumes),axis=0))
     return np.array(falsification_volumes)
 
-
-# Options initialization
-test_function_dimension = 2
-delta = 0.001
-alpha = [0.95]
-region_support = np.array([[[-1., 1.], [-1., 1.]]])
-
-initialization_budget = 10
-max_budget = 5000
-number_of_BO_samples = [10]
-number_of_samples_gen_GP = 100
-continued_sampling_budget = 100
-branching_factor = 2
-nugget_mean = 0
-nugget_std_dev = 0.001
-
-R = number_of_BO_samples[0]
-M = number_of_samples_gen_GP
-
+def get_true_fv(number_of_samples, options):
+    samples = uniformSampling(number_of_samples, options.initial_region_support, options.test_function_dimension)
+    y = calculate_robustness(samples)
+    print(calculate_volume(options.initial_region_support))
+    print(np.sum(np.array(y <= 0)))
+    print(number_of_samples)
+    return (np.sum(np.array(y <= 0)) / (number_of_samples)) * calculate_volume(options.initial_region_support)
 
 function_name = "Goldstein_Price"
-exp_name = function_name + "_1"
-
-options = partx_options(region_support, branching_factor, test_function_dimension, 
-                        number_of_BO_samples, number_of_samples_gen_GP, alpha, M, R, 
-                        delta, True, initialization_budget, max_budget, 
-                        continued_sampling_budget, nugget_mean, nugget_std_dev)
-
+exp_name = function_name + "_3"
+f = open(exp_name+"_options.pkl", "rb")
+options = pickle.load(f)
+f.close()
 
 ftree = load_tree(exp_name+".pkl")
-v = falsification_volume_using_gp(ftree, options, [0.5,0.9, 0.95, 0.99])
-
+print(vars(options))
+# leaves = ftree.leaves()
+# for x,i in enumerate(leaves):
+#     # fig = plt.figure()
+#     x_1, y_1, x_2,y_2,x_3,y_3,x_4,y_4 = plotRegion(i.data.region_support)
+#     plt.plot(x_1,y_1)
+#     plt.plot(x_2,y_2)
+#     plt.plot(x_3,y_3)
+#     plt.plot(x_4,y_4)
+    # leaves = ftree.leaves()
+# for x,i in enumerate(leaves):
+#     # fig = plt.figure()
+#     x_1, y_1, x_2,y_2,x_3,y_3,x_4,y_4 = plotRegion(i.data.region_support)
+#     plt.plot(x_1,y_1)
+#     plt.plot(x_2,y_2)
+#     plt.plot(x_3,y_3)
+#     plt.plot(x_4,y_4)
+    
+#     if i.data.region_class == "+":
+#         plt.plot(i.data.samples_in[0,:,0], i.data.samples_in[0,:,1], 'g.')
+#     elif i.data.region_class == "-":
+#         plt.plot(i.data.samples_in[0,:,0], i.data.samples_in[0,:,1], 'r.')
+# # plt.title("{} Function Budget = {} -- BO Grid {} x {}".format(function_name, options.max_budget, number_of_BO_samples[0], number_of_samples_gen_GP))
+# plt.show()
+#     if i.data.region_class == "+":
+#         plt.plot(i.data.samples_in[0,:,0], i.data.samples_in[0,:,1], 'g.')
+#     elif i.data.region_class == "-":
+#         plt.plot(i.data.samples_in[0,:,0], i.data.samples_in[0,:,1], 'r.')
+# # plt.title("{} Function Budget = {} -- BO Grid {} x {}".format(function_name, options.max_budget, number_of_BO_samples[0], number_of_samples_gen_GP))
+# plt.show()
+# volume_gp = falsification_volume_using_gp(ftree, options, [0.5,0.9, 0.95, 0.99], exp_name)
+# print("****************")
+volume = falsification_volume(ftree, options)
+f = open(exp_name+"_falsification_volume_gp.pkl", "rb")
+volume_gp = pickle.load(f)
+f.close()
+print("****************")
+x = (np.sum(np.array(volume_gp),axis = 0))
+true_fv = get_true_fv(10000, options)
+print("{}\t{}\t{}\t{}\t{}\t{}".format(true_fv[0], x[0],x[1],x[2],x[3],volume))
+# import matplotlib.pyplot as plt
+# for iterate,i in enumerate(y[0]):
+#     print(iterate)
+#     if i <= 0:
+#         plt.plot(x[0,iterate,0], x[0,iterate,1], 'r.')
+#     else:
+#         plt.plot(x[0,iterate,0], x[0,iterate,1], 'g.')
+# plt.show()
