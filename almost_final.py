@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from budget_check import budget_check
 from treelib import Tree
 from calIntegral import calculate_mc_integral
+from utils_partx import plotRegion
 """"
 # add nugget effect to MC_integral_function
 # nugget is absolute of normal distributio with mean 0 and var 0.001
@@ -16,6 +17,9 @@ from calIntegral import calculate_mc_integral
 # Ensemble part
 """
 
+
+function_name = "Goldstein_Price"
+exp_name = function_name + "_1"
 
 
 # Options initialization
@@ -25,13 +29,13 @@ alpha = [0.95]
 region_support = np.array([[[-1., 1.], [-1., 1.]]])
 
 initialization_budget = 10
-max_budget = 3000
+max_budget = 5000
 number_of_BO_samples = [10]
 number_of_samples_gen_GP = 100
 continued_sampling_budget = 100
 branching_factor = 2
 nugget_mean = 0
-nugget_std_dev = 0.01
+nugget_std_dev = 0.001
 
 R = number_of_BO_samples[0]
 M = number_of_samples_gen_GP
@@ -247,20 +251,21 @@ print("Budget available = {}".format(budget_available))
 print("**********************************************")
 print("**********************************************")
 
-
-from utils_partx import plotRegion
-ftree.show()
-
 import pickle
-f = open("tree.pkl", "wb")
+f = open(exp_name + ".pkl", "wb")
 pickle.dump(ftree,f)
+f.close()
+
+f = open(exp_name + "_options.pkl", "wb")
+pickle.dump(options,f)
+f.close()
 
 leaves = ftree.leaves()
-print("number of leaves= {}".format(len(leaves)))
-print("******************")
-# plt.ion()
+# print("number of leaves= {}".format(len(leaves)))
+# print("******************")
+# # plt.ion()
 
-print("*******************************************************")
+# print("*******************************************************")
 points_in_list = []
 node_id = []
 points_class = []
@@ -278,15 +283,15 @@ for x,i in enumerate(leaves):
         plt.plot(i.data.samples_in[0,:,0], i.data.samples_in[0,:,1], 'g.')
     elif i.data.region_class == "-":
         plt.plot(i.data.samples_in[0,:,0], i.data.samples_in[0,:,1], 'r.')
-plt.title("Goldsteing Price Function Budget = {} -- BO Grid {} x {}".format(options.max_budget, number_of_BO_samples[0], number_of_samples_gen_GP))
-plt.show()
+plt.title("{} Function Budget = {} -- BO Grid {} x {}".format(function_name, options.max_budget, number_of_BO_samples[0], number_of_samples_gen_GP))
+plt.savefig(exp_name+".png")
 
-print("final budget check = {}".format(test_function.callCount))
+# print("final budget check = {}".format(test_function.callCount))
 
-print(points_in_list)
-print("*****************************")
-print(node_id)
-print("*****************************")
-print(points_class)
-print("*****************************")
-print(sum(points_in_list))
+# print(points_in_list)
+# print("*****************************")
+# print(node_id)
+# print("*****************************")
+# print(points_class)
+# print("*****************************")
+# print(sum(points_in_list))

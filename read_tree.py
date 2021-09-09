@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import pickle
-f = open("tree.pkl", "rb")
+
+function_name = "Goldstein_Price"
+exp_name = function_name + "_1"
+f = open(exp_name + ".pkl", "rb")
 ftree = pickle.load(f)
 
 from utils_partx import plotRegion
