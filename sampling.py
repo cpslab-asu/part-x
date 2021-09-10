@@ -5,7 +5,7 @@ from testFunction import test_function
 from calculate_robustness import calculate_robustness
 
 
-def uniformSampling(number_of_samples: int, region_support: np.array, test_function_dimension: int) -> np.array:
+def uniformSampling(number_of_samples: int, region_support: np.array, test_function_dimension: int, rng) -> np.array:
     """Sample *number_of_samples* points within the *region_support* which has a dimension as mentioned below.
 
     Args:
@@ -31,7 +31,7 @@ def uniformSampling(number_of_samples: int, region_support: np.array, test_funct
 
     raw_samples = np.apply_along_axis(
             lambda bounds: 
-                np.random.uniform(bounds[0], bounds[1], number_of_samples), 
+                rng.uniform(bounds[0], bounds[1], number_of_samples), 
             2, region_support)
 
     samples = []

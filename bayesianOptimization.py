@@ -5,7 +5,7 @@ from warnings import catch_warnings
 from warnings import simplefilter
 from numpy import argmax
 from scipy.stats import norm
-
+from pathos.multiprocessing import ProcessingPool as Pool
 from calculate_robustness import calculate_robustness
 from sampling import uniformSampling
 from testFunction import test_function
@@ -52,7 +52,7 @@ def acquisition(X: np.array, Xsamples: np.array, model):
 
 
 
-def opt_acquisition(X: np.array, y: np.array, model, num_points_to_construct_gp:int ,test_function_dimension:int, region_support: np.array) -> np.array:
+def opt_acquisition(X: np.array, y: np.array, model, num_points_to_construct_gp:int ,test_function_dimension:int, region_support: np.array, rng) -> np.array:
     """Get the sample points
 
     Args:
@@ -73,7 +73,7 @@ def opt_acquisition(X: np.array, y: np.array, model, num_points_to_construct_gp:
     """
 
     region_support = np.array(region_support.reshape((1,region_support.shape[0],region_support.shape[1])))
-    sbo = uniformSampling(num_points_to_construct_gp, region_support, test_function_dimension)
+    sbo = uniformSampling(num_points_to_construct_gp, region_support, test_function_dimension, rng)
     scores = acquisition(X, sbo, model)
     ix = argmax(scores)
     min_bo = sbo[0,ix,:]
@@ -82,7 +82,7 @@ def opt_acquisition(X: np.array, y: np.array, model, num_points_to_construct_gp:
 
 
 
-def bayesian_optimization(samples_in: np.array, corresponding_robustness: np.array, number_of_samples_to_generate: list, test_function_dimension:int, region_support:list, num_points_to_construct_gp=100) -> list:
+def bayesian_optimization(samples_in: np.array, corresponding_robustness: np.array, number_of_samples_to_generate: list, test_function_dimension:int, region_support:list, num_points_to_construct_gp, rng) -> list:
     """Sample using Bayesian Optimization
     https://machinelearningmastery.com/what-is-bayesian-optimization/
 
@@ -118,7 +118,7 @@ def bayesian_optimization(samples_in: np.array, corresponding_robustness: np.arr
             model = GaussianProcessRegressor()
             model.fit(X, Y)
             
-            min_bo, samples_acquistion = opt_acquisition(X, Y, model, num_points_to_construct_gp, test_function_dimension, region_support[i,:,:])
+            min_bo, samples_acquistion = opt_acquisition(X, Y, model, num_points_to_construct_gp, test_function_dimension, region_support[i,:,:], rng)
             actual = calculate_robustness(np.array(min_bo))
             acquisition_fun_sample_region.append(samples_acquistion)
             X = np.vstack((X, np.array(min_bo)))
@@ -126,25 +126,47 @@ def bayesian_optimization(samples_in: np.array, corresponding_robustness: np.arr
         acquisition_fun_final_samples.append(acquisition_fun_sample_region)
         samples_in_new.append(np.expand_dims(X, axis = 0))
         corresponding_robustness_new.append(np.transpose(Y))
+        
     return samples_in_new, corresponding_robustness_new, acquisition_fun_final_samples
 
 
-# region_support = np.array([[[-1, 1], [-1, 1]], [[-0.5,0.5],[-0.5,0.2]]])
+# rng = np.random.default_rng(seed)
+# region_support = np.array([[[-1, 1], [-1, 1]]])
 # test_function_dimension = 2
 # number_of_samples = 20
 
-# x = uniformSampling(number_of_samples, region_support, test_function_dimension)
+# x = uniformSampling(number_of_samples, region_support, test_function_dimension, rng)
 # y = calculate_robustness(x)
 
+# x_new, y_new, s = bayesian_optimization(x, y, [10], test_function_dimension, region_support, 10, rng)
+# return x_new, y_new,s
 
-# x_new, y_new, s = bayesian_optimization(x, y, [10,20], test_function_dimension, region_support, 10)
-# # print(x.shape)
-# # print(y.shape)
-# # print(x_new[0].shape)
-# # print(y_new[0].shape)
-# # print(x_new[1].shape)
-# # print(y_new[1].shape)
-# # print(test_function.callCount)
-# print(s[0][0])
-# print("*********************")
-# print(s[0][1])
+
+
+# def run_par(data):
+#     num_samples, BO_samples, s = data
+#     rng = np.random.default_rng(s)
+#     region_support = np.array([[[-1, 1], [-1, 1]]])
+#     test_function_dimension = 2
+#     number_of_samples = num_samples
+
+#     x = uniformSampling(number_of_samples, region_support, test_function_dimension, rng)
+#     y = calculate_robustness(x)
+
+#     x_new, y_new, s = bayesian_optimization(x, y, BO_samples, test_function_dimension, region_support, 10, rng)
+#     print(test_function.callCount)
+#     return [test_function.callCount]
+
+# inputs = []
+# start_seed = 1
+# a = [10,10,10,10]
+# b = [[20],[21],[19],[22]]
+# for q in range(4):
+#     s =  start_seed + q
+#     data = (a[q], b[q], s)
+#     inputs.append(data)
+
+# pool = Pool()
+# results = list(pool.map(run_par, inputs))
+
+# print(results)

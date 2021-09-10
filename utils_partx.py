@@ -27,7 +27,7 @@ def plotRegion(regionBounds):
     return x_coordinates_1, y_coordinates_1, x_coordinates_2, y_coordinates_2, x_coordinates_3, y_coordinates_3, x_coordinates_4, y_coordinates_4
 
 
-def branch_new_region_support(region_support: np.array, direction_of_branching:int, uniform: bool,branching_factor:int) -> np.array:
+def branch_new_region_support(region_support: np.array, direction_of_branching:int, uniform: bool,branching_factor:int, rng) -> np.array:
     """Generate new region supports based on direction of branching and the branching factor. For now, the
     partitioning of space is uniformly done.
 
@@ -49,7 +49,7 @@ def branch_new_region_support(region_support: np.array, direction_of_branching:i
     if uniform:
         split_array = region_support[0][direction_of_branching][0] + (np.arange(branching_factor+1)/branching_factor) * dim_length
     else: 
-        split_array = region_support[0][direction_of_branching][0] + np.sort(np.insert(np.random.uniform(0,1,branching_factor-1), 0,[0,1])) * dim_length
+        split_array = region_support[0][direction_of_branching][0] + np.sort(np.insert(rng.uniform(0,1,branching_factor-1), 0,[0,1])) * dim_length
         # print(split_array)
     
     
@@ -147,11 +147,11 @@ def testPointInSubRegion(regionSamples, regionBounds, subRegionBounds):
     plt.show()
 
 
-def assign_budgets(vol_probablity_distribution, continued_sampling_budget):
+def assign_budgets(vol_probablity_distribution, continued_sampling_budget, rng):
 
     cumu_sum = np.cumsum(np.insert(vol_probablity_distribution, 0,0))
     # print("Cumulative_sum list = {}".format(cumu_sum))
-    random_numbers = np.random.uniform(0.0,1.0, continued_sampling_budget)
+    random_numbers = rng.uniform(0.0,1.0, continued_sampling_budget)
     n_cont_budget_distribution = []
     for iterate in range(len(cumu_sum)-1):
         bool_array = np.logical_and(random_numbers > cumu_sum[iterate], random_numbers <= cumu_sum[iterate+1])
