@@ -23,7 +23,7 @@ def budget_check(options, function_calls, remaining_nodes):
     # classified_region_count = len(classified_nodes)
     budget_for_iter =  remaining_regions_count * (initialization_budget + number_of_BO_samples) + continued_sampling_budget
     # print("*******************************************************************")
-    print("Budget Available = {}".format(budget_available))
+    # print("Budget Available = {}".format(budget_available))
     # print("Estimated Budget for iteration = {}".format(budget_for_iter))
     if budget_available >= budget_for_iter:
         # print("Going ahead with normal flow")

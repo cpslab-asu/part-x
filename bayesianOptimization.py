@@ -8,7 +8,7 @@ from scipy.stats import norm
 from pathos.multiprocessing import ProcessingPool as Pool
 from calculate_robustness import calculate_robustness
 from sampling import uniformSampling
-from testFunction import test_function
+# from testFunction import test_function
 
 def surrogate(model, X:np.array):
     """Surrogate Model function
@@ -82,7 +82,7 @@ def opt_acquisition(X: np.array, y: np.array, model, num_points_to_construct_gp:
 
 
 
-def bayesian_optimization(samples_in: np.array, corresponding_robustness: np.array, number_of_samples_to_generate: list, test_function_dimension:int, region_support:list, num_points_to_construct_gp, rng) -> list:
+def bayesian_optimization(test_function, samples_in: np.array, corresponding_robustness: np.array, number_of_samples_to_generate: list, test_function_dimension:int, region_support:list, num_points_to_construct_gp, rng) -> list:
     """Sample using Bayesian Optimization
     https://machinelearningmastery.com/what-is-bayesian-optimization/
 
@@ -119,7 +119,7 @@ def bayesian_optimization(samples_in: np.array, corresponding_robustness: np.arr
             model.fit(X, Y)
             
             min_bo, samples_acquistion = opt_acquisition(X, Y, model, num_points_to_construct_gp, test_function_dimension, region_support[i,:,:], rng)
-            actual = calculate_robustness(np.array(min_bo))
+            actual = calculate_robustness(np.array(min_bo), test_function)
             acquisition_fun_sample_region.append(samples_acquistion)
             X = np.vstack((X, np.array(min_bo)))
             Y = np.vstack((Y, np.array(actual)))

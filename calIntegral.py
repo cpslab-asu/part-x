@@ -2,7 +2,7 @@ from sklearn.gaussian_process import GaussianProcessRegressor
 from sampling import uniformSampling
 import numpy as np
 from scipy import stats
-from calculate_robustness import calculate_robustness
+# from calculate_robustness import calculate_robustness
 
 
 def calculate_mc_integral(samples_in, samples_out, region_support, region_dimension, R, M, rng):

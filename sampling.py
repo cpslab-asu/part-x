@@ -1,7 +1,7 @@
 
 import numpy as np
 from numpy.core.fromnumeric import shape
-from testFunction import test_function
+# from testFunction import test_function
 from calculate_robustness import calculate_robustness
 
 
@@ -45,17 +45,45 @@ def uniformSampling(number_of_samples: int, region_support: np.array, test_funct
 # region_support = np.array([[[-1, 1], [-1, 1]]])
 # test_function_dimension = 2
 # number_of_samples = 3
+# seed = 1000
+# rng = np.random.default_rng(seed)
+# samples_in = uniformSampling(number_of_samples, region_support, test_function_dimension, rng)
+# print(samples_in.shape)
+# callCount = 0
 
-# samples_in = uniformSampling(number_of_samples, region_support, test_function_dimension)
-# # print(samples_in.shape)
+# from testFunction import callCounter
+
+# def test_function(X):  ##CHANGE
+#     # return (X[0]**2 + X[1] - 11)**2 + (X[1]**2 + X[0] - 7)**2 - 40 # Himmelblau's
+#     # return (100 * (X[1] - X[0] **2)**2 + ((1 - X[0])**2)) - 20 # Rosenbrock
+#     return (1 + (X[0] + X[1] + 1) ** 2 * (
+#                 19 - 14 * X[0] + 3 * X[0] ** 2 - 14 * X[1] + 6 * X[0] * X[1] + 3 * X[1] ** 2)) * (
+#                        30 + (2 * X[0] - 3 * X[1]) ** 2 * (
+#                            18 - 32 * X[0] + 12 * X[0] ** 2 + 48 * X[1] - 36 * X[0] * X[1] + 27 * X[1] ** 2)) - 50
+
+# ca = callCounter(test_function)
 
 
+# samples_out = calculate_robustness(samples_in, ca)
 
-# samples_out = calculate_robustness(samples_in)
 # print(samples_in.shape)
 # b = np.array([[[]]])
 # print(b.shape)
 # a = np.append(samples_in,samples_in, axis=1)
 
 # print(a.shape)
-# print(test_function.callCount)
+# print(ca.callCount)
+
+
+# # ca = callCounter(test_function)
+
+
+# samples_out = calculate_robustness(samples_in, ca)
+
+# print(samples_in.shape)
+# b = np.array([[[]]])
+# print(b.shape)
+# a = np.append(samples_in,samples_in, axis=1)
+
+# print(a.shape)
+# print(ca.callCount)

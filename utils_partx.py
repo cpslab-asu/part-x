@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from sampling import uniformSampling
 import numpy as np
-from calculate_robustness import calculate_robustness
+# from calculate_robustness import calculate_robustness
 
 def plotRegion(regionBounds):
     x_coordinates_1 = [regionBounds[0][0][0], regionBounds[0][0][0]]

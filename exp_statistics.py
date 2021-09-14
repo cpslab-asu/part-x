@@ -8,7 +8,7 @@ from sklearn.gaussian_process import GaussianProcessRegressor
 from sampling import uniformSampling
 from scipy import stats
 from calculate_robustness import calculate_robustness
-
+from testFunction import callCounter
 def load_tree(tree_name):
     f = open(tree_name, "rb")
     ftree = pickle.load(f)
@@ -32,7 +32,7 @@ def falsification_volume(ftree, options):
     volumes = calculate_volume(region_supports)
     return np.sum(volumes)
 
-def falsification_volume_using_gp(ftree, options, quantiles_at, exp_name):
+def falsification_volume_using_gp(ftree, options, quantiles_at, rng):
     leaves = ftree.leaves()
     region_supports = []
     falsification_volumes = []
@@ -45,7 +45,7 @@ def falsification_volume_using_gp(ftree, options, quantiles_at, exp_name):
         model.fit(X, Y)
         quantile_values_r= []
         for r in range(options.R):
-            samples = uniformSampling(options.M, node_data.region_support, options.test_function_dimension)
+            samples = uniformSampling(options.M, node_data.region_support, options.test_function_dimension, rng)
             y_pred, sigma_st = model.predict(samples[0], return_std=True)
             quantile_values_m = []
             for x in range(options.M):
@@ -53,7 +53,7 @@ def falsification_volume_using_gp(ftree, options, quantiles_at, exp_name):
                 for alp in quantiles_at:
                     
                     quantiles_values = (stats.norm.ppf(alp,y_pred[x][0],sigma_st[x]))
-                    print(quantiles_values)
+                    # print(quantiles_values)
                     quantiles_values_alp.append(quantiles_values)
                 quantile_values_m.append(quantiles_values_alp)
             quantile_values_r.extend(quantile_values_m)
@@ -63,61 +63,86 @@ def falsification_volume_using_gp(ftree, options, quantiles_at, exp_name):
     print(np.sum(np.array(falsification_volumes),axis=0))
     return np.array(falsification_volumes)
 
-def get_true_fv(number_of_samples, options):
-    samples = uniformSampling(number_of_samples, options.initial_region_support, options.test_function_dimension)
-    y = calculate_robustness(samples)
-    print(calculate_volume(options.initial_region_support))
-    print(np.sum(np.array(y <= 0)))
-    print(number_of_samples)
-    return (np.sum(np.array(y <= 0)) / (number_of_samples)) * calculate_volume(options.initial_region_support)
+def get_true_fv(number_of_samples, options, rng, test_function):
+    callCount = callCounter(test_function)
+    samples = uniformSampling(number_of_samples, options.initial_region_support, options.test_function_dimension, rng)
+    y = calculate_robustness(samples, callCount)
+    # print(calculate_volume(options.initial_region_support))
+    # print(np.sum(np.array(y <= 0)))
+    # print(number_of_samples)
+    return (np.sum(np.array(y <= 0)) / (number_of_samples)) * calculate_volume(options.initial_region_support), samples, y
 
-function_name = "Goldstein_Price"
-exp_name = function_name + "_3"
-f = open(exp_name+"_options.pkl", "rb")
+def con_int(x, conf_at):
+    mean, std = x.mean(), x.std(ddof=1)
+    conf_intveral = stats.norm.interval(conf_at, loc=mean, scale=std)
+    return conf_intveral
+
+
+
+def test_function(X):  ##CHANGE
+    # return (X[0]**2 + X[1] - 11)**2 + (X[1]**2 + X[0] - 7)**2 - 40 # Himmelblau's
+    # return (100 * (X[1] - X[0] **2)**2 + ((1 - X[0])**2)) - 20 # Rosenbrock
+    return (1 + (X[0] + X[1] + 1) ** 2 * (
+                19 - 14 * X[0] + 3 * X[0] ** 2 - 14 * X[1] + 6 * X[0] * X[1] + 3 * X[1] ** 2)) * (
+                       30 + (2 * X[0] - 3 * X[1]) ** 2 * (
+                           18 - 32 * X[0] + 12 * X[0] ** 2 + 48 * X[1] - 36 * X[0] * X[1] + 27 * X[1] ** 2)) - 50
+
+
+function_name = "Goldstein_price_2"
+
+# function_name = "Himmelblaus_3"
+# function_name = "Rosenbrock_3"
+
+dir_name = function_name + "/"
+exp_name = dir_name + function_name + "_"
+quantiles_at = [0.5, 0.95, 0.99]
+f = open(exp_name+"options.pkl", "rb")
 options = pickle.load(f)
 f.close()
+start_seed = 5000
 
-ftree = load_tree(exp_name+".pkl")
-print(vars(options))
-# leaves = ftree.leaves()
-# for x,i in enumerate(leaves):
-#     # fig = plt.figure()
-#     x_1, y_1, x_2,y_2,x_3,y_3,x_4,y_4 = plotRegion(i.data.region_support)
-#     plt.plot(x_1,y_1)
-#     plt.plot(x_2,y_2)
-#     plt.plot(x_3,y_3)
-#     plt.plot(x_4,y_4)
-    # leaves = ftree.leaves()
-# for x,i in enumerate(leaves):
-#     # fig = plt.figure()
-#     x_1, y_1, x_2,y_2,x_3,y_3,x_4,y_4 = plotRegion(i.data.region_support)
-#     plt.plot(x_1,y_1)
-#     plt.plot(x_2,y_2)
-#     plt.plot(x_3,y_3)
-#     plt.plot(x_4,y_4)
+for i in range(48,50):
+    rng = np.random.default_rng(start_seed + i)
+    ftree = load_tree(exp_name + str(i) + ".pkl")
+    falsification_volume_arrays = falsification_volume_using_gp(ftree, options, quantiles_at, rng)
     
-#     if i.data.region_class == "+":
-#         plt.plot(i.data.samples_in[0,:,0], i.data.samples_in[0,:,1], 'g.')
-#     elif i.data.region_class == "-":
-#         plt.plot(i.data.samples_in[0,:,0], i.data.samples_in[0,:,1], 'r.')
-# # plt.title("{} Function Budget = {} -- BO Grid {} x {}".format(function_name, options.max_budget, number_of_BO_samples[0], number_of_samples_gen_GP))
-# plt.show()
-#     if i.data.region_class == "+":
-#         plt.plot(i.data.samples_in[0,:,0], i.data.samples_in[0,:,1], 'g.')
-#     elif i.data.region_class == "-":
-#         plt.plot(i.data.samples_in[0,:,0], i.data.samples_in[0,:,1], 'r.')
-# # plt.title("{} Function Budget = {} -- BO Grid {} x {}".format(function_name, options.max_budget, number_of_BO_samples[0], number_of_samples_gen_GP))
-# plt.show()
-# volume_gp = falsification_volume_using_gp(ftree, options, [0.5,0.9, 0.95, 0.99], exp_name)
-# print("****************")
-volume = falsification_volume(ftree, options)
-f = open(exp_name+"_falsification_volume_gp.pkl", "rb")
-volume_gp = pickle.load(f)
-f.close()
-print("****************")
-x = (np.sum(np.array(volume_gp),axis = 0))
-true_fv = get_true_fv(10000, options)
-print("{}\t{}\t{}\t{}\t{}\t{}".format(true_fv[0], x[0],x[1],x[2],x[3],volume))
+    f = open(exp_name + str(i)+ "_fal_val_gp.pkl", "wb")
+    pickle.dump(falsification_volume_arrays,f)
+    f.close()
+
+
+volume_wo_gp_rep = []
+volume_w_gp_rep = []
+
+for i in range(50):
+    f = open(exp_name + str(i)+ "_fal_val_gp.pkl", "rb")
+    arr = pickle.load(f)
+    f.close()
+    volume_w_gp_rep.append(np.sum(np.array(arr),axis = 0))
+    
+
+    ftree = load_tree(exp_name + str(i) + ".pkl")
+    volume_wo_gp_rep.append(falsification_volume(ftree, options))
+
+con_int_wo_gp = con_int(np.array(volume_wo_gp_rep), 0.95)
+con_int_w_gp_50 = con_int(np.array(volume_w_gp_rep)[:,0], 0.95)
+con_int_w_gp_95 = con_int(np.array(volume_w_gp_rep)[:,1], 0.95)
+con_int_w_gp_99 = con_int(np.array(volume_w_gp_rep)[:,2], 0.95)
+
+
+
+start_seed = 10000
+rng = np.random.default_rng(start_seed)
+true_fv, x,y = get_true_fv(10000, options, rng, test_function)
+
+vol_w_gp = np.mean(volume_w_gp_rep, axis =0)
+vol_wo_gp = np.mean(volume_wo_gp_rep)
+
+print("{};{};{};{};{};{};{};{};{};{};{};{};{}".format(true_fv[0], vol_w_gp[0], con_int_w_gp_50[0], con_int_w_gp_50[1], 
+                                            vol_w_gp[1], con_int_w_gp_95[0], con_int_w_gp_95[1],
+                                            vol_w_gp[2], con_int_w_gp_99[0], con_int_w_gp_99[1],
+                                            vol_wo_gp, con_int_wo_gp[0], con_int_wo_gp[1]))
+
 # import matplotlib.pyplot as plt
 # for iterate,i in enumerate(y[0]):
 #     print(iterate)

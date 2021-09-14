@@ -16,14 +16,14 @@ class partx_node(object):
         self.samples_out = samples_out
         self.bo_samples = []
         
-    def samples_management_unclassified(self, options, rng):
+    def samples_management_unclassified(self, options, test_function, rng):
         number_of_samples_present = self.samples_out.shape[1]
         diff_number_of_samples_uniform = options.initialization_budget - number_of_samples_present
 
         if diff_number_of_samples_uniform > 0:
             # number_of_points_to_sample = diff_number_of_samples_uniform
             samples_in_uniform = uniformSampling(diff_number_of_samples_uniform, self.region_support, options.test_function_dimension, rng)
-            samples_out_uniform = calculate_robustness(samples_in_uniform)
+            samples_out_uniform = calculate_robustness(samples_in_uniform, test_function)
             if self.samples_out.shape[1] == 0:
                 new_samples_in = samples_in_uniform
                 new_samples_out = samples_out_uniform
@@ -35,16 +35,16 @@ class partx_node(object):
             new_samples_out = self.samples_out
         # print(new_samples_in)
         # print(new_samples_out)
-        final_new_samples_in, final_new_samples_out, bo_samples = bayesian_optimization(new_samples_in, new_samples_out, options.number_of_BO_samples, options.test_function_dimension, self.region_support, options.number_of_samples_gen_GP, rng)
+        final_new_samples_in, final_new_samples_out, bo_samples = bayesian_optimization(test_function, new_samples_in, new_samples_out, options.number_of_BO_samples, options.test_function_dimension, self.region_support, options.number_of_samples_gen_GP, rng)
         self.samples_in = final_new_samples_in[0]
         self.samples_out = final_new_samples_out[0]
         self.bo_samples = bo_samples[0]
         # self.bo_samples = []
         return final_new_samples_in, final_new_samples_out
     
-    def samples_management_classified(self, options, number_of_samples, rng):
+    def samples_management_classified(self, options, test_function, number_of_samples, rng):
         samples_uniform_in = uniformSampling(number_of_samples, self.region_support, options.test_function_dimension, rng)
-        samples_uniform_out = calculate_robustness(samples_uniform_in)
+        samples_uniform_out = calculate_robustness(samples_uniform_in, test_function)
         self.samples_in = np.concatenate((self.samples_in, samples_uniform_in), axis=1)
         self.samples_out = np.concatenate((self.samples_out, samples_uniform_out), axis=1)
         

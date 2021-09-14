@@ -1,6 +1,6 @@
 from classification import calculate_volume
 from utils_partx import assign_budgets, branch_new_region_support, pointsInSubRegion
-from testFunction import test_function
+
 from partx_node import partx_node
 from partx_options import partx_options
 import numpy as np
@@ -12,8 +12,9 @@ from calIntegral import calculate_mc_integral
 from utils_partx import plotRegion
 from single_replication import run_single_replication
 from pathos.multiprocessing import ProcessingPool as Pool
-
-
+import pickle
+import logging
+# from testFunction import test_function
 """"
 # add nugget effect to MC_integral_function
 # nugget is absolute of normal distributio with mean 0 and var 0.001
@@ -23,8 +24,19 @@ from pathos.multiprocessing import ProcessingPool as Pool
 
 
 
-function_name = "Goldstein_Price"
-exp_name = function_name + "_1"
+
+def test_function(X):  ##CHANGE
+    # return (X[0]**2 + X[1] - 11)**2 + (X[1]**2 + X[0] - 7)**2 - 40 # Himmelblau's
+    # return (100 * (X[1] - X[0] **2)**2 + ((1 - X[0])**2)) - 20 # Rosenbrock
+    return (1 + (X[0] + X[1] + 1) ** 2 * (
+                19 - 14 * X[0] + 3 * X[0] ** 2 - 14 * X[1] + 6 * X[0] * X[1] + 3 * X[1] ** 2)) * (
+                       30 + (2 * X[0] - 3 * X[1]) ** 2 * (
+                           18 - 32 * X[0] + 12 * X[0] ** 2 + 48 * X[1] - 36 * X[0] * X[1] + 27 * X[1] ** 2)) - 50
+
+function_name = "Goldstein_price_3/Goldstein_price"
+# function_name = "Rosenbrock_3/Rosenbrock"
+# function_name = "Himmelblaus_3/Himmelblaus"
+exp_name = function_name + "_3"
 
 
 # Options initialization
@@ -35,8 +47,8 @@ region_support = np.array([[[-1., 1.], [-1., 1.]]])
 
 initialization_budget = 10
 max_budget = 5000
-number_of_BO_samples = [10]
-number_of_samples_gen_GP = 100
+number_of_BO_samples = [20]
+number_of_samples_gen_GP = 500
 continued_sampling_budget = 100
 branching_factor = 2
 nugget_mean = 0
@@ -50,15 +62,23 @@ options = partx_options(region_support, branching_factor, test_function_dimensio
                         delta, True, initialization_budget, max_budget, 
                         continued_sampling_budget, nugget_mean, nugget_std_dev)
 
+f = open(exp_name + "_options.pkl", "wb")
+pickle.dump(options,f)
+f.close()
+
+
 start_seed = 1000
 inputs = []
 print("Hello")
-for q in range(3):
-    print(q)
+for q in range(50):
+    # print(q)
     seed = start_seed + q
-    data = [q, options, exp_name+"_"+str(q), seed]
+    # print(seed)
+    # test_function.callCount = 0
+    data = [q, options, exp_name+"_"+str(q), seed, test_function]
     inputs.append(data)
-
+    # run_single_replication(q, options, exp_name+"_"+str(q), seed, test_function)
+print(len(inputs))
 pool = Pool()
 results = list(pool.map(run_single_replication, inputs))
 
