@@ -44,14 +44,14 @@ def save_trees_plots(q, exp_name, options):
 # dir_name = "Goldstein_price_1/"
 # function_name = "Goldstein_price"
 
-dir_name = "Himmelblaus_1/"
+dir_name = "Himmelblaus_2/"
 function_name = "Himmelblaus"
 
-f = open(dir_name+ function_name + "_1_options.pkl", "rb")
+f = open(dir_name+ function_name + "_2_options.pkl", "rb")
 options = pickle.load(f)
 f.close()
 from utils_partx import plotRegion
 
 for i in range(50):
-    exp_name = function_name + "_1_" + str(i)
+    exp_name = function_name + "_2_" + str(i)
     save_trees_plots(i, dir_name + exp_name, options)

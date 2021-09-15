@@ -25,7 +25,7 @@ def budget_check(options, function_calls, remaining_nodes):
     # print("*******************************************************************")
     # print("Budget Available = {}".format(budget_available))
     # print("Estimated Budget for iteration = {}".format(budget_for_iter))
-    if budget_available >= budget_for_iter:
+    if (budget_available >= budget_for_iter) and remaining_regions_count!=0:
         # print("Going ahead with normal flow")
         # print("*******************************************************************")
         return True

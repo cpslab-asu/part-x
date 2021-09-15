@@ -9,6 +9,8 @@ from sampling import uniformSampling
 from scipy import stats
 from calculate_robustness import calculate_robustness
 from testFunction import callCounter
+import pathlib
+
 def load_tree(tree_name):
     f = open(tree_name, "rb")
     ftree = pickle.load(f)
@@ -81,54 +83,55 @@ def con_int(x, conf_at):
 
 def test_function(X):  ##CHANGE
     # return (X[0]**2 + X[1] - 11)**2 + (X[1]**2 + X[0] - 7)**2 - 40 # Himmelblau's
-    # return (100 * (X[1] - X[0] **2)**2 + ((1 - X[0])**2)) - 20 # Rosenbrock
-    return (1 + (X[0] + X[1] + 1) ** 2 * (
-                19 - 14 * X[0] + 3 * X[0] ** 2 - 14 * X[1] + 6 * X[0] * X[1] + 3 * X[1] ** 2)) * (
-                       30 + (2 * X[0] - 3 * X[1]) ** 2 * (
-                           18 - 32 * X[0] + 12 * X[0] ** 2 + 48 * X[1] - 36 * X[0] * X[1] + 27 * X[1] ** 2)) - 50
+    return (100 * (X[1] - X[0] **2)**2 + ((1 - X[0])**2)) - 20 # Rosenbrock
+    # return (100 * (X[1] - X[0] **2)**2 + ((1 - X[0])**2)) + (100 * (X[2] - X[1] **2)**2 + ((1 - X[1])**2)) - 20
+    # return (1 + (X[0] + X[1] + 1) ** 2 * (
+    #             19 - 14 * X[0] + 3 * X[0] ** 2 - 14 * X[1] + 6 * X[0] * X[1] + 3 * X[1] ** 2)) * (
+    #                    30 + (2 * X[0] - 3 * X[1]) ** 2 * (
+    #                        18 - 32 * X[0] + 12 * X[0] ** 2 + 48 * X[1] - 36 * X[0] * X[1] + 27 * X[1] ** 2)) - 50
 
 
-function_name = "Goldstein_price_2"
+BENCHMARK_NAME = "Himmelblaus_3"
 
-# function_name = "Himmelblaus_3"
-# function_name = "Rosenbrock_3"
+result_directory = pathlib.Path().joinpath('result_files').joinpath(BENCHMARK_NAME).joinpath(BENCHMARK_NAME + "_result_generating_files")
 
-dir_name = function_name + "/"
-exp_name = dir_name + function_name + "_"
 quantiles_at = [0.5, 0.95, 0.99]
-f = open(exp_name+"options.pkl", "rb")
+
+f = open(result_directory.joinpath(BENCHMARK_NAME + "_options.pkl"), "rb")
 options = pickle.load(f)
 f.close()
 start_seed = 5000
+print(vars(options))
+number_of_macro_replications = 50
 
-for i in range(48,50):
-    rng = np.random.default_rng(start_seed + i)
-    ftree = load_tree(exp_name + str(i) + ".pkl")
-    falsification_volume_arrays = falsification_volume_using_gp(ftree, options, quantiles_at, rng)
+
+# for i in range(number_of_macro_replications):
+#     rng = np.random.default_rng(start_seed + i)
+#     ftree = load_tree(result_directory.joinpath(BENCHMARK_NAME + "_" + str(i) + ".pkl"))
+#     falsification_volume_arrays = falsification_volume_using_gp(ftree, options, quantiles_at, rng)
     
-    f = open(exp_name + str(i)+ "_fal_val_gp.pkl", "wb")
-    pickle.dump(falsification_volume_arrays,f)
-    f.close()
+#     f = open(result_directory.joinpath(BENCHMARK_NAME + "_" + str(i) + "_fal_val_gp.pkl"), "wb")
+#     pickle.dump(falsification_volume_arrays,f)
+#     f.close()
 
 
 volume_wo_gp_rep = []
 volume_w_gp_rep = []
 
-for i in range(50):
-    f = open(exp_name + str(i)+ "_fal_val_gp.pkl", "rb")
+for i in range(number_of_macro_replications):
+    f = open(result_directory.joinpath(BENCHMARK_NAME + "_" + str(i) + "_fal_val_gp.pkl"), "rb")
     arr = pickle.load(f)
     f.close()
     volume_w_gp_rep.append(np.sum(np.array(arr),axis = 0))
     
 
-    ftree = load_tree(exp_name + str(i) + ".pkl")
+    ftree = load_tree(result_directory.joinpath(BENCHMARK_NAME + "_" + str(i) + ".pkl"))
     volume_wo_gp_rep.append(falsification_volume(ftree, options))
 
 con_int_wo_gp = con_int(np.array(volume_wo_gp_rep), 0.95)
 con_int_w_gp_50 = con_int(np.array(volume_w_gp_rep)[:,0], 0.95)
 con_int_w_gp_95 = con_int(np.array(volume_w_gp_rep)[:,1], 0.95)
 con_int_w_gp_99 = con_int(np.array(volume_w_gp_rep)[:,2], 0.95)
-
 
 
 start_seed = 10000
