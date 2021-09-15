@@ -117,8 +117,8 @@ def testPointInSubRegion(regionSamples, regionBounds, subRegionBounds):
     listStyle_marker = ['b.',  'y.', 'k.', 'g.']
     
     for iterate in range(len(subRegionBounds)):
-        print(subRegionBounds[iterate,:,:])
-        print("***********")
+        # print(subRegionBounds[iterate,:,:])
+        # print("***********")
 
         x_coordinates_sub_r_1 = [subRegionBounds[iterate,0,0], subRegionBounds[iterate,0,0]]
         y_coordinates_sub_r_1 = [subRegionBounds[iterate,1,0], subRegionBounds[iterate,1,1]]

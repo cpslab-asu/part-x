@@ -80,9 +80,9 @@ def run_single_replication(inputs):
     ftree = Tree()
     ftree.create_node(id,id,data=root)
 
-    print(len(remaining_regions_list))
+    # print(len(remaining_regions_list))
     while budget_check(options, callCounts.callCount, remaining_regions_list):
-        print(len(remaining_regions_list))
+        # print(len(remaining_regions_list))
         tempQueue = remaining_regions_list.copy()
         remaining_regions_list = []
 
@@ -163,7 +163,7 @@ def run_single_replication(inputs):
         log.info("Unidentified regions = {}".format(len(unidentified_regions_list)))
         log.info("Budget available for replication = {}".format(options.max_budget - callCounts.callCount))
         log.info("**************************************************")
-        print(len(remaining_regions_list)!=0)
+        # (len(remaining_regions_list)!=0)
     budget_available = options.max_budget - callCounts.callCount
     if budget_available >= 0:
         log.info("**************************************************")
@@ -235,5 +235,10 @@ def run_single_replication(inputs):
     log.removeHandler(fh)
     del log, fh
 
-    return [ftree, classified_regions_list, remaining_regions_list, unidentified_regions_list]
+    return {
+        'ftree': ftree,
+        'classified_regions_list': classified_regions_list,
+        'remaining_regions_list': remaining_regions_list,
+        'unidentified_regions_list': unidentified_regions_list
+    }
     

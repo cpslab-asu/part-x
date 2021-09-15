@@ -3,7 +3,7 @@ import numpy as np
 def assign_budgets(vol_probablity_distribution, continued_sampling_budget):
 
     cumu_sum = np.cumsum(np.insert(vol_probablity_distribution, 0,0))
-    print("Cumulative_sum list = {}".format(cumu_sum))
+    # print("Cumulative_sum list = {}".format(cumu_sum))
     random_numbers = np.random.uniform(0.0,1.0, continued_sampling_budget)
     n_cont_budget_distribution = []
     for iterate in range(len(cumu_sum)-1):
