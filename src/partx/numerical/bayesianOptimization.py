@@ -6,9 +6,9 @@ from warnings import simplefilter
 from numpy import argmax
 from scipy.stats import norm
 from pathos.multiprocessing import ProcessingPool as Pool
-from calculate_robustness import calculate_robustness
-from sampling import uniformSampling
-# from testFunction import test_function
+from .calculate_robustness import calculate_robustness
+from .sampling import uniformSampling
+
 
 def surrogate(model, X:np.array):
     """Surrogate Model function

@@ -1,9 +1,7 @@
 import matplotlib.pyplot as plt
 import pickle
 import numpy as np
-from partx_options import partx_options
-
-
+from ..models.partx_options import partx_options
 
 def save_trees_plots(q, exp_name, options):
     

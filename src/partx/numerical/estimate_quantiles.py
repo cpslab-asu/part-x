@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.gaussian_process import GaussianProcessRegressor
 # import scipy as sp
 from scipy import stats
-from sampling import uniformSampling
+from .sampling import uniformSampling
 # from calculate_robustness import calculate_robustness
 # from testFunction import test_function
 

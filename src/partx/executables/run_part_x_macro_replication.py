@@ -1,23 +1,21 @@
-from classification import calculate_volume
-from utils_partx import assign_budgets, branch_new_region_support, pointsInSubRegion
+from ..numerical.classification import calculate_volume
+from ..utilities.utils_partx import assign_budgets, branch_new_region_support, pointsInSubRegion, plotRegion
 
-from partx_node import partx_node
-from partx_options import partx_options
+from ..models.partx_node import partx_node
+from ..models.partx_options import partx_options
 import numpy as np
-from classification import calculate_volume
+from ..numerical.classification import calculate_volume
 import matplotlib.pyplot as plt
-from budget_check import budget_check
+from ..numerical.budget_check import budget_check
 from treelib import Tree
-from calIntegral import calculate_mc_integral
-from utils_partx import plotRegion
-from single_replication import run_single_replication
+from ..numerical.calIntegral import calculate_mc_integral
+from ..numerical.utils_partx import plotRegion
+from .single_replication import run_single_replication
 from pathos.multiprocessing import ProcessingPool as Pool
 import pickle
 import logging
 
 import pathlib
-
-
 
 
 def test_function(X):  ##CHANGE

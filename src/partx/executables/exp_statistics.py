@@ -1,14 +1,14 @@
 import numpy as np
-from utils_partx import plotRegion
+from ..utitlies.utils_partx import plotRegion
 import matplotlib.pyplot as plt
 import pickle
-from partx_options import partx_options
-from classification import calculate_volume
+from ..models.partx_options import partx_options
+from ..numerical.classification import calculate_volume
 from sklearn.gaussian_process import GaussianProcessRegressor
-from sampling import uniformSampling
+from ..numerical.sampling import uniformSampling
 from scipy import stats
-from calculate_robustness import calculate_robustness
-from testFunction import callCounter
+from ..numerical.calculate_robustness import calculate_robustness
+from ..models.testFunction import callCounter
 import pathlib
 
 def load_tree(tree_name):

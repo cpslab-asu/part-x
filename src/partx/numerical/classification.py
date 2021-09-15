@@ -1,4 +1,5 @@
 import numpy as np
+
 def calculate_volume(region_support: np.array) -> list:
     """Calculate volume of a hypercube. 
 

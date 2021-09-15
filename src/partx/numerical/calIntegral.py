@@ -1,5 +1,5 @@
 from sklearn.gaussian_process import GaussianProcessRegressor
-from sampling import uniformSampling
+from .sampling import uniformSampling
 import numpy as np
 from scipy import stats
 # from calculate_robustness import calculate_robustness

@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from sampling import uniformSampling
+from ..numerical.sampling import uniformSampling
 import numpy as np
 # from calculate_robustness import calculate_robustness
 

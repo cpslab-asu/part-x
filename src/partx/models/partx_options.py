@@ -1,4 +1,4 @@
-from classification import calculate_volume
+from ..numerical.classification import calculate_volume
 
 class partx_options:
     def __init__(self, initial_region_support, branching_factor, test_function_dimension,

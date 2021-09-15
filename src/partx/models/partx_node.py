@@ -1,9 +1,9 @@
 import numpy as np
-from sampling import uniformSampling
-from estimate_quantiles import estimate_quantiles
-from bayesianOptimization import bayesian_optimization
-from calculate_robustness import calculate_robustness
-from classification import classification
+from ..numerical.sampling import uniformSampling
+from ..numerical.estimate_quantiles import estimate_quantiles
+from ..numerical.bayesianOptimization import bayesian_optimization
+from ..numerical.calculate_robustness import calculate_robustness
+from ..numerical.classification import classification
 
 
 class partx_node(object):

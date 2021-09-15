@@ -5,8 +5,12 @@ description = "PartX - A family of stochastic optimzeres"
 authors = ["Aniruddh Vinay Chandratre <achand75@asu.edu>"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = ">=3.7,<3.10"
 treelib = "^1.6.1"
+pathos = "^0.2.8"
+numpy = "^1.21.2"
+scikit-learn = "^0.24.2"
+scipy = "^1.7.1"
 
 [tool.poetry.dev-dependencies]
 

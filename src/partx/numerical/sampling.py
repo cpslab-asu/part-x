@@ -2,7 +2,7 @@
 import numpy as np
 from numpy.core.fromnumeric import shape
 # from testFunction import test_function
-from calculate_robustness import calculate_robustness
+from .calculate_robustness import calculate_robustness
 
 
 def uniformSampling(number_of_samples: int, region_support: np.array, test_function_dimension: int, rng) -> np.array:
