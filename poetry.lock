@@ -1,4 +1,26 @@
 [[package]]
+name = "antlr4-python3-runtime"
+version = "4.5.3"
+description = "ANTLR 4.5.3 runtime for Python 3.4.0"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "attrs"
+version = "21.2.0"
+description = "Classes Without Boilerplate"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+
+[package.extras]
+dev = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "zope.interface", "furo", "sphinx", "sphinx-notfound-page", "pre-commit"]
+docs = ["furo", "sphinx", "zope.interface", "sphinx-notfound-page"]
+tests = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "zope.interface"]
+tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins"]
+
+[[package]]
 name = "cycler"
 version = "0.10.0"
 description = "Composable style cycles"
@@ -121,6 +143,23 @@ python-versions = "*"
 dill = ["dill (>=0.3.4)"]
 
 [[package]]
+name = "psy-taliro"
+version = "1.0.0a14"
+description = "System-level verification library using STL"
+category = "main"
+optional = false
+python-versions = ">=3.7.1,<3.10"
+
+[package.dependencies]
+antlr4-python3-runtime = ">=4.5.3,<4.6.0"
+attrs = ">=21.0.0,<22.0.0"
+numpy = ">=1.20.2,<2.0.0"
+pathos = ">=0.2.8,<0.3.0"
+scipy = ">=1.6.2,<2.0.0"
+tltk-mtl = ">=0.0.27,<0.0.28"
+typing-extensions = ">=3.10.0,<4.0.0"
+
+[[package]]
 name = "pyparsing"
 version = "2.4.7"
 description = "Python parsing module"
@@ -187,6 +226,17 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "tltk-mtl"
+version = "0.0.27"
+description = "A libary for effecient Metric temporal logic calculation"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+numpy = "*"
+
+[[package]]
 name = "treelib"
 version = "1.6.1"
 description = "A Python 2/3 implementation of tree structure."
@@ -197,12 +247,28 @@ python-versions = "*"
 [package.dependencies]
 future = "*"
 
+[[package]]
+name = "typing-extensions"
+version = "3.10.0.2"
+description = "Backported and Experimental Type Hints for Python 3.5+"
+category = "main"
+optional = false
+python-versions = "*"
+
 [metadata]
 lock-version = "1.1"
-python-versions = ">=3.7,<3.10"
-content-hash = "155a8f8a34fb74e460a3a211134626bc8b6668f099ce7a0396a0d2fcf6c03264"
+python-versions = ">=3.7.1,<3.10"
+content-hash = "6dc7e17d81b3b4c9cd8a96a5752c95ed15c848d230d1a319a7fa27d8c677ae1a"
 
 [metadata.files]
+antlr4-python3-runtime = [
+    {file = "antlr4-python3-runtime-4.5.3.macosx-10.10-x86_64.exe", hash = "sha256:fa539e98d5e801c38d14ce8932a62a708841609ce28c80f8200fbbe288fc6490"},
+    {file = "antlr4-python3-runtime-4.5.3.tar.gz", hash = "sha256:d490754e5774e58b4e870a7eba3f97086c1f3793deb08cfb92307f287dfd4ff2"},
+]
+attrs = [
+    {file = "attrs-21.2.0-py2.py3-none-any.whl", hash = "sha256:149e90d6d8ac20db7a955ad60cf0e6881a3f20d37096140088356da6c716b0b1"},
+    {file = "attrs-21.2.0.tar.gz", hash = "sha256:ef6aaac3ca6cd92904cdd0d83f629a15f18053ec84e6432106f7a4d04ae4f5fb"},
+]
 cycler = [
     {file = "cycler-0.10.0-py2.py3-none-any.whl", hash = "sha256:1d8a5ae1ff6c5cf9b93e8811e581232ad8920aeec647c37316ceac982b08cb2d"},
     {file = "cycler-0.10.0.tar.gz", hash = "sha256:cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8"},
@@ -402,6 +468,10 @@ ppft = [
     {file = "ppft-1.6.6.4-py3-none-any.whl", hash = "sha256:63d12035786dfd52e7a0fedcd75a498b68b80e6ac54720cd8a4282512608131c"},
     {file = "ppft-1.6.6.4.zip", hash = "sha256:473442cc6731856990bd25bd6b454bb98720007de4523a73c560bdd0060463d2"},
 ]
+psy-taliro = [
+    {file = "PSY-TaLiRo-1.0.0a14.tar.gz", hash = "sha256:418594c538b1dfbbeab20a9ceeaeafd4e0ceb62cc7999fcd4e9163dce4d0c559"},
+    {file = "PSY_TaLiRo-1.0.0a14-py3-none-any.whl", hash = "sha256:480d4f698c5d07c1fd562e9c87c03608ec380e6af6643820d25eebf2147ce40e"},
+]
 pyparsing = [
     {file = "pyparsing-2.4.7-py2.py3-none-any.whl", hash = "sha256:ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b"},
     {file = "pyparsing-2.4.7.tar.gz", hash = "sha256:c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1"},
@@ -474,7 +544,15 @@ threadpoolctl = [
     {file = "threadpoolctl-2.2.0-py3-none-any.whl", hash = "sha256:e5a995e3ffae202758fa8a90082e35783b9370699627ae2733cd1c3a73553616"},
     {file = "threadpoolctl-2.2.0.tar.gz", hash = "sha256:86d4b6801456d780e94681d155779058759eaef3c3564758b17b6c99db5f81cb"},
 ]
+tltk-mtl = [
+    {file = "tltk_mtl-0.0.27.tar.gz", hash = "sha256:7d84675bffb69046f5c27a3f879831fc6adc2fd5278e2960098422e4781f69f8"},
+]
 treelib = [
     {file = "treelib-1.6.1-py3.7.egg", hash = "sha256:8065064e5b92f59400295c221226b65905fd219c6ea43971fa0676b9e7780095"},
     {file = "treelib-1.6.1.tar.gz", hash = "sha256:1cbfffb2d2b75ccac27d0200cee0507b6fbb0726e0afb9fae017ade5d2ce8788"},
+]
+typing-extensions = [
+    {file = "typing_extensions-3.10.0.2-py2-none-any.whl", hash = "sha256:d8226d10bc02a29bcc81df19a26e56a9647f8b0a6d4a83924139f4a8b01f17b7"},
+    {file = "typing_extensions-3.10.0.2-py3-none-any.whl", hash = "sha256:f1d25edafde516b146ecd0613dabcc61409817af4766fbbcfb8d1ad4ec441a34"},
+    {file = "typing_extensions-3.10.0.2.tar.gz", hash = "sha256:49f75d16ff11f1cd258e1b988ccff82a3ca5570217d7ad8c5f48205dd99a677e"},
 ]

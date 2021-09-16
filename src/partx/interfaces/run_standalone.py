@@ -38,7 +38,7 @@ def run_partx(benchmark_name, test_function, test_function_dimension, region_sup
     
     
     # Start running
-    start_seed = 1000
+    start_seed = initial_seed
     inputs = []
 
     for replication_number in range(number_of_macro_replications):
