@@ -90,9 +90,7 @@ mc_uniform_test_function = {"true_fv" : true_fv,
                             "x" : x,
                             "y" : y}
 
-f = open(benchmark_result_pickle_files.joinpath(BENCHMARK_NAME + "_mc_truefv_test_function.pkl"), "wb")
-pickle.dump(mc_uniform_test_function, f)
-f.close()
+
 ####################
 
 inputs = []
@@ -105,3 +103,7 @@ for replication_number in range(number_of_macro_replications):
 print(len(inputs))
 pool = Pool()
 results = list(pool.map(run_single_replication, inputs))
+
+f = open(benchmark_result_pickle_files.joinpath(BENCHMARK_NAME + "_mc_truefv_test_function.pkl"), "wb")
+pickle.dump(mc_uniform_test_function, f)
+f.close()
