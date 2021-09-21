@@ -62,6 +62,20 @@ def mc_Step(samples_in, samples_out, samples_from_bo, region_support, regionDime
     minQuantile = np.zeros((R, len(alpha)))
     maxQuantile = np.zeros((R, len(alpha)))
     do_uniform_sampling = samples_from_bo == []
+
+    new_samples_for_reuse = []
+    for iterate in (samples_from_bo):
+        new_samples_for_reuse.extend(iterate[0])
+    # print(np.array(new_samples_for_reuse).shape)
+    num_extra_samples_needed = R*M - np.array(new_samples_for_reuse).shape[0]
+
+    if num_extra_samples_needed > 0:
+        extra_samples = uniformSampling(num_extra_samples_needed, region_support, regionDimensions, rng)
+        # print(np.array(extra_samples[0]).shape)
+        new_samples_for_reuse.extend(extra_samples[0].tolist())
+    
+    all_samples = [[new_samples_for_reuse[i:i + M]] for i in range(0, len(new_samples_for_reuse), M)]
+    # print(np.array(a).shape)
     for iterate in range(R):
         X = samples_in[0]
         Y = np.transpose(samples_out)
@@ -72,7 +86,7 @@ def mc_Step(samples_in, samples_out, samples_from_bo, region_support, regionDime
         if do_uniform_sampling:
             samples = uniformSampling(M, region_support, regionDimensions, rng)
         else: 
-            samples = samples_from_bo[iterate]
+            samples = all_samples[iterate]
         
             # https://scikit-learn.org/stable/auto_examples/gaussian_process/plot_gpr_noisy_targets.html#sphx-glr-auto-examples-gaussian-process-plot-gpr-noisy-targets-py
         y_pred, sigma_st = model.predict(samples[0], return_std=True)

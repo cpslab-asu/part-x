@@ -9,7 +9,6 @@ from pathos.multiprocessing import ProcessingPool as Pool
 from .calculate_robustness import calculate_robustness
 from .sampling import uniformSampling
 
-
 def surrogate(model, X:np.array):
     """Surrogate Model function
 
@@ -126,7 +125,6 @@ def bayesian_optimization(test_function, samples_in: np.array, corresponding_rob
         acquisition_fun_final_samples.append(acquisition_fun_sample_region)
         samples_in_new.append(np.expand_dims(X, axis = 0))
         corresponding_robustness_new.append(np.transpose(Y))
-        
     return samples_in_new, corresponding_robustness_new, acquisition_fun_final_samples
 
 

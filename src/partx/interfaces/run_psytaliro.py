@@ -1,5 +1,6 @@
 from .run_standalone import run_partx
-
+from ..executables.exp_statistics import get_true_fv
+from ..executables.generate_statistics import generate_statistics
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -18,6 +19,8 @@ class PartXOptimizerOptions:
     continued_sampling_budget: int
     number_of_BO_samples: list
     number_of_samples_gen_GP: int
+    M : int
+    R : int
     branching_factor: int
     nugget_mean: float
     nugget_std_dev: float
@@ -25,6 +28,9 @@ class PartXOptimizerOptions:
     delta: float
     number_of_macro_replications: int
     initial_seed: int
+    fv_quantiles_for_gp: list
+    fv_confidence_at: int
+    points_for_unif_sampling: int
 
 def _optimize(func: OptimizationFn, options: Options, optimizer_options: PartXOptimizerOptions):
     bounds = [bound.astuple() for bound in options.bounds]
@@ -41,16 +47,26 @@ def _optimize(func: OptimizationFn, options: Options, optimizer_options: PartXOp
         continued_sampling_budget=optimizer_options.continued_sampling_budget,
         number_of_BO_samples=optimizer_options.number_of_BO_samples,
         number_of_samples_gen_GP=optimizer_options.number_of_samples_gen_GP,
+        M = optimizer_options.M,
+        R = optimizer_options.R,
         branching_factor=optimizer_options.branching_factor,
         nugget_mean=optimizer_options.nugget_mean,
         nugget_std_dev=optimizer_options.nugget_std_dev,
         alpha=optimizer_options.alpha,
         delta=optimizer_options.delta,
         number_of_macro_replications=optimizer_options.number_of_macro_replications,
-        initial_seed=optimizer_options.initial_seed
+        initial_seed=optimizer_options.initial_seed,
+        fv_quantiles_for_gp = optimizer_options.fv_quantiles_for_gp, 
+        points_for_unif_sampling = optimizer_options.points_for_unif_sampling
     )
     end_time = datetime.now()
-    
+    print("Generating Results")
+    result_dictionary = generate_statistics(optimizer_options.benchmark_name, 
+                                            optimizer_options.number_of_macro_replications, 
+                                            optimizer_options.fv_quantiles_for_gp, 
+                                            optimizer_options.fv_confidence_at, 
+                                            optimizer_options.initial_seed)
+                        
     return results
 
 
@@ -70,13 +86,18 @@ class PartX(Optimizer[Run]):
             continued_sampling_budget=kwargs['continued_sampling_budget'],
             number_of_BO_samples=kwargs['number_of_BO_samples'],
             number_of_samples_gen_GP=kwargs['number_of_samples_gen_GP'],
+            M = kwargs['M'],
+            R = kwargs['R'],
             branching_factor=kwargs['branching_factor'],
             nugget_mean=kwargs['nugget_mean'],
             nugget_std_dev=kwargs['nugget_std_dev'],
             alpha=kwargs['alpha'],
             delta=kwargs['delta'],
             number_of_macro_replications=kwargs['number_of_macro_replications'],
-            initial_seed=kwargs['initial_seed']
+            initial_seed=kwargs['initial_seed'],
+            fv_quantiles_for_gp = kwargs['fv_quantiles_for_gp'],
+            fv_confidence_at = kwargs['fv_confidence_at'],
+            points_for_unif_sampling = kwargs['points_for_unif_sampling']
         )
 
     def optimize(self, func: OptimizationFn, 

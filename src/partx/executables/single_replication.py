@@ -11,20 +11,19 @@ from treelib import Tree
 from ..numerical.calIntegral import calculate_mc_integral
 import logging
 import pickle
+from .exp_statistics import falsification_volume_using_gp
 
 def run_single_replication(inputs):
-    replication_number, options, BENCHMARK_NAME, seed, test_function, benchmark_result_directory = inputs
+    replication_number, options, test_function, benchmark_result_directory = inputs
 
-    benchmark_result_pickle_files = benchmark_result_directory.joinpath(BENCHMARK_NAME + "_result_generating_files")
-    benchmark_result_pickle_files.mkdir(exist_ok=True)
+    seed = options.start_seed + replication_number
+    BENCHMARK_NAME = options.BENCHMARK_NAME
 
     benchmark_result_log_files = benchmark_result_directory.joinpath(BENCHMARK_NAME + "_log_files")
     benchmark_result_log_files.mkdir(exist_ok=True)
 
-    f = open(benchmark_result_pickle_files.joinpath(BENCHMARK_NAME + "_options.pkl"), "wb")
-    pickle.dump(options,f)
-    f.close()
-
+    benchmark_result_pickle_files = benchmark_result_directory.joinpath(BENCHMARK_NAME + "_result_generating_files")
+    benchmark_result_pickle_files.mkdir(exist_ok=True)
 
     callCounts = callCounter(test_function)
     
@@ -38,12 +37,16 @@ def run_single_replication(inputs):
     fh.setFormatter(formatter)
     log.addHandler(fh)
     log.info("Information about Replication {}".format(replication_number))
+    log.info("Running {} Replication {} with seed {}".format(BENCHMARK_NAME, replication_number, seed))
     log.info("**************************************************")
     log.info("Initial Values for Replication {}")
-
+    log.info(vars(options))
+    log.info("**************************************************")
     log.info("Budget Used = {}".format(callCounts.callCount))
     log.info("Budget Available (Max Budget) = {}".format(options.max_budget))
     log.info("**************************************************")
+    log.info("**************************************************")
+    log.info("***************Replication Start******************")
     print("Started replication {}".format(replication_number))
 
     rng = np.random.default_rng(seed)
@@ -74,7 +77,12 @@ def run_single_replication(inputs):
     elif region_class == 'u':
         unidentified_regions_list.append(id)
 
-
+    log.info("**************************************************")
+    log.info("Classified regions = {}".format(len(classified_regions_list)))
+    log.info("Unclassified regions = {}".format(len(remaining_regions_list)))
+    log.info("Unidentified regions = {}".format(len(unidentified_regions_list)))
+    log.info("Budget available for replication = {}".format(options.max_budget - callCounts.callCount))
+    log.info("**************************************************")
 
     # Tree initialization using root
     ftree = Tree()
@@ -163,7 +171,7 @@ def run_single_replication(inputs):
         log.info("Unidentified regions = {}".format(len(unidentified_regions_list)))
         log.info("Budget available for replication = {}".format(options.max_budget - callCounts.callCount))
         log.info("**************************************************")
-        # (len(remaining_regions_list)!=0)
+        # print(len(remaining_regions_list)!=0)
     budget_available = options.max_budget - callCounts.callCount
     if budget_available >= 0:
         log.info("**************************************************")
@@ -226,15 +234,22 @@ def run_single_replication(inputs):
     log.info("Budget available = {}".format(budget_available))
     log.info("**************************************************")
     log.info("**************************************************")
+    log.info("****************Replication END*******************")
 
     f = open(benchmark_result_pickle_files.joinpath(BENCHMARK_NAME+ "_" + str(replication_number) + ".pkl"), "wb")
     pickle.dump(ftree,f)
     f.close()
 
+    print("Generating Result Files for replication Number {}".format(replication_number))
+    falsification_volume_arrays = falsification_volume_using_gp(ftree, options, options.fv_quantiles_for_gp, rng)
+            
+    f = open(benchmark_result_pickle_files.joinpath(BENCHMARK_NAME + "_" + str(replication_number) + "_fal_val_gp.pkl"), "wb")
+    pickle.dump(falsification_volume_arrays,f)
+    f.close()
+
     print("Ended replication {}".format(replication_number))
     log.removeHandler(fh)
     del log, fh
-
     return {
         'ftree': ftree,
         'classified_regions_list': classified_regions_list,
