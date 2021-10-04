@@ -31,7 +31,7 @@ def run_single_replication(inputs):
     log.setLevel(logging.INFO) 
     fh = logging.FileHandler(filename=benchmark_result_log_files.joinpath(BENCHMARK_NAME + "_" + str(replication_number) + ".log"))
     formatter = logging.Formatter(
-                    fmt='%(message)s'
+                    fmt = '%(asctime)s :: %(message)s', datefmt = '%a, %d %b %Y %H:%M:%S'
                     )
 
     fh.setFormatter(formatter)
@@ -39,8 +39,10 @@ def run_single_replication(inputs):
     log.info("Information about Replication {}".format(replication_number))
     log.info("Running {} Replication {} with seed {}".format(BENCHMARK_NAME, replication_number, seed))
     log.info("**************************************************")
-    log.info("Initial Values for Replication {}")
-    log.info(vars(options))
+    log.info("Options File:")
+    options_results = vars(options)
+    for key, value in options_results.items():
+        log.info("{} : {}".format(key, value))
     log.info("**************************************************")
     log.info("Budget Used = {}".format(callCounts.callCount))
     log.info("Budget Available (Max Budget) = {}".format(options.max_budget))
@@ -63,6 +65,7 @@ def run_single_replication(inputs):
 
     # define root node
     root = partx_node(options.initial_region_support, samples_in, samples_out, direction_of_branch)
+    root.generate_samples_points_grid(options, rng)
     samples_in, samples_out = root.samples_management_unclassified(options, callCounts, rng)
     region_class = root.calculate_and_classifiy(options,rng)
 
@@ -106,6 +109,7 @@ def run_single_replication(inputs):
                 new_region_supp = np.reshape(new_bounds[iterate], (1,new_bounds[iterate].shape[0],new_bounds[iterate].shape[1]))
 
                 new_node = partx_node(new_region_supp, points_division_samples_in[iterate], points_division_samples_out[iterate], (node.direction_of_branch+1), node.region_class)
+                new_node.generate_samples_points_grid(options, rng)
                 samples_in, samples_out = new_node.samples_management_unclassified(options, callCounts, rng)
                 region_class = new_node.calculate_and_classifiy(options,rng)
                 ftree.create_node(id, id, parent = parent, data = new_node)
@@ -204,6 +208,7 @@ def run_single_replication(inputs):
                     parent = node.identifier
                     node = node.data
 
+                    node.generate_samples_points_grid(options, rng)
                     samples_in, samples_out = node.samples_management_classified(options, callCounts, n_cont_sampling_budget_assignment[iterate],rng)
 
                     region_class = node.calculate_and_classifiy(options,rng)
@@ -247,13 +252,17 @@ def run_single_replication(inputs):
     pickle.dump(falsification_volume_arrays,f)
     f.close()
 
+    f = open(benchmark_result_pickle_files.joinpath(BENCHMARK_NAME + "_" + str(replication_number) + "_point_history.pkl"), "wb")
+    pickle.dump(callCounts.point_history,f)
+    f.close()
+
     print("Ended replication {}".format(replication_number))
     log.removeHandler(fh)
     del log, fh
+
     return {
         'ftree': ftree,
         'classified_regions_list': classified_regions_list,
         'remaining_regions_list': remaining_regions_list,
         'unidentified_regions_list': unidentified_regions_list
     }
-    

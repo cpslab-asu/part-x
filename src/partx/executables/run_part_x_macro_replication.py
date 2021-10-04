@@ -16,9 +16,10 @@ from .exp_statistics import get_true_fv
 import pickle
 import logging
 
+
 def test_function(X):  ##CHANGE
-    # return (X[0]**2 + X[1] - 11)**2 + (X[1]**2 + X[0] - 7)**2 - 40 # Himmelblau's
-    return (100 * (X[1] - X[0] **2)**2 + ((1 - X[0])**2)) - 20 # Rosenbrock
+    return (X[0]**2 + X[1] - 11)**2 + (X[1]**2 + X[0] - 7)**2 - 40 # Himmelblau's
+    # return (100 * (X[1] - X[0] **2)**2 + ((1 - X[0])**2)) - 20 # Rosenbrock
     # return (1 + (X[0] + X[1] + 1) ** 2 * (
     #             19 - 14 * X[0] + 3 * X[0] ** 2 - 14 * X[1] + 6 * X[0] * X[1] + 3 * X[1] ** 2)) * (
     #                    30 + (2 * X[0] - 3 * X[1]) ** 2 * (
@@ -26,7 +27,7 @@ def test_function(X):  ##CHANGE
 
 
 
-BENCHMARK_NAME = "Rosenbrock_random_seed_1"
+BENCHMARK_NAME = "Himmelblaus_3"
 
 base_path = pathlib.Path()
 
@@ -44,7 +45,7 @@ benchmark_result_pickle_files.mkdir(exist_ok=True)
 
 # Test function properties
 test_function_dimension = 2
-region_support = np.array([[[-1., 1.], [-1., 1.]]])
+region_support = np.array([[[-5., 5.], [-5., 5.]]])
 
 # Budgets
 initialization_budget = 10
@@ -52,13 +53,12 @@ max_budget = 5000
 continued_sampling_budget = 100
 
 # BO grid size : number_of_BO_samples * number_of_samples_gen_GP
-number_of_BO_samples = [10]
-number_of_samples_gen_GP = 100
+number_of_BO_samples = [20]
 # R = number_of_BO_samples[0]
 # M = number_of_samples_gen_GP
-R = 10
-M = 100
-
+R = 20
+M = 500
+NGP = R * M
 
 # Mostly not changes. change with caution
 branching_factor = 2
@@ -68,28 +68,21 @@ alpha = [0.95]
 delta = 0.001
 
 # Other Parameters
-number_of_macro_replications = 5
+number_of_macro_replications = 50
 start_seed = 1000
 fv_quantiles_for_gp = [0.5,0.95,0.99]
 
 # Build options
 options = partx_options(region_support, branching_factor, test_function_dimension, 
-                        number_of_BO_samples, number_of_samples_gen_GP, alpha, M, R, 
+                        number_of_BO_samples, alpha, M, R, 
                         delta, True, initialization_budget, max_budget, 
-                        continued_sampling_budget, nugget_mean, nugget_std_dev, start_seed, fv_quantiles_for_gp, BENCHMARK_NAME)
+                        continued_sampling_budget, nugget_mean, nugget_std_dev, start_seed, fv_quantiles_for_gp, BENCHMARK_NAME, NGP)
 
 f = open(benchmark_result_pickle_files.joinpath(BENCHMARK_NAME + "_options.pkl"), "wb")
 pickle.dump(options,f)
 f.close()
 
 ### Uniform Monte Carlo
-points_for_unif_sampling = 10000
-rng = np.random.default_rng(10000)
-true_fv, x,y = get_true_fv(points_for_unif_sampling, options, rng, test_function)
-mc_uniform_test_function = {"true_fv" : true_fv,
-                            "x" : x,
-                            "y" : y}
-
 
 ####################
 
@@ -103,6 +96,13 @@ for replication_number in range(number_of_macro_replications):
 print(len(inputs))
 pool = Pool()
 results = list(pool.map(run_single_replication, inputs))
+
+points_for_unif_sampling = 10000
+rng = np.random.default_rng(10000)
+true_fv, x,y = get_true_fv(points_for_unif_sampling, options, rng, test_function)
+mc_uniform_test_function = {"true_fv" : true_fv,
+                            "x" : x,
+                            "y" : y}
 
 f = open(benchmark_result_pickle_files.joinpath(BENCHMARK_NAME + "_mc_truefv_test_function.pkl"), "wb")
 pickle.dump(mc_uniform_test_function, f)

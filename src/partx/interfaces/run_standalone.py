@@ -20,13 +20,13 @@ import pathlib
 
 def run_partx(benchmark_name, test_function, test_function_dimension, region_support, 
               initialization_budget, maximum_budget, continued_sampling_budget, number_of_BO_samples, 
-              number_of_samples_gen_GP, M, R, branching_factor, nugget_mean, nugget_std_dev, alpha, delta,
-              number_of_macro_replications, initial_seed, fv_quantiles_for_gp, points_for_unif_sampling):
+              NGP, M, R, branching_factor, nugget_mean, nugget_std_dev, alpha, delta,
+              number_of_macro_replications, initial_seed, fv_quantiles_for_gp, points_for_unif_sampling, results_folder):
     
     
     # create a directory for storing result files
     base_path = pathlib.Path()
-    result_directory = base_path.joinpath('result_files')
+    result_directory = base_path.joinpath(results_folder)
     result_directory.mkdir(exist_ok=True)
     benchmark_result_directory = result_directory.joinpath(benchmark_name)
     benchmark_result_directory.mkdir(exist_ok=True)
@@ -35,24 +35,14 @@ def run_partx(benchmark_name, test_function, test_function_dimension, region_sup
 
     
     # create partx options
-    options = partx_options(region_support, branching_factor, test_function_dimension, number_of_BO_samples, 
-                            number_of_samples_gen_GP, alpha, M, R,  
+    options = partx_options(region_support, branching_factor, test_function_dimension, number_of_BO_samples, alpha, M, R,  
                             delta, True, initialization_budget, maximum_budget, continued_sampling_budget, 
-                            nugget_mean, nugget_std_dev, initial_seed, fv_quantiles_for_gp, benchmark_name)
+                            nugget_mean, nugget_std_dev, initial_seed, fv_quantiles_for_gp, benchmark_name, NGP)
     
     f = open(benchmark_result_pickle_files.joinpath(options.BENCHMARK_NAME + "_options.pkl"), "wb")
     pickle.dump(options,f)
     f.close()
 
-    # rng = np.random.default_rng(initial_seed)
-    # true_fv, x,y = get_true_fv(points_for_unif_sampling, options, rng, test_function)
-    # mc_uniform_test_function = {"true_fv" : true_fv,
-    #                             "x" : x,
-    #                             "y" : y}
-
-    # f = open(benchmark_result_pickle_files.joinpath(benchmark_name + "_mc_truefv_test_function.pkl"), "wb")
-    # pickle.dump(mc_uniform_test_function, f)
-    # f.close()
 
     # Start running
 
@@ -67,15 +57,15 @@ def run_partx(benchmark_name, test_function, test_function_dimension, region_sup
     pool = Pool()
     results = list(pool.map(run_single_replication, inputs))
     
-    print("Starting Uniform Sampling for {} points".format(points_for_unif_sampling))
-    rng = np.random.default_rng(initial_seed)
-    true_fv, x,y = get_true_fv(points_for_unif_sampling, options, rng, test_function)
-    mc_uniform_test_function = {"true_fv" : true_fv,
-                                "x" : x,
-                                "y" : y}
+    # print("Starting Uniform Sampling for {} points".format(points_for_unif_sampling))
+    # rng = np.random.default_rng(initial_seed)
+    # true_fv, x,y = get_true_fv(points_for_unif_sampling, options, rng, test_function)
+    # mc_uniform_test_function = {"true_fv" : true_fv,
+    #                             "x" : x,
+    #                             "y" : y}
 
-    f = open(benchmark_result_pickle_files.joinpath(benchmark_name + "_mc_truefv_test_function.pkl"), "wb")
-    pickle.dump(mc_uniform_test_function, f)
-    f.close()
-    print("Ending Uniform Sampling")
+    # f = open(benchmark_result_pickle_files.joinpath(benchmark_name + "_mc_truefv_test_function.pkl"), "wb")
+    # pickle.dump(mc_uniform_test_function, f)
+    # f.close()
+    # print("Ending Uniform Sampling")
     return results

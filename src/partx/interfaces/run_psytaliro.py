@@ -18,7 +18,7 @@ class PartXOptimizerOptions:
     initialization_budget: int
     continued_sampling_budget: int
     number_of_BO_samples: list
-    number_of_samples_gen_GP: int
+    NGP: int
     M : int
     R : int
     branching_factor: int
@@ -31,6 +31,7 @@ class PartXOptimizerOptions:
     fv_quantiles_for_gp: list
     fv_confidence_at: int
     points_for_unif_sampling: int
+    results_folder: str
 
 def _optimize(func: OptimizationFn, options: Options, optimizer_options: PartXOptimizerOptions):
     bounds = [bound.astuple() for bound in options.bounds]
@@ -46,7 +47,7 @@ def _optimize(func: OptimizationFn, options: Options, optimizer_options: PartXOp
         maximum_budget=options.iterations,
         continued_sampling_budget=optimizer_options.continued_sampling_budget,
         number_of_BO_samples=optimizer_options.number_of_BO_samples,
-        number_of_samples_gen_GP=optimizer_options.number_of_samples_gen_GP,
+        NGP=optimizer_options.NGP,
         M = optimizer_options.M,
         R = optimizer_options.R,
         branching_factor=optimizer_options.branching_factor,
@@ -57,16 +58,10 @@ def _optimize(func: OptimizationFn, options: Options, optimizer_options: PartXOp
         number_of_macro_replications=optimizer_options.number_of_macro_replications,
         initial_seed=optimizer_options.initial_seed,
         fv_quantiles_for_gp = optimizer_options.fv_quantiles_for_gp, 
-        points_for_unif_sampling = optimizer_options.points_for_unif_sampling
+        points_for_unif_sampling = optimizer_options.points_for_unif_sampling,
+        results_folder = optimizer_options.results_folder
     )
     end_time = datetime.now()
-    print("Generating Results")
-    result_dictionary = generate_statistics(optimizer_options.benchmark_name, 
-                                            optimizer_options.number_of_macro_replications, 
-                                            optimizer_options.fv_quantiles_for_gp, 
-                                            optimizer_options.fv_confidence_at, 
-                                            optimizer_options.initial_seed)
-                        
     return results
 
 
@@ -85,7 +80,7 @@ class PartX(Optimizer[Run]):
             initialization_budget=kwargs['initialization_budget'],
             continued_sampling_budget=kwargs['continued_sampling_budget'],
             number_of_BO_samples=kwargs['number_of_BO_samples'],
-            number_of_samples_gen_GP=kwargs['number_of_samples_gen_GP'],
+            NGP=kwargs['NGP'],
             M = kwargs['M'],
             R = kwargs['R'],
             branching_factor=kwargs['branching_factor'],
@@ -97,10 +92,10 @@ class PartX(Optimizer[Run]):
             initial_seed=kwargs['initial_seed'],
             fv_quantiles_for_gp = kwargs['fv_quantiles_for_gp'],
             fv_confidence_at = kwargs['fv_confidence_at'],
-            points_for_unif_sampling = kwargs['points_for_unif_sampling']
+            points_for_unif_sampling = kwargs['points_for_unif_sampling'],
+            results_folder = kwargs['results_folder']
         )
 
     def optimize(self, func: OptimizationFn, 
                  options: Options):
         return _optimize(func, options, self.optimizer_options)
-

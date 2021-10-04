@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from ..numerical.sampling import uniformSampling
+from ..numerical.sampling import lhs_sampling
 import numpy as np
 # from calculate_robustness import calculate_robustness
 
@@ -173,7 +173,7 @@ def assign_budgets(vol_probablity_distribution, continued_sampling_budget, rng):
 # print(partitions_region_support[0].reshape((1,partitions_region_support[0].shape[0],partitions_region_support[0].shape[1])))
 
 # number_of_samples = 100
-# samples = uniformSampling(number_of_samples, region_support, problemDimension)
+# samples = lhs_sampling(number_of_samples, region_support, problemDimension)
 # out = calculate_robustness(samples)
 # rs, out = pointsInSubRegion(samples, out, partitions_region_support)
 

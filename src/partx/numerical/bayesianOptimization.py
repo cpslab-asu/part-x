@@ -7,7 +7,7 @@ from numpy import argmax
 from scipy.stats import norm
 from pathos.multiprocessing import ProcessingPool as Pool
 from .calculate_robustness import calculate_robustness
-from .sampling import uniformSampling
+from .sampling import lhs_sampling
 
 def surrogate(model, X:np.array):
     """Surrogate Model function
@@ -51,14 +51,14 @@ def acquisition(X: np.array, Xsamples: np.array, model):
 
 
 
-def opt_acquisition(X: np.array, y: np.array, model, num_points_to_construct_gp:int ,test_function_dimension:int, region_support: np.array, rng) -> np.array:
+def opt_acquisition(X: np.array, y: np.array, model, sbo:list ,test_function_dimension:int, region_support: np.array, rng) -> np.array:
     """Get the sample points
 
     Args:
         X (np.array): sample points 
         y (np.array): corresponding robustness values
         model ([type]): the GP models 
-        num_points_to_construct_gp (int): number of sample points to construct the robustness values
+        sbo (list): sample points to construct the robustness values
         test_function_dimension (int): The dimensionality of the region. (Dimensionality of the test function)
         region_support (np.array): The bounds of the region within which the sampling is to be done.
                                     Region Bounds is M x N x O where;
@@ -68,20 +68,23 @@ def opt_acquisition(X: np.array, y: np.array, model, num_points_to_construct_gp:
 
     Returns:
         [np.array]: the new sample points by BO
-        [np.array]: random uniform samples for reuse later
+        [np.array]: sbo - new samples for resuse
     """
-
+    # print("*************")
+    # print("Length before removing {}".format(sbo.shape))
     region_support = np.array(region_support.reshape((1,region_support.shape[0],region_support.shape[1])))
-    sbo = uniformSampling(num_points_to_construct_gp, region_support, test_function_dimension, rng)
     scores = acquisition(X, sbo, model)
     ix = argmax(scores)
     min_bo = sbo[0,ix,:]
-    return np.array(min_bo), sbo
+    new_sbo = np.delete(sbo, ix, axis = 1)
+    # print("Length after removing {}".format(new_sbo.shape))
+    # print("*************")
+    return np.array(min_bo), new_sbo
     
 
 
 
-def bayesian_optimization(test_function, samples_in: np.array, corresponding_robustness: np.array, number_of_samples_to_generate: list, test_function_dimension:int, region_support:list, num_points_to_construct_gp, rng) -> list:
+def bayesian_optimization(test_function, samples_in: np.array, corresponding_robustness: np.array, number_of_samples_to_generate: list, test_function_dimension:int, region_support:list, random_points_for_gp: list, rng) -> list:
     """Sample using Bayesian Optimization
     https://machinelearningmastery.com/what-is-bayesian-optimization/
 
@@ -95,7 +98,7 @@ def bayesian_optimization(test_function, samples_in: np.array, corresponding_rob
                                         M = number of regions;
                                         N = test_function_dimension (Dimensionality of the test function);
                                         O = Lower and Upper bound. Should be of length 2;
-        num_points_to_construct_gp ([int], optional): Number of points to construct GPs in BO. Defaults to 100:int.
+        random_points_for_gp (list): Random samlpes for SBO
 
     Returns:
         list: Old and new samples (np.array of shape M x N x O). Length of list is number of regions provided in samples_in
@@ -107,25 +110,22 @@ def bayesian_optimization(test_function, samples_in: np.array, corresponding_rob
     """
 
     samples_in_new = []
-    acquisition_fun_final_samples = []
     corresponding_robustness_new = []
+    sbo = random_points_for_gp
     for i in range(samples_in.shape[0]):
         X = samples_in[i,:,:]
         Y = corresponding_robustness[i,:].reshape((corresponding_robustness.shape[1],1))
-        acquisition_fun_sample_region = []
         for j in range(number_of_samples_to_generate[i]):
             model = GaussianProcessRegressor()
             model.fit(X, Y)
             
-            min_bo, samples_acquistion = opt_acquisition(X, Y, model, num_points_to_construct_gp, test_function_dimension, region_support[i,:,:], rng)
+            min_bo, sbo = opt_acquisition(X, Y, model, sbo, test_function_dimension, region_support[i,:,:], rng)
             actual = calculate_robustness(np.array(min_bo), test_function)
-            acquisition_fun_sample_region.append(samples_acquistion)
             X = np.vstack((X, np.array(min_bo)))
             Y = np.vstack((Y, np.array(actual)))
-        acquisition_fun_final_samples.append(acquisition_fun_sample_region)
         samples_in_new.append(np.expand_dims(X, axis = 0))
         corresponding_robustness_new.append(np.transpose(Y))
-    return samples_in_new, corresponding_robustness_new, acquisition_fun_final_samples
+    return samples_in_new, corresponding_robustness_new
 
 
 # rng = np.random.default_rng(seed)
@@ -133,7 +133,7 @@ def bayesian_optimization(test_function, samples_in: np.array, corresponding_rob
 # test_function_dimension = 2
 # number_of_samples = 20
 
-# x = uniformSampling(number_of_samples, region_support, test_function_dimension, rng)
+# x = lhs_sampling(number_of_samples, region_support, test_function_dimension, rng)
 # y = calculate_robustness(x)
 
 # x_new, y_new, s = bayesian_optimization(x, y, [10], test_function_dimension, region_support, 10, rng)
@@ -148,7 +148,7 @@ def bayesian_optimization(test_function, samples_in: np.array, corresponding_rob
 #     test_function_dimension = 2
 #     number_of_samples = num_samples
 
-#     x = uniformSampling(number_of_samples, region_support, test_function_dimension, rng)
+#     x = lhs_sampling(number_of_samples, region_support, test_function_dimension, rng)
 #     y = calculate_robustness(x)
 
 #     x_new, y_new, s = bayesian_optimization(x, y, BO_samples, test_function_dimension, region_support, 10, rng)

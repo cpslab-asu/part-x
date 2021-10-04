@@ -5,7 +5,7 @@ import pickle
 from ..models.partx_options import partx_options
 from ..numerical.classification import calculate_volume
 from sklearn.gaussian_process import GaussianProcessRegressor
-from ..numerical.sampling import uniformSampling
+from ..numerical.sampling import uniform_sampling, lhs_sampling
 from scipy import stats
 from ..numerical.calculate_robustness import calculate_robustness
 from ..models.testFunction import callCounter
@@ -49,7 +49,7 @@ def falsification_volume_using_gp(ftree, options, quantiles_at, rng):
         model.fit(X, Y)
         quantile_values_r= []
         for r in range(options.R):
-            samples = uniformSampling(options.M, node_data.region_support, options.test_function_dimension, rng)
+            samples = uniform_sampling(options.M, node_data.region_support, options.test_function_dimension, rng)
             y_pred, sigma_st = model.predict(samples[0], return_std=True)
             quantile_values_m = []
             for x in range(options.M):
@@ -66,15 +66,6 @@ def falsification_volume_using_gp(ftree, options, quantiles_at, rng):
         # print("{} of {} done".format(iterate, len(leaves)))
     # print(np.sum(np.array(falsification_volumes),axis=0))
     return np.array(falsification_volumes)
-
-def get_true_fv(number_of_samples, options, rng, test_function):
-    callCount = callCounter(test_function)
-    samples = uniformSampling(number_of_samples, options.initial_region_support, options.test_function_dimension, rng)
-    y = calculate_robustness(samples, callCount)
-    # print(calculate_volume(options.initial_region_support))
-    # print(np.sum(np.array(y <= 0)))
-    # print(number_of_samples)
-    return (np.sum(np.array(y <= 0)) / (number_of_samples)) * calculate_volume(options.initial_region_support), samples, y
 
 def con_int(x, conf_at):
     mean, std = x.mean(), x.std(ddof=1)

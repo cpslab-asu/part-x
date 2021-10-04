@@ -1,10 +1,11 @@
 import numpy as np
 from .exp_statistics import load_tree, falsification_volume, con_int
+from ..models.partx_options import partx_options
 import pathlib
 import pickle
 
-def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_at, confidence_at, start_seed):
-    result_directory = pathlib.Path().joinpath('result_files').joinpath(BENCHMARK_NAME).joinpath(BENCHMARK_NAME + "_result_generating_files")
+def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_at, confidence_at, folder_name):
+    result_directory = pathlib.Path().joinpath(folder_name).joinpath(BENCHMARK_NAME).joinpath(BENCHMARK_NAME + "_result_generating_files")
 
     print(result_directory.joinpath(BENCHMARK_NAME + "_options.pkl"))
     f = open(result_directory.joinpath(BENCHMARK_NAME + "_options.pkl"), "rb")
@@ -13,22 +14,40 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
 
     print(vars(options))
 
-    f = open(result_directory.joinpath(BENCHMARK_NAME + "_mc_truefv_test_function.pkl"), "rb")
-    mc_uniform_test_function = pickle.load(f)
-    f.close()
+    # f = open(result_directory.joinpath(BENCHMARK_NAME + "_uniform_random_results.pkl"), "rb")
+    # mc_uniform_test_function = pickle.load(f)
+    # f.close()
 
-    result_dictionary = {"true_fv" : mc_uniform_test_function["true_fv"][0]}
+    # result_dictionary = {"true_fv" : mc_uniform_test_function["true_fv"][0]}
+    result_dictionary = {"true_fv" : 0}
     
     volume_wo_gp_rep_classified = []
     volume_wo_gp_rep_unclassified = []
     volume_w_gp_rep = []
-
+    first_falsification = []
+    falsified_true = []
+    best_robustness = []
     for i in range(number_of_macro_replications):
         f = open(result_directory.joinpath(BENCHMARK_NAME + "_" + str(i) + "_fal_val_gp.pkl"), "rb")
         arr = pickle.load(f)
         f.close()
         volume_w_gp_rep.append(np.sum(np.array(arr),axis = 0))
         
+        f = open(result_directory.joinpath(BENCHMARK_NAME + "_" + str(i) + "_point_history.pkl"), "rb")
+        point_history = pickle.load(f)
+        f.close()
+        
+        point_history = np.array(point_history)
+        list_of_neg_rob = np.where(point_history[:,-1] < 0)
+        best_robustness.append(np.min(point_history[:,-1]))
+        # print(list_of_neg_rob[0][0])
+        # print(list_of_neg_rob)
+        if list_of_neg_rob[0] != []:
+            falsified_true.append(1)
+            first_falsification.append(point_history[list_of_neg_rob[0][0],0])
+        else:
+            falsified_true.append(0)
+            first_falsification.append(options.max_budget)
 
         ftree = load_tree(result_directory.joinpath(BENCHMARK_NAME + "_" + str(i) + ".pkl"))
         vol_classified, vol_unclassified = falsification_volume(ftree, options)
@@ -43,7 +62,7 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
     f = open(result_directory.joinpath(BENCHMARK_NAME + "_arrays_for_verif_result.pkl"), "wb")
     pickle.dump(result_generating_dictionary_for_verif, f)
     f.close
-
+    
     con_int_wo_gp_classified = con_int(np.array(volume_wo_gp_rep_classified), confidence_at)
     con_int_wo_gp_unclassified = con_int(np.array(volume_wo_gp_rep_unclassified), confidence_at)
     vol_wo_gp_classified = np.mean(volume_wo_gp_rep_classified)
@@ -68,10 +87,18 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
     vol_w_gp = np.mean(volume_w_gp_rep, axis =0)
     vol_w_gp_sd = np.std(volume_w_gp_rep, axis =0)
     
-
-
-    
-
+    result_dictionary['falsified_true'] = falsified_true
+    falsification_rate = np.sum(falsified_true)
+    numpoints_fin_first_f_mean = np.mean(first_falsification)
+    numpoints_fin_first_f_min = np.min(first_falsification)
+    numpoints_fin_first_f_max = np.max(first_falsification)
+    numpoints_fin_first_f_median = np.median(first_falsification)
+    result_dictionary['numpoints_fin_first_f_mean'] = numpoints_fin_first_f_mean
+    result_dictionary['numpoints_fin_first_f_median'] = numpoints_fin_first_f_median
+    result_dictionary['numpoints_fin_first_f_min'] = numpoints_fin_first_f_min
+    result_dictionary['numpoints_fin_first_f_max'] = numpoints_fin_first_f_max
+    result_dictionary['falsification_rate'] = falsification_rate
+    result_dictionary['best_robustness'] = np.min(best_robustness)
     for iterate in range(len(quantiles_at)):
         quantile_string = str(quantiles_at[iterate]).replace(".","_")
         result_dictionary["mean_fv_with_gp_quan" + quantile_string] = vol_w_gp[iterate]
@@ -79,6 +106,9 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
         conf_interval = con_int(np.array(volume_w_gp_rep)[:,iterate], confidence_at)
         result_dictionary["con_int_fv_with_gp_quan_"+quantile_string+"_confidence_"+confidence_at_string] = conf_interval
 
+    f = open(result_directory.joinpath(BENCHMARK_NAME + "_all_result.pkl"), "wb")
+    pickle.dump(result_dictionary, f)
+    f.close
     
     
     # import matplotlib.pyplot as plt
@@ -104,20 +134,4 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
     # print("{}\n{}\n{}\n{}".format(vol_wo_gp_classified_sd, vol_w_gp_sd[0], vol_w_gp_sd[1], vol_w_gp_sd[2]))
     # print("***************")
     # print(result_dictionary)
-    f = open(result_directory.joinpath(BENCHMARK_NAME + "_results.pkl"), "wb")
-    pickle.dump(result_dictionary, f)
-    f.close
-    
     return result_dictionary
-
-
-
-# BENCHMARK_NAME = "Himmelblaus_3_random_seed"
-# quantiles_at = [0.5, 0.95, 0.99]
-# number_of_macro_replications = 5
-# start_seed = 5000
-# points_for_unif_sampling = 10000
-# confidence_at = 0.95
-# result_dictionary = get_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_at, confidence_at, start_seed, points_for_unif_sampling)
-# print("******************")
-# print(result_dictionary)
