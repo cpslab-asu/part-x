@@ -1,11 +1,11 @@
 from ..models.uniform_random_options import uniform_random_options
-from ..executables.run_single_replication_UR import run_single_replication_UR
+from ..executables.single_replication_UR import run_single_replication_UR
 from pathos.multiprocessing import ProcessingPool as Pool
 import pickle
 import pathlib
 
 
-def run_partx_UR(number_of_macro_replications, benchmark_name, start_seed, test_function, 
+def run_partx_UR(number_of_macro_replications, benchmark_name, initial_seed, test_function, 
                 test_function_dimension, region_support,
                 number_of_samples, results_folder):
     
@@ -21,7 +21,7 @@ def run_partx_UR(number_of_macro_replications, benchmark_name, start_seed, test_
 
     
     # create partx options
-    options = uniform_random_options(start_seed, number_of_samples, initial_region_support, test_function_dimension, benchmark_name)
+    options = uniform_random_options(initial_seed, number_of_samples, region_support, test_function_dimension, benchmark_name)
     
     f = open(benchmark_result_pickle_files.joinpath(options.BENCHMARK_NAME + "_uniform_random_options.pkl"), "wb")
     pickle.dump(options,f)

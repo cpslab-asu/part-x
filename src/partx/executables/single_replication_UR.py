@@ -13,10 +13,12 @@ import logging
 import pickle
 from .exp_statistics import falsification_volume_using_gp
 from ..numerical.sampling import uniform_sampling
+from ..numerical.calculate_robustness import calculate_robustness
 
 def run_single_replication_UR(inputs):
     replication_number, options, test_function, benchmark_result_directory = inputs
 
+    print("Started Replication Number {} with {} points.".format(replication_number, options.number_of_samples))
     seed = options.start_seed + replication_number
     BENCHMARK_NAME = options.BENCHMARK_NAME
 
@@ -26,14 +28,15 @@ def run_single_replication_UR(inputs):
     callCounts = callCounter(test_function)
     rng = np.random.default_rng(seed)
 
-    samples = uniform_sampling(points_for_unif_sampling, options.initial_region_support, options.test_function_dimension, rng)
-    y = calculate_robustness(samples, callCount)
+    samples = uniform_sampling(options.number_of_samples, options.initial_region_support, options.test_function_dimension, rng)
+    y = calculate_robustness(samples, callCounts)
 
     true_fv = (np.sum(np.array(y <= 0)) / (number_of_samples)) * calculate_volume(options.initial_region_support)
     result_dictionary = {"true_fv" : true_fv,
                          "samples" : samples,
                          "robustness" : y}
 
+    print("Ended Replication Number {} with {} points.".format(replication_number, options.number_of_samples))
 
     f = open(benchmark_result_pickle_files.joinpath(benchmark_name + "_" + str(replication_number) + "_uniform_random_results.pkl"), "wb")
     pickle.dump(result_dictionary, f)
