@@ -31,14 +31,14 @@ def run_single_replication_UR(inputs):
     samples = uniform_sampling(options.number_of_samples, options.initial_region_support, options.test_function_dimension, rng)
     y = calculate_robustness(samples, callCounts)
 
-    true_fv = (np.sum(np.array(y <= 0)) / (number_of_samples)) * calculate_volume(options.initial_region_support)
+    true_fv = (np.sum(np.array(y <= 0)) / (options.number_of_samples)) * calculate_volume(options.initial_region_support)
     result_dictionary = {"true_fv" : true_fv,
                          "samples" : samples,
                          "robustness" : y}
 
     print("Ended Replication Number {} with {} points.".format(replication_number, options.number_of_samples))
 
-    f = open(benchmark_result_pickle_files.joinpath(benchmark_name + "_" + str(replication_number) + "_uniform_random_results.pkl"), "wb")
+    f = open(benchmark_result_pickle_files.joinpath(BENCHMARK_NAME + "_" + str(replication_number) + "_uniform_random_results.pkl"), "wb")
     pickle.dump(result_dictionary, f)
     f.close()
 
