@@ -1,14 +1,15 @@
 def budget_check(options, function_calls, remaining_nodes):
+    """[summary]Check if the budget is remaining to continue or move to Continued Sampling phase
+
+    Args:
+        options ([type]): Initialization Options
+        function_calls ([type]): number of function calls made
+        remaining_nodes ([type]): remaining regions
+
+    Returns:
+        [type]: If False, Move to continued sampling
     """
-    :param total_budget: Maximum Number of Evaluations (T)
-    :param initialization_budget: Budget for sampling points
-    :param number_of_BO_samples: Budget for BO samples
-    :param continued_sampling_budget: Budget for Continious Sampling
-    :param Nc: Minimum Evaluations per subregion for Classified
-    :param Nc_: Minimum Evaluations per subregion for Unclassified
-    :param n_subrem: Number of regions with class 'remaining' (r,r+,r-)
-    :return: Total Budget remaining after the iteration
-    """
+    
 
     max_budget = options.max_budget
     budget_exhausted = function_calls

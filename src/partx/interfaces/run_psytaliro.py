@@ -1,5 +1,5 @@
 from .run_standalone import run_partx
-from ..executables.exp_statistics import get_true_fv
+# from ..executables.exp_statistics import get_true_fv
 from ..executables.generate_statistics import generate_statistics
 from dataclasses import dataclass
 from datetime import datetime
@@ -36,6 +36,7 @@ class PartXOptimizerOptions:
 def _optimize(func: OptimizationFn, options: Options, optimizer_options: PartXOptimizerOptions):
     bounds = [bound.astuple() for bound in options.bounds]
     region_support = np.array([list(map(list, bounds))])
+    print(region_support)
     start_time = datetime.now()
     
     results = run_partx(

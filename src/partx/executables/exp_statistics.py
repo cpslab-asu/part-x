@@ -1,5 +1,4 @@
 import numpy as np
-# from ..utitlies.utils_partx import plotRegion
 import matplotlib.pyplot as plt
 import pickle
 from ..models.partx_options import partx_options
@@ -12,11 +11,28 @@ from ..models.testFunction import callCounter
 import pathlib
 
 def load_tree(tree_name):
+    """Load the tree
+
+    Args:
+        tree_name ([type]): Load a tree for a particular replication
+
+    Returns:
+        [type]: tree
+    """
     f = open(tree_name, "rb")
     ftree = pickle.load(f)
     return ftree
 
 def falsification_volume(ftree, options):
+    """Calculate Falsification Volume Using the classified and unclassified regions
+
+    Args:
+        ftree ([type]): ftree
+        options ([type]): initialization options
+
+    Returns:
+        [type]: volumes of classified and unclassified regions
+    """
     leaves = ftree.leaves()
     region_supports_classified = []
     region_supports_unclassified = []
@@ -37,6 +53,17 @@ def falsification_volume(ftree, options):
     return np.sum(volumes_classified), np.sum(volumes_unclassified)
 
 def falsification_volume_using_gp(ftree, options, quantiles_at, rng):
+    """Calculate falsification volume using GP 
+
+    Args:
+        ftree ([type]): [description]
+        options ([type]): [description]
+        quantiles_at ([type]): [description]
+        rng ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     leaves = ftree.leaves()
     region_supports = []
     falsification_volumes = []
@@ -68,6 +95,15 @@ def falsification_volume_using_gp(ftree, options, quantiles_at, rng):
     return np.array(falsification_volumes)
 
 def con_int(x, conf_at):
+    """Calculate COnfidence interval
+
+    Args:
+        x ([type]): [description]
+        conf_at ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     mean, std = x.mean(), x.std(ddof=1)
     conf_intveral = stats.norm.interval(conf_at, loc=mean, scale=std)
     return conf_intveral

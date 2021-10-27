@@ -10,7 +10,6 @@ from ..numerical.budget_check import budget_check
 from treelib import Tree
 from ..numerical.calIntegral import calculate_mc_integral
 from ..executables.single_replication import run_single_replication
-from ..executables.exp_statistics import get_true_fv
 from pathos.multiprocessing import ProcessingPool as Pool
 import pickle
 import logging
@@ -21,12 +20,12 @@ import pathlib
 def run_partx(benchmark_name, test_function, test_function_dimension, region_support, 
               initialization_budget, maximum_budget, continued_sampling_budget, number_of_BO_samples, 
               NGP, M, R, branching_factor, nugget_mean, nugget_std_dev, alpha, delta,
-              number_of_macro_replications, initial_seed, fv_quantiles_for_gp, points_for_unif_sampling, results_folder):
+              number_of_macro_replications, initial_seed, fv_quantiles_for_gp, results_folder_name):
     
     
     # create a directory for storing result files
     base_path = pathlib.Path()
-    result_directory = base_path.joinpath(results_folder)
+    result_directory = base_path.joinpath(results_folder_name)
     result_directory.mkdir(exist_ok=True)
     benchmark_result_directory = result_directory.joinpath(benchmark_name)
     benchmark_result_directory.mkdir(exist_ok=True)
@@ -57,15 +56,4 @@ def run_partx(benchmark_name, test_function, test_function_dimension, region_sup
     pool = Pool()
     results = list(pool.map(run_single_replication, inputs))
     
-    # print("Starting Uniform Sampling for {} points".format(points_for_unif_sampling))
-    # rng = np.random.default_rng(initial_seed)
-    # true_fv, x,y = get_true_fv(points_for_unif_sampling, options, rng, test_function)
-    # mc_uniform_test_function = {"true_fv" : true_fv,
-    #                             "x" : x,
-    #                             "y" : y}
-
-    # f = open(benchmark_result_pickle_files.joinpath(benchmark_name + "_mc_truefv_test_function.pkl"), "wb")
-    # pickle.dump(mc_uniform_test_function, f)
-    # f.close()
-    # print("Ending Uniform Sampling")
     return results

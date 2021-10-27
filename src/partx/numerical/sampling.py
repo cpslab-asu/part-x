@@ -8,7 +8,7 @@ from skopt.space import Space
 
 
 def lhs_sampling(number_of_samples: int, region_support: np.array, test_function_dimension: int, rng) -> np.array:
-    """Sample *number_of_samples* points within the *region_support* which has a dimension as mentioned below.
+    """Latin Hypercube Sampling: Sample *number_of_samples* points within the *region_support* which has a dimension as mentioned below.
 
     Args:
         number_of_samples (int): Number of points to sample within the region bounds.

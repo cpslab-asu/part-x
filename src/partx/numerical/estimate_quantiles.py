@@ -5,9 +5,7 @@ from scipy import stats
 from .sampling import lhs_sampling
 # from calculate_robustness import calculate_robustness
 # from testFunction import test_function
-
-def calculateQuantile(y_pred, sigma_st, alpha):
-    """
+"""
     Min-Max Quantile Calculation
     Parameters:
     ----------
@@ -24,6 +22,18 @@ def calculateQuantile(y_pred, sigma_st, alpha):
 
         upper_quantile: list
             maximum Quantile at various alpha values.
+    """
+def calculateQuantile(y_pred, sigma_st, alpha):
+    """[summary]
+
+    Args:
+        y_pred ([type]): Predicted Function Value for Sampled observation from the BO algorithm.
+        sigma_st ([type]): Standard deviation of Fitted Gaussian Process corresponding to the region at query points.
+        alpha ([type]): list of Significance Levels
+
+    Returns:
+        [type]: lower_quantile
+        [type]: upper_quantile
     """
 
     term1 = np.array(y_pred)

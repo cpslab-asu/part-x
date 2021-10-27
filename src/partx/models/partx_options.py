@@ -1,4 +1,5 @@
 from ..numerical.classification import calculate_volume
+import numpy as np
 
 class partx_options:
     def __init__(self, initial_region_support, branching_factor, test_function_dimension,
@@ -6,7 +7,7 @@ class partx_options:
                 delta, uniform_partitioning, initialization_budget, max_budget, 
                 continued_sampling_budget, nugget_mean, nugget_std_dev, start_seed, fv_quantiles_for_gp, BENCHMARK_NAME, NGP):
                 
-        self.initial_region_support = initial_region_support
+        self.initial_region_support = initial_region_support.astype('float64')
         self.test_function_dimension = test_function_dimension
         # self.number_of_samples_gen_GP = number_of_samples_gen_GP
         self.alpha = alpha
