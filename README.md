@@ -23,6 +23,9 @@ To run these non-linear benchmarks:
 cd bookish_umbrella
 poetry update
 poetry run python BENCHMARK_NAME.py
+
+# To run driver_goldstein_1 benchmark:
+poetry run python driver_goldstein_1.py
 ```
 
 ## Citation
