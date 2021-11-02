@@ -7,7 +7,7 @@ from datetime import datetime
 import numpy as np
 
 from staliro.options import Options
-from staliro.optimizers import OptimizationFn, Optimizer
+from staliro.optimizers.optimizer import OptimizationFn, Optimizer
 from staliro.results import Result, Run
 
 
@@ -30,8 +30,7 @@ class PartXOptimizerOptions:
     initial_seed: int
     fv_quantiles_for_gp: list
     fv_confidence_at: int
-    points_for_unif_sampling: int
-    results_folder: str
+    results_folder_name: str
 
 def _optimize(func: OptimizationFn, options: Options, optimizer_options: PartXOptimizerOptions):
     bounds = [bound.astuple() for bound in options.bounds]
@@ -59,8 +58,7 @@ def _optimize(func: OptimizationFn, options: Options, optimizer_options: PartXOp
         number_of_macro_replications=optimizer_options.number_of_macro_replications,
         initial_seed=optimizer_options.initial_seed,
         fv_quantiles_for_gp = optimizer_options.fv_quantiles_for_gp, 
-        points_for_unif_sampling = optimizer_options.points_for_unif_sampling,
-        results_folder = optimizer_options.results_folder
+        results_folder_name = optimizer_options.results_folder_name
     )
     end_time = datetime.now()
     return results
@@ -93,8 +91,7 @@ class PartX(Optimizer[Run]):
             initial_seed=kwargs['initial_seed'],
             fv_quantiles_for_gp = kwargs['fv_quantiles_for_gp'],
             fv_confidence_at = kwargs['fv_confidence_at'],
-            points_for_unif_sampling = kwargs['points_for_unif_sampling'],
-            results_folder = kwargs['results_folder']
+            results_folder_name = kwargs['results_folder_name']
         )
 
     def optimize(self, func: OptimizationFn, 
