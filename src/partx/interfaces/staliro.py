@@ -29,7 +29,7 @@ class PartX(Optimizer[PartXResult]):
     delta: float
     macro_replication: int
     fv_quantiles_for_gp: int
-    fv_confidence_at: float
+    results_at_confidence: float
     results_folder_name: str
 
     def optimize(self, func: ObjectiveFn, bounds: Bounds, budget:int, seed: int) -> PartXResult:
@@ -57,7 +57,8 @@ class PartX(Optimizer[PartXResult]):
             delta=self.delta,
             number_of_macro_replications=self.macro_replication,
             initial_seed=seed,
-            fv_quantiles_for_gp = self.fv_quantiles_for_gp, 
+            fv_quantiles_for_gp = self.fv_quantiles_for_gp,
+            results_at_confidence = self.results_at_confidence,
             results_folder_name = self.results_folder_name
         )
 

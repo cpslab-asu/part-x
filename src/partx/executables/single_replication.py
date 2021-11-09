@@ -53,7 +53,7 @@ def run_single_replication(inputs):
 
     rng = np.random.default_rng(seed)
 
-    if options.max_budget < options.initialization_budget+options.number_of_BO_samples:
+    if options.max_budget < options.initialization_budget+options.number_of_BO_samples[0]:
         log.info("Error: Cannot Initialize root node")
         raise Exception("(Max Budget) MUST NOT BE LESS THAN (Initialization_budget + number_of_BO_samples)")
 # Sampling Initialization
