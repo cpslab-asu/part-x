@@ -50,10 +50,9 @@ def run_partx(benchmark_name, test_function, test_function_dimension, region_sup
     for replication_number in range(number_of_macro_replications):
         data = [replication_number, options, test_function, benchmark_result_directory]
         inputs.append(data)
-    
-        
+         
     print("Starting run for {} macro replications".format(len(inputs)))
     pool = Pool()
     results = list(pool.map(run_single_replication, inputs))
     
-    return results
+    return [results]

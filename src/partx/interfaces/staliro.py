@@ -16,6 +16,7 @@ class PartX(Optimizer[PartXResult]):
 
     benchmark_name: str
     test_function_dimension: int
+    initialization_budget: int
     continued_sampling_budget: int
     number_of_BO_samples: int
     NGP: Any
@@ -31,9 +32,9 @@ class PartX(Optimizer[PartXResult]):
     fv_confidence_at: float
     results_folder_name: str
 
-    def optimize(self, func: ObjectiveFn, bounds: Bounds, budget: int, seed: int) -> PartXResult:
+    def optimize(self, func: ObjectiveFn, bounds: Bounds, budget:int, seed: int) -> PartXResult:
         region_support = np.array((tuple(bound.astuple() for bound in bounds),))
-
+        print(budget)
         def test_function(sample: np.ndarray) -> float:
             return func.eval_sample(Sample(sample))
         
@@ -42,8 +43,8 @@ class PartX(Optimizer[PartXResult]):
             test_function=test_function,
             test_function_dimension=self.test_function_dimension,
             region_support=region_support,
-            initialization_budget=budget,
-            maximum_budget=self.iterations,
+            initialization_budget=self.initialization_budget,
+            maximum_budget=budget,
             continued_sampling_budget=self.continued_sampling_budget,
             number_of_BO_samples=self.number_of_BO_samples,
             NGP=self.NGP,

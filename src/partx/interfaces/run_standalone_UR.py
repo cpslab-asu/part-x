@@ -35,10 +35,11 @@ def run_partx_UR(number_of_macro_replications, benchmark_name, initial_seed, tes
     for replication_number in range(number_of_macro_replications):
         data = [replication_number, options, test_function, benchmark_result_directory]
         inputs.append(data)
+        run_single_replication_UR(data)
     
         
-    print("Starting run for {} macro replications".format(len(inputs)))
-    pool = Pool()
-    results = list(pool.map(run_single_replication_UR, inputs))
-
+    # print("Starting run for {} macro replications".format(len(inputs)))
+    # pool = Pool()
+    # results = list(pool.map(run_single_replication_UR, inputs))
+    results = 1
     return results
