@@ -85,6 +85,19 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "kriging-gpr"
+version = "0.1.3"
+description = "Gaussian Process Regression Package from Matlab to Python"
+category = "main"
+optional = false
+python-versions = ">=3.7.1,<3.10"
+develop = false
+
+[package.source]
+type = "directory"
+url = "../kriging_gpr"
+
+[[package]]
 name = "matplotlib"
 version = "3.5.0"
 description = "Python plotting package"
@@ -340,7 +353,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.1,<3.10"
-content-hash = "980d43c921a5fb54a10594c5296466efb3b75995d17eac40b264b591fb229944"
+content-hash = "994d521ac4baa09ac0ad1d7fb9736159bd77b3a57a46b05958da2dd74d243e8d"
 
 [metadata.files]
 antlr4-python3-runtime = [
@@ -416,6 +429,7 @@ kiwisolver = [
     {file = "kiwisolver-1.3.2-pp37-pypy37_pp73-win_amd64.whl", hash = "sha256:bcadb05c3d4794eb9eee1dddf1c24215c92fb7b55a80beae7a60530a91060560"},
     {file = "kiwisolver-1.3.2.tar.gz", hash = "sha256:fc4453705b81d03568d5b808ad8f09c77c47534f6ac2e72e733f9ca4714aa75c"},
 ]
+kriging-gpr = []
 matplotlib = [
     {file = "matplotlib-3.5.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:4b018ea6f26424a0852eb60eb406420d9f0d34f65736ea7bbfbb104946a66d86"},
     {file = "matplotlib-3.5.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:a07ff2565da72a7b384a9e000b15b6b8270d81370af8a3531a16f6fbcee023cc"},

@@ -14,6 +14,7 @@ scipy = "^1.7.1"
 matplotlib = "^3.4.3"
 psy-taliro = "^1.0.0-alpha.14"
 scikit-optimize = "^0.8.1"
+kriging_gpr = {path = "../kriging_gpr"}
 
 [tool.poetry.dev-dependencies]
 
