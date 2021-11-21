@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import numpy as np
-from sklearn.gaussian_process import GaussianProcessRegressor
+# from sklearn.gaussian_process import GaussianProcessRegressor
 from warnings import catch_warnings
 from warnings import simplefilter
 from numpy import argmax
@@ -9,7 +9,11 @@ from pathos.multiprocessing import ProcessingPool as Pool
 from .calculate_robustness import calculate_robustness
 from .sampling import lhs_sampling
 
-def surrogate(model, X:np.array):
+from kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
+from kriging_gpr.interface.OK_Rpredict import OK_Rpredict
+
+
+def surrogate(model, X:np.array, Ytrain):
     """Surrogate Model function
 
     Args:
@@ -23,10 +27,11 @@ def surrogate(model, X:np.array):
     with catch_warnings():
         # ignore generated warnings
         simplefilter("ignore")
-        return model.predict(X, return_std=True)
+        # return model.predict(X, return_std=True)
+        return OK_Rpredict(model, X, 0, Ytrain)
 
 
-def acquisition(X: np.array, Xsamples: np.array, model):
+def acquisition(X: np.array, y, Xsamples: np.array, model):
     """Acquisition function
 
     Args:
@@ -40,10 +45,10 @@ def acquisition(X: np.array, Xsamples: np.array, model):
 
     
     # calculate the best surrogate score found so far
-    yhat, _ = surrogate(model, X)
+    yhat, _ = surrogate(model, X, y)
     best = min(yhat)
     # calculate mean and stdev via surrogate function
-    mu, std = surrogate(model, Xsamples[0,:,:])
+    mu, std = surrogate(model, Xsamples[0], y)
     mu = mu[:, 0]
     # calculate the probability of improvement
     probs = norm.cdf((mu - best) / (std+1E-9))
@@ -73,7 +78,7 @@ def opt_acquisition(X: np.array, y: np.array, model, sbo:list ,test_function_dim
     # print("*************")
     # print("Length before removing {}".format(sbo.shape))
     region_support = np.array(region_support.reshape((1,region_support.shape[0],region_support.shape[1])))
-    scores = acquisition(X, sbo, model)
+    scores = acquisition(X, y, sbo, model)
     ix = argmax(scores)
     min_bo = sbo[0,ix,:]
     new_sbo = np.delete(sbo, ix, axis = 1)
@@ -116,8 +121,7 @@ def bayesian_optimization(test_function, samples_in: np.array, corresponding_rob
         X = samples_in[i,:,:]
         Y = corresponding_robustness[i,:].reshape((corresponding_robustness.shape[1],1))
         for j in range(number_of_samples_to_generate[i]):
-            model = GaussianProcessRegressor()
-            model.fit(X, Y)
+            model = OK_Rmodel_kd_nugget(X, Y, 0, 2)
             
             min_bo, sbo = opt_acquisition(X, Y, model, sbo, test_function_dimension, region_support[i,:,:], rng)
             actual = calculate_robustness(np.array(min_bo), test_function)

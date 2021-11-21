@@ -1,10 +1,10 @@
 import numpy as np
-from sklearn.gaussian_process import GaussianProcessRegressor
-# import scipy as sp
+# from sklearn.gaussian_process import GaussianProcessRegressor
 from scipy import stats
 from .sampling import lhs_sampling
-# from calculate_robustness import calculate_robustness
-# from testFunction import test_function
+from kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
+from kriging_gpr.interface.OK_Rpredict import OK_Rpredict
+
 
 def calculateQuantile(y_pred, sigma_st, alpha):
     """Min-Max Quantile Calculation
@@ -61,14 +61,14 @@ def mc_Step(samples_in, samples_out, grid, region_support, regionDimensions, alp
     for iterate in range(R):
         X = samples_in[0]
         Y = np.transpose(samples_out)
-        model = GaussianProcessRegressor()
-        model.fit(X, Y)
+        model = OK_Rmodel_kd_nugget(X, Y, 0, 2)
+        
 
 
         samples = reshaped_grid[iterate]
         
             # https://scikit-learn.org/stable/auto_examples/gaussian_process/plot_gpr_noisy_targets.html#sphx-glr-auto-examples-gaussian-process-plot-gpr-noisy-targets-py
-        y_pred, sigma_st = model.predict(samples[0], return_std=True)
+        y_pred, sigma_st = OK_Rpredict(model, samples[0], 0, Y)
         for alpha_iter in range(len(alpha)):
             minq, maxq = calculateQuantile(y_pred, sigma_st, alpha[alpha_iter])
             minQuantile[iterate, alpha_iter] = min(minq)

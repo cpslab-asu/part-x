@@ -1,4 +1,6 @@
-from sklearn.gaussian_process import GaussianProcessRegressor
+from kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
+from kriging_gpr.interface.OK_Rpredict import OK_Rpredict
+
 from .sampling import lhs_sampling
 import numpy as np
 from scipy import stats
@@ -8,13 +10,13 @@ from scipy import stats
 def calculate_mc_integral(samples_in, samples_out, region_support, region_dimension, R, M, rng):
     X = samples_in[0]
     Y = np.transpose(samples_out)
-    model = GaussianProcessRegressor()
-    model.fit(X, Y)
+    model = OK_Rmodel_kd_nugget(X, Y, 0, 2)
+    # model.fit(X, Y)
 
     cdf_all = []
     for r in range(R):
         samples = lhs_sampling(M, region_support, region_dimension, rng)
-        y_pred, sigma_st = model.predict(samples[0], return_std=True)
+        y_pred, sigma_st = OK_Rpredict(model, samples[0], 0, Y)
         for x in range(M):
             # print(stats.norm.cdf(0,y_pred[x],sigma_st[x]))
             cdf_all.extend((stats.norm.cdf(0.,y_pred[x],sigma_st[x])))
