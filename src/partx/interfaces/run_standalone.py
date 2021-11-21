@@ -56,7 +56,7 @@ def run_partx(benchmark_name, test_function, test_function_dimension, region_sup
         data = [replication_number, options, test_function, benchmark_result_directory]
         inputs.append(data)
         run_single_replication(data)
-    results = []
+
          
     # print("Starting run for {} macro replications".format(len(inputs)))
     # pool = Pool()
@@ -72,4 +72,4 @@ def run_partx(benchmark_name, test_function, test_function_dimension, region_sup
             writer.writerow([key, value])
 
 
-    return [results]
+    return [result_dictionary]

@@ -39,10 +39,12 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
         f = open(result_directory.joinpath(BENCHMARK_NAME + "_" + str(i) + "_point_history.pkl"), "rb")
         point_history = pickle.load(f)
         f.close()
+        print(point_history)
         
         point_history = np.array(point_history)
-        list_of_neg_rob = np.where(point_history[:,-1] < 0)
-        list_of_pos_rob = np.where(point_history[:,-1] >= 0)
+        list_of_neg_rob = np.where(point_history[:,-1] <= 0)
+        list_of_pos_rob = np.where((point_history[:,-1] > 0))
+       
         best_robustness.append(np.min(point_history[:,-1]))
         if list_of_neg_rob[0].size > 0 :
             falsified_true.append(1)
@@ -50,7 +52,9 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
             first_falsification.append(point_history[list_of_neg_rob[0][0],0])
             falsification_corresponding_points.append(point_history[list_of_neg_rob[0][0]])
         else:
-            unfalsification_corresponding_points.append(point_history[list_of_pos_rob[0][0]])
+            # unfalsification_corresponding_points.append(point_history[list_of_pos_rob[0][0]])
+            unfal_ind = np.argmin(point_history[list_of_pos_rob,-1])
+            unfalsification_corresponding_points.append(point_history[unfal_ind])
             falsified_true.append(0)
             first_falsification.append(options.max_budget)
 
@@ -118,7 +122,7 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
 
     result_dictionary["falsification_corr_point"] = falsification_corresponding_points
     result_dictionary["unfalsification_corr_point"] = unfalsification_corresponding_points
-    
+    print(best_robustness)
     f = open(result_directory.joinpath(BENCHMARK_NAME + "_all_result.pkl"), "wb")
     pickle.dump(result_dictionary, f)
     f.close
