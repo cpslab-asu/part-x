@@ -139,7 +139,7 @@ def run_single_replication(inputs):
                 parent = node.identifier
                 node = node.data
                 cdf_sum = calculate_mc_integral(node.samples_in, node.samples_out, node.region_support, options.test_function_dimension, options.R, options.M, rng)
-                volumes.append((cdf_sum * calculate_volume(node.region_support)[0]) + abs(rng.normal(options.nugget_mean, options.nugget_std_dev))) # + nugget
+                volumes.append(cdf_sum * calculate_volume(node.region_support)[0])
             
             if np.sum(volumes) != 0.0:
                 volume_distribution = volumes/np.sum(volumes)
@@ -200,7 +200,7 @@ def run_single_replication(inputs):
                 parent = node.identifier
                 node = node.data
                 cdf_sum = calculate_mc_integral(node.samples_in, node.samples_out, node.region_support, options.test_function_dimension, options.R, options.M,rng)
-                volumes.append((cdf_sum * calculate_volume(node.region_support)[0]) + abs(rng.normal(options.nugget_mean, options.nugget_std_dev))) # + nugget
+                volumes.append(cdf_sum * calculate_volume(node.region_support)[0])
 
             volume_distribution = volumes/np.sum(volumes)
             n_cont_sampling_budget_assignment = assign_budgets(volume_distribution,budget_available,rng)

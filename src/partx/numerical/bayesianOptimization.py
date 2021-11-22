@@ -46,13 +46,19 @@ def acquisition(X: np.array, y, Xsamples: np.array, model):
     
     # calculate the best surrogate score found so far
     yhat, _ = surrogate(model, X, y)
-    best = min(yhat)
+    best = np.min(yhat)
     # calculate mean and stdev via surrogate function
     mu, std = surrogate(model, Xsamples[0], y)
+    # print(mu)
+    # print(mu[:,0])
     mu = mu[:, 0]
+    prob_temp = (mu - best) / (std+1E-9)
+    # print(prob_temp[:,0])
+    probs = []
+    for j in prob_temp[:,0]:
     # calculate the probability of improvement
-    probs = norm.cdf((mu - best) / (std+1E-9))
-    return probs
+        probs.append(norm.cdf(j))
+    return np.array(probs)
 
 
 

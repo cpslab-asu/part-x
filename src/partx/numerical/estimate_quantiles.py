@@ -66,9 +66,9 @@ def mc_Step(samples_in, samples_out, grid, region_support, regionDimensions, alp
 
 
         samples = reshaped_grid[iterate]
-        
+        # print((np.array(samples)[0]))
             # https://scikit-learn.org/stable/auto_examples/gaussian_process/plot_gpr_noisy_targets.html#sphx-glr-auto-examples-gaussian-process-plot-gpr-noisy-targets-py
-        y_pred, sigma_st = OK_Rpredict(model, samples[0], 0, Y)
+        y_pred, sigma_st = OK_Rpredict(model, np.array(samples)[0], 0, Y)
         for alpha_iter in range(len(alpha)):
             minq, maxq = calculateQuantile(y_pred, sigma_st, alpha[alpha_iter])
             minQuantile[iterate, alpha_iter] = min(minq)
@@ -128,6 +128,7 @@ def estimate_quantiles(samples_in: np.array, samples_out: np.array, grid:list, r
     for alpha_iter in range(len(alpha)):
         lower_bound.append(mcEstimate_minimum_mean[alpha_iter] - ((stats.norm.ppf(1 - (alpha[alpha_iter] / 2))) * mcEstimate_minimum_variance[alpha_iter]))
         upper_bound.append(mcEstimate_maximum_mean[alpha_iter] + ((stats.norm.ppf(1 - (alpha[alpha_iter] / 2))) * mcEstimate_maximum_variance[alpha_iter]))
+    # print(lower_bound, upper_bound)
     return lower_bound, upper_bound
 
 #####################################################Test################################################################################################
