@@ -45,20 +45,29 @@ def acquisition(X: np.array, y, Xsamples: np.array, model):
 
     
     # calculate the best surrogate score found so far
-    yhat, _ = surrogate(model, X, y)
-    best = np.min(yhat)
+    yhat, _ = surrogate(model, X, y) 
+    curr_best = np.max(yhat)
     # calculate mean and stdev via surrogate function
     mu, std = surrogate(model, Xsamples[0], y)
-    # print(mu)
-    # print(mu[:,0])
+    
     mu = mu[:, 0]
-    prob_temp = (mu - best) / (std+1E-9)
-    # print(prob_temp[:,0])
-    probs = []
-    for j in prob_temp[:,0]:
-    # calculate the probability of improvement
-        probs.append(norm.cdf(j))
-    return np.array(probs)
+    ei_0 = []
+    
+    for pred_mu, pred_std in zip(mu, std):
+        pred_var = np.sqrt(pred_std[0])
+        if pred_var > 0:
+            
+            var_1 = curr_best-pred_mu
+            var_2 = var_1 / pred_var
+            
+            
+            ei = (var_1 * norm.cdf(var_2) + pred_var * norm.pdf(var_2))
+        elif pred_var<=0:
+            ei = 0
+        ei_0.append(ei)
+
+    expec_improv = np.array(ei_0)
+    return expec_improv
 
 
 
@@ -85,7 +94,7 @@ def opt_acquisition(X: np.array, y: np.array, model, sbo:list ,test_function_dim
     # print("Length before removing {}".format(sbo.shape))
     region_support = np.array(region_support.reshape((1,region_support.shape[0],region_support.shape[1])))
     scores = acquisition(X, y, sbo, model)
-    ix = argmax(scores)
+    ix = argmin(scores)
     min_bo = sbo[0,ix,:]
     new_sbo = np.delete(sbo, ix, axis = 1)
     # print("Length after removing {}".format(new_sbo.shape))

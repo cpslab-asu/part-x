@@ -18,7 +18,7 @@ import time
 import datetime
 import re, csv, itertools
 import pathlib
-
+import os
 
 def run_partx(benchmark_name, test_function, test_function_dimension, region_support, 
               initialization_budget, maximum_budget, continued_sampling_budget, number_of_BO_samples, 
@@ -55,13 +55,25 @@ def run_partx(benchmark_name, test_function, test_function_dimension, region_sup
     for replication_number in range(number_of_macro_replications):
         data = [replication_number, options, test_function, benchmark_result_directory]
         inputs.append(data)
-        run_single_replication(data)
-
-         
+        results = run_single_replication(data)
+    
+        
     # print("Starting run for {} macro replications".format(len(inputs)))
     # pool = Pool()
+
+    # with Pool(processes=os.cpu_count() - 1) as pool:
+    #     for replication_number in range(number_of_macro_replications):
+    #         result = pool.apply_async(run_single_replication, (inputs[replication_number],))
+            # result_objs.append(result)
+        
+        # results = [result.get() for result in result_objs]
+        # print(len(results), np.mean(results), np.var(results))
+
+    # with Pool(10) as pool:
+    #     results = list(pool.map(run_single_replication, inputs))
+
     # results = list(pool.map(run_single_replication, inputs))
-    
+
     result_dictionary = generate_statistics(options.BENCHMARK_NAME, number_of_macro_replications, options.fv_quantiles_for_gp, results_at_confidence,results_folder_name)
 
     today = time.strftime("%m/%d/%Y")

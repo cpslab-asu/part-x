@@ -128,7 +128,7 @@ def estimate_quantiles(samples_in: np.array, samples_out: np.array, grid:list, r
     for alpha_iter in range(len(alpha)):
         lower_bound.append(mcEstimate_minimum_mean[alpha_iter] - ((stats.norm.ppf(1 - (alpha[alpha_iter] / 2))) * mcEstimate_minimum_variance[alpha_iter]))
         upper_bound.append(mcEstimate_maximum_mean[alpha_iter] + ((stats.norm.ppf(1 - (alpha[alpha_iter] / 2))) * mcEstimate_maximum_variance[alpha_iter]))
-    # print(lower_bound, upper_bound)
+    print(lower_bound, upper_bound)
     return lower_bound, upper_bound
 
 #####################################################Test################################################################################################

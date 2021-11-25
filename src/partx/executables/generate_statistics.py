@@ -39,7 +39,7 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
         f = open(result_directory.joinpath(BENCHMARK_NAME + "_" + str(i) + "_point_history.pkl"), "rb")
         point_history = pickle.load(f)
         f.close()
-        print(point_history)
+        # print(point_history)
         
         point_history = np.array(point_history)
         list_of_neg_rob = np.where(point_history[:,-1] <= 0)
