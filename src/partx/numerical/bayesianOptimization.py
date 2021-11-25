@@ -12,6 +12,8 @@ from .sampling import lhs_sampling
 from kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
 from kriging_gpr.interface.OK_Rpredict import OK_Rpredict
 
+from scipy.optimize import minimize
+from scipy.optimize import Bounds
 
 def surrogate(model, X:np.array, Ytrain):
     """Surrogate Model function
@@ -42,34 +44,45 @@ def acquisition(X: np.array, y, Xsamples: np.array, model):
     Returns:
         [type]: Sample probabiility of each sample points
     """
-
-    
+    # if (Xsamples.shape).shape == 1:
+    Xsamples = Xsamples.reshape(1,Xsamples.shape[0])
     # calculate the best surrogate score found so far
     yhat, _ = surrogate(model, X, y) 
-    curr_best = np.max(yhat)
+    curr_best = np.min(yhat)
     # calculate mean and stdev via surrogate function
-    mu, std = surrogate(model, Xsamples[0], y)
+    mu, std = surrogate(model, Xsamples, y)
     
-    mu = mu[:, 0]
+    mu = mu[0,0]
+    std = std[0,0]
     ei_0 = []
     
-    for pred_mu, pred_std in zip(mu, std):
-        pred_var = np.sqrt(pred_std[0])
-        if pred_var > 0:
+    pred_var = np.sqrt(std)
+    if pred_var > 0:
+        
+        var_1 = curr_best - mu
+        var_2 = var_1 / pred_var
+        
+        
+        ei = ((var_1 * norm.cdf(var_2,loc=0,scale=1)) + (pred_var * norm.pdf(var_2,loc=0,scale=1)))
+    elif pred_var<=0:
+        ei = 0.
+    # print(f)
+    # for pred_mu, pred_std in zip(mu, std):
+    #     pred_var = np.sqrt(pred_std[0])
+    #     if pred_var > 0:
             
-            var_1 = curr_best-pred_mu
-            var_2 = var_1 / pred_var
+    #         var_1 = curr_best - pred_mu
+    #         var_2 = var_1 / pred_var
             
             
-            ei = (var_1 * norm.cdf(var_2) + pred_var * norm.pdf(var_2))
-        elif pred_var<=0:
-            ei = 0
-        ei_0.append(ei)
+    #         ei = ((var_1 * norm.cdf(var_2,loc=0,scale=1)) + (pred_var * norm.pdf(var_2,loc=0,scale=1)))
+    #     elif pred_var<=0:
+    #         ei = 0.
+    #     ei_0.append(ei)
 
-    expec_improv = np.array(ei_0)
-    return expec_improv
-
-
+    # expec_improv = np.array(ei_0)
+    
+    return ei
 
 def opt_acquisition(X: np.array, y: np.array, model, sbo:list ,test_function_dimension:int, region_support: np.array, rng) -> np.array:
     """Get the sample points
@@ -92,14 +105,56 @@ def opt_acquisition(X: np.array, y: np.array, model, sbo:list ,test_function_dim
     """
     # print("*************")
     # print("Length before removing {}".format(sbo.shape))
+
     region_support = np.array(region_support.reshape((1,region_support.shape[0],region_support.shape[1])))
-    scores = acquisition(X, y, sbo, model)
-    ix = argmin(scores)
-    min_bo = sbo[0,ix,:]
+    lower_bound_theta = np.ndarray.flatten(region_support[0,:,0])
+    upper_bound_theta = np.ndarray.flatten(region_support[0,:,1])
+
+    options = {'maxiter' : 1000000}
+    bnds =  Bounds(lower_bound_theta, upper_bound_theta)
+    fun = lambda x_: -1*acquisition(X,y,x_,model)
+    params = minimize(fun, np.ndarray.flatten(sbo[:,0,:]), method = 'Nelder-Mead', bounds = bnds, options = options)
+    maxEIs = params.x
+    maxEIvals = acquisition(X,y,maxEIs,model)
+    
+    # scores = acquisition(X, y, sbo, model)
+    ix = argmax(maxEIvals)
+    min_bo = (params.x).reshape((1,1,(params.x).shape[0]))
     new_sbo = np.delete(sbo, ix, axis = 1)
     # print("Length after removing {}".format(new_sbo.shape))
     # print("*************")
+
     return np.array(min_bo), new_sbo
+
+# def opt_acquisition(X: np.array, y: np.array, model, sbo:list ,test_function_dimension:int, region_support: np.array, rng) -> np.array:
+#     """Get the sample points
+
+#     Args:
+#         X (np.array): sample points 
+#         y (np.array): corresponding robustness values
+#         model ([type]): the GP models 
+#         sbo (list): sample points to construct the robustness values
+#         test_function_dimension (int): The dimensionality of the region. (Dimensionality of the test function)
+#         region_support (np.array): The bounds of the region within which the sampling is to be done.
+#                                     Region Bounds is M x N x O where;
+#                                         M = number of regions;
+#                                         N = test_function_dimension (Dimensionality of the test function);
+#                                         O = Lower and Upper bound. Should be of length 2;
+
+#     Returns:
+#         [np.array]: the new sample points by BO
+#         [np.array]: sbo - new samples for resuse
+#     """
+#     # print("*************")
+#     # print("Length before removing {}".format(sbo.shape))
+#     region_support = np.array(region_support.reshape((1,region_support.shape[0],region_support.shape[1])))
+#     scores = acquisition(X, y, sbo, model)
+#     ix = argmax(scores)
+#     min_bo = sbo[0,ix,:]
+#     new_sbo = np.delete(sbo, ix, axis = 1)
+#     # print("Length after removing {}".format(new_sbo.shape))
+#     # print("*************")
+#     return np.array(min_bo), new_sbo
     
 
 
@@ -135,13 +190,17 @@ def bayesian_optimization(test_function, samples_in: np.array, corresponding_rob
     for i in range(samples_in.shape[0]):
         X = samples_in[i,:,:]
         Y = corresponding_robustness[i,:].reshape((corresponding_robustness.shape[1],1))
+        model = OK_Rmodel_kd_nugget(X, Y, 0, 2)
         for j in range(number_of_samples_to_generate[i]):
-            model = OK_Rmodel_kd_nugget(X, Y, 0, 2)
             
             min_bo, sbo = opt_acquisition(X, Y, model, sbo, test_function_dimension, region_support[i,:,:], rng)
             actual = calculate_robustness(np.array(min_bo), test_function)
-            X = np.vstack((X, np.array(min_bo)))
-            Y = np.vstack((Y, np.array(actual)))
+            print("*****************************")
+            print(min_bo)
+            print(actual)
+            print("*****************************")
+            # X = np.vstack((X, np.array(min_bo)))
+            # Y = np.vstack((Y, np.array(actual)))
         samples_in_new.append(np.expand_dims(X, axis = 0))
         corresponding_robustness_new.append(np.transpose(Y))
     return samples_in_new, corresponding_robustness_new
