@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "partx"
-version = "0.1.11"
+version = "0.1.2"
 description = "PartX - A family of stochastic optimzers"
 authors = ["Tanmay Bhaskar Khandait <tkhandai@asu.edu>"]
 

@@ -20,7 +20,9 @@ def calculateQuantile(y_pred, sigma_st, alpha):
     """
 
     term1 = np.array(y_pred)
-    term2 = np.array(stats.norm.ppf(1 - (alpha / 2)) * (sigma_st))
+    # print(sigma_st[:,0])
+    # print()
+    term2 = np.array(stats.norm.ppf(1 - (alpha / 2))) * np.sqrt(sigma_st[:,0].astype(float))
     term2 = term2.reshape(term2.shape[0], 1)
 
     lower_quantile = term1 - term2
@@ -128,7 +130,7 @@ def estimate_quantiles(samples_in: np.array, samples_out: np.array, grid:list, r
     for alpha_iter in range(len(alpha)):
         lower_bound.append(mcEstimate_minimum_mean[alpha_iter] - ((stats.norm.ppf(1 - (alpha[alpha_iter] / 2))) * mcEstimate_minimum_variance[alpha_iter]))
         upper_bound.append(mcEstimate_maximum_mean[alpha_iter] + ((stats.norm.ppf(1 - (alpha[alpha_iter] / 2))) * mcEstimate_maximum_variance[alpha_iter]))
-    print(lower_bound, upper_bound)
+    # print(lower_bound, upper_bound)
     return lower_bound, upper_bound
 
 #####################################################Test################################################################################################

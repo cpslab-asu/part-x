@@ -8,6 +8,7 @@ from scipy.stats import norm
 from pathos.multiprocessing import ProcessingPool as Pool
 from .calculate_robustness import calculate_robustness
 from .sampling import lhs_sampling
+from .sampling import uniform_sampling
 
 from kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
 from kriging_gpr.interface.OK_Rpredict import OK_Rpredict
@@ -64,24 +65,8 @@ def acquisition(X: np.array, y, Xsamples: np.array, model):
         
         
         ei = ((var_1 * norm.cdf(var_2,loc=0,scale=1)) + (pred_var * norm.pdf(var_2,loc=0,scale=1)))
-    elif pred_var<=0:
-        ei = 0.
-    # print(f)
-    # for pred_mu, pred_std in zip(mu, std):
-    #     pred_var = np.sqrt(pred_std[0])
-    #     if pred_var > 0:
-            
-    #         var_1 = curr_best - pred_mu
-    #         var_2 = var_1 / pred_var
-            
-            
-    #         ei = ((var_1 * norm.cdf(var_2,loc=0,scale=1)) + (pred_var * norm.pdf(var_2,loc=0,scale=1)))
-    #     elif pred_var<=0:
-    #         ei = 0.
-    #     ei_0.append(ei)
-
-    # expec_improv = np.array(ei_0)
-    
+    else:
+        ei = 0.0
     return ei
 
 def opt_acquisition(X: np.array, y: np.array, model, sbo:list ,test_function_dimension:int, region_support: np.array, rng) -> np.array:
@@ -113,7 +98,11 @@ def opt_acquisition(X: np.array, y: np.array, model, sbo:list ,test_function_dim
     options = {'maxiter' : 1000000}
     bnds =  Bounds(lower_bound_theta, upper_bound_theta)
     fun = lambda x_: -1*acquisition(X,y,x_,model)
-    params = minimize(fun, np.ndarray.flatten(sbo[:,0,:]), method = 'Nelder-Mead', bounds = bnds, options = options)
+    random_sample = uniform_sampling(1, region_support, test_function_dimension, rng)
+
+    # print(random_sample)
+    params = minimize(fun, np.ndarray.flatten(random_sample[:,0,:]), method = 'Nelder-Mead', bounds = bnds, options = options)
+    
     maxEIs = params.x
     maxEIvals = acquisition(X,y,maxEIs,model)
     
@@ -195,11 +184,11 @@ def bayesian_optimization(test_function, samples_in: np.array, corresponding_rob
             
             min_bo, sbo = opt_acquisition(X, Y, model, sbo, test_function_dimension, region_support[i,:,:], rng)
             actual = calculate_robustness(np.array(min_bo), test_function)
-            print("*****************************")
-            print(min_bo)
-            print(actual)
-            print("*****************************")
-            # X = np.vstack((X, np.array(min_bo)))
+            # print("*****************************")
+            # # print(min_bo)
+            # print(actual)
+            # print("*****************************")
+            # X = np.vstack((X, np.array(min_bo)[0,:,:]))
             # Y = np.vstack((Y, np.array(actual)))
         samples_in_new.append(np.expand_dims(X, axis = 0))
         corresponding_robustness_new.append(np.transpose(Y))
