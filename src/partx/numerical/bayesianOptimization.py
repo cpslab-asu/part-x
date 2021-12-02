@@ -49,7 +49,7 @@ def acquisition(X: np.array, y, Xsamples: np.array, model):
     Xsamples = Xsamples.reshape(1,Xsamples.shape[0])
     # calculate the best surrogate score found so far
     yhat, _ = surrogate(model, X, y) 
-    curr_best = np.min(yhat)
+    curr_best = np.max(yhat)
     # calculate mean and stdev via surrogate function
     mu, std = surrogate(model, Xsamples, y)
     
@@ -60,7 +60,7 @@ def acquisition(X: np.array, y, Xsamples: np.array, model):
     pred_var = np.sqrt(std)
     if pred_var > 0:
         
-        var_1 = curr_best - mu
+        var_1 = mu-curr_best-0.001
         var_2 = var_1 / pred_var
         
         
@@ -100,7 +100,6 @@ def opt_acquisition(X: np.array, y: np.array, model, sbo:list ,test_function_dim
     fun = lambda x_: -1*acquisition(X,y,x_,model)
     random_sample = uniform_sampling(1, region_support, test_function_dimension, rng)
 
-    # print(random_sample)
     params = minimize(fun, np.ndarray.flatten(random_sample[:,0,:]), method = 'Nelder-Mead', bounds = bnds, options = options)
     
     maxEIs = params.x
