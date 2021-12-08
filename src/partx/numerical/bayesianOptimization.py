@@ -49,18 +49,19 @@ def acquisition(X: np.array, y, Xsamples: np.array, model):
     Xsamples = Xsamples.reshape(1,Xsamples.shape[0])
     # calculate the best surrogate score found so far
     yhat, _ = surrogate(model, X, y) 
-    curr_best = np.max(yhat)
+    curr_best = np.min(yhat)
     # calculate mean and stdev via surrogate function
     mu, std = surrogate(model, Xsamples, y)
     
     mu = mu[0,0]
     std = std[0,0]
     ei_0 = []
-    
+    # print(std)
+    # print("******************************")
     pred_var = np.sqrt(std)
     if pred_var > 0:
         
-        var_1 = mu-curr_best-0.001
+        var_1 = curr_best-mu
         var_2 = var_1 / pred_var
         
         
@@ -95,22 +96,16 @@ def opt_acquisition(X: np.array, y: np.array, model, sbo:list ,test_function_dim
     lower_bound_theta = np.ndarray.flatten(region_support[0,:,0])
     upper_bound_theta = np.ndarray.flatten(region_support[0,:,1])
 
-    options = {'maxiter' : 1000000}
     bnds =  Bounds(lower_bound_theta, upper_bound_theta)
     fun = lambda x_: -1*acquisition(X,y,x_,model)
     random_sample = uniform_sampling(1, region_support, test_function_dimension, rng)
 
-    params = minimize(fun, np.ndarray.flatten(random_sample[:,0,:]), method = 'Nelder-Mead', bounds = bnds, options = options)
+    options = {'maxiter':1e10}
+    params = minimize(fun, np.ndarray.flatten(random_sample[:,0,:]), method = 'L-BFGS-B', bounds = bnds, options = options)
     
-    maxEIs = params.x
-    maxEIvals = acquisition(X,y,maxEIs,model)
-    
-    # scores = acquisition(X, y, sbo, model)
-    ix = argmax(maxEIvals)
-    min_bo = (params.x).reshape((1,1,(params.x).shape[0]))
-    new_sbo = np.delete(sbo, ix, axis = 1)
-    # print("Length after removing {}".format(new_sbo.shape))
-    # print("*************")
+    min_bo = params.x
+    new_sbo = np.delete(sbo, 0, axis = 1)
+    return np.array(min_bo), new_sbo
 
     return np.array(min_bo), new_sbo
 
@@ -178,17 +173,17 @@ def bayesian_optimization(test_function, samples_in: np.array, corresponding_rob
     for i in range(samples_in.shape[0]):
         X = samples_in[i,:,:]
         Y = corresponding_robustness[i,:].reshape((corresponding_robustness.shape[1],1))
-        model = OK_Rmodel_kd_nugget(X, Y, 0, 2)
+        
         for j in range(number_of_samples_to_generate[i]):
-            
+            model = OK_Rmodel_kd_nugget(X, Y, 0, 2)
             min_bo, sbo = opt_acquisition(X, Y, model, sbo, test_function_dimension, region_support[i,:,:], rng)
             actual = calculate_robustness(np.array(min_bo), test_function)
             # print("*****************************")
-            # # print(min_bo)
+            # print(min_bo)
             # print(actual)
             # print("*****************************")
-            # X = np.vstack((X, np.array(min_bo)[0,:,:]))
-            # Y = np.vstack((Y, np.array(actual)))
+            X = np.vstack((X, np.array(min_bo)))
+            Y = np.vstack((Y, np.array(actual)))
         samples_in_new.append(np.expand_dims(X, axis = 0))
         corresponding_robustness_new.append(np.transpose(Y))
     return samples_in_new, corresponding_robustness_new

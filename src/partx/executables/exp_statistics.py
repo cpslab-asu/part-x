@@ -9,6 +9,8 @@ from scipy import stats
 from ..numerical.calculate_robustness import calculate_robustness
 from ..models.testFunction import callCounter
 import pathlib
+from kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
+from kriging_gpr.interface.OK_Rpredict import OK_Rpredict
 
 def load_tree(tree_name):
     """Load the tree
@@ -72,12 +74,12 @@ def falsification_volume_using_gp(ftree, options, quantiles_at, rng):
         node_data = temp_node_id.data
         X = node_data.samples_in[0]
         Y = np.transpose(node_data.samples_out)
-        model = GaussianProcessRegressor()
-        model.fit(X, Y)
+        model = OK_Rmodel_kd_nugget(X, Y, 0, 2)
         quantile_values_r= []
         for r in range(options.R):
             samples = uniform_sampling(options.M, node_data.region_support, options.test_function_dimension, rng)
-            y_pred, sigma_st = model.predict(samples[0], return_std=True)
+            y_pred, pred_var = OK_Rpredict(model, np.array(samples)[0], 0, Y)
+            sigma_st = np.sqrt(pred_var[:,0].astype(float))
             quantile_values_m = []
             for x in range(options.M):
                 quantiles_values_alp = []
