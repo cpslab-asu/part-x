@@ -55,11 +55,11 @@ def run_partx(benchmark_name, test_function, test_function_dimension, region_sup
     for replication_number in range(number_of_macro_replications):
         data = [replication_number, options, test_function, benchmark_result_directory]
         inputs.append(data)
-        # results = run_single_replication(data)
+        results = run_single_replication(data)
     
         
-    print("Starting run for {} macro replications".format(len(inputs)))
-    pool = Pool()
+    # print("Starting run for {} macro replications".format(len(inputs)))
+    # pool = Pool()
 
     # with Pool(processes=os.cpu_count() - 1) as pool:
     #     for replication_number in range(number_of_macro_replications):
@@ -72,7 +72,7 @@ def run_partx(benchmark_name, test_function, test_function_dimension, region_sup
     # with Pool(10) as pool:
     #     results = list(pool.map(run_single_replication, inputs))
 
-    results = list(pool.map(run_single_replication, inputs))
+    # results = list(pool.map(run_single_replication, inputs))
 
     result_dictionary = generate_statistics(options.BENCHMARK_NAME, number_of_macro_replications, options.fv_quantiles_for_gp, results_at_confidence,results_folder_name)
 

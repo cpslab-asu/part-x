@@ -3,6 +3,8 @@ from .exp_statistics import load_tree, falsification_volume, con_int
 from ..models.partx_options import partx_options
 import pathlib
 import pickle
+from kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
+from kriging_gpr.interface.OK_Rpredict import OK_Rpredict
 
 def cal_std_err(x):
     num_macro_rep = len(x)

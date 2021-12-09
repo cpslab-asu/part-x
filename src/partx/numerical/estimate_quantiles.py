@@ -20,7 +20,7 @@ def calculateQuantile(y_pred, sigma_st, alpha):
     """
 
     term1 = np.array(y_pred)
-    term2 = np.array(stats.norm.ppf(1 - (alpha / 2))) * np.sqrt(sigma_st.astype(float))
+    term2 = np.array(stats.norm.ppf(1 - (alpha / 2))) * sigma_st
     term2 = term2.reshape(term2.shape[0], 1)
 
     lower_quantile = term1 - term2
