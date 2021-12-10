@@ -35,11 +35,21 @@ def run_partx_UR(number_of_macro_replications, benchmark_name, initial_seed, tes
     for replication_number in range(number_of_macro_replications):
         data = [replication_number, options, test_function, benchmark_result_directory]
         inputs.append(data)
-        run_single_replication_UR(data)
+        # run_single_replication_UR(data)
     
         
-    # print("Starting run for {} macro replications".format(len(inputs)))
-    # pool = Pool()
-    # results = list(pool.map(run_single_replication_UR, inputs))
+    print("Starting run for {} macro replications".format(len(inputs)))
+    pool = Pool()
+    results = list(pool.map(run_single_replication_UR, inputs))
+
+    # result_dictionary = generate_statistics(options.BENCHMARK_NAME, number_of_macro_replications, options.fv_quantiles_for_gp, results_at_confidence,results_folder_name)
+
+    # today = time.strftime("%m/%d/%Y")
+    # file_date = today.replace("/","_")
+    # with open(results_csv.joinpath(options.BENCHMARK_NAME+"_"+file_date+ "_results.csv"), 'w') as csv_file:  
+    #     writer = csv.writer(csv_file)
+    #     for key, value in result_dictionary.items():
+    #         writer.writerow([key, value])
+
     results = 1
     return results

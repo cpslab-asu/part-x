@@ -31,6 +31,7 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
     unfalsification_corresponding_points = []
     falsified_true = []
     best_robustness = []
+    best_robustness_points = []
     fr_count = 0
     for i in range(number_of_macro_replications):
         f = open(result_directory.joinpath(BENCHMARK_NAME + "_" + str(i) + "_fal_val_gp.pkl"), "rb")
@@ -48,6 +49,7 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
         list_of_pos_rob = np.where((point_history[:,-1] > 0))
        
         best_robustness.append(np.min(point_history[:,-1]))
+        best_robustness_points.append(point_history[np.argmin(point_history[:,-1])])
         if list_of_neg_rob[0].size > 0 :
             falsified_true.append(1)
             fr_count = fr_count + 1
@@ -124,6 +126,7 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
 
     result_dictionary["falsification_corr_point"] = falsification_corresponding_points
     result_dictionary["unfalsification_corr_point"] = unfalsification_corresponding_points
+    result["best_robustness_points"] = best_robustness_points
     print(best_robustness)
     f = open(result_directory.joinpath(BENCHMARK_NAME + "_all_result.pkl"), "wb")
     pickle.dump(result_dictionary, f)
