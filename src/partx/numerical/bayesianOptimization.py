@@ -16,7 +16,7 @@ from kriging_gpr.interface.OK_Rpredict import OK_Rpredict
 from scipy.optimize import minimize, dual_annealing
 from scipy.optimize import Bounds
 
-def surrogate(model, X:np.array, Ytrain):
+def surrogate(model, X:np.array):
     """Surrogate Model function
 
     Args:
@@ -31,10 +31,10 @@ def surrogate(model, X:np.array, Ytrain):
         # ignore generated warnings
         simplefilter("ignore")
         # return model.predict(X, return_std=True)
-        return OK_Rpredict(model, X, 0, Ytrain)
+        return OK_Rpredict(model, X, 0)
 
 
-def acquisition(X: np.array, y, Xsamples: np.array, model):
+def acquisition(X: np.array, Xsamples: np.array, model):
     """Acquisition function
 
     Args:
@@ -48,10 +48,10 @@ def acquisition(X: np.array, y, Xsamples: np.array, model):
     # if (Xsamples.shape).shape == 1:
     Xsamples = Xsamples.reshape(1,Xsamples.shape[0])
     # calculate the best surrogate score found so far
-    yhat, _ = surrogate(model, X, y) 
+    yhat, _ = surrogate(model, X) 
     curr_best = np.min(yhat)
     # calculate mean and stdev via surrogate function
-    mu, std = surrogate(model, Xsamples, y)
+    mu, std = surrogate(model, Xsamples)
     
     mu = mu[0,0]
     std = std[0,0]
@@ -70,7 +70,7 @@ def acquisition(X: np.array, y, Xsamples: np.array, model):
         ei = 0.0
     return ei
 
-def opt_acquisition(X: np.array, y: np.array, model, sbo:list ,test_function_dimension:int, region_support: np.array, rng) -> np.array:
+def opt_acquisition(X: np.array, model, sbo:list ,test_function_dimension:int, region_support: np.array, rng) -> np.array:
     """Get the sample points
 
     Args:
@@ -97,7 +97,7 @@ def opt_acquisition(X: np.array, y: np.array, model, sbo:list ,test_function_dim
     upper_bound_theta = np.ndarray.flatten(region_support[0,:,1])
 
     bnds =  Bounds(lower_bound_theta, upper_bound_theta)
-    fun = lambda x_: -1*acquisition(X,y,x_,model)
+    fun = lambda x_: -1*acquisition(X,x_,model)
     # random_sample = uniform_sampling(1, region_support, test_function_dimension, rng)
     
     # options = {'maxiter':1e10}
@@ -178,8 +178,8 @@ def bayesian_optimization(test_function, samples_in: np.array, corresponding_rob
         Y = corresponding_robustness[i,:].reshape((corresponding_robustness.shape[1],1))
         
         for j in range(number_of_samples_to_generate[i]):
-            model = OK_Rmodel_kd_nugget(X, Y, 0, 2)
-            min_bo, sbo = opt_acquisition(X, Y, model, sbo, test_function_dimension, region_support[i,:,:], rng)
+            model = OK_Rmodel_kd_nugget(X, Y, 0, 2, 16)
+            min_bo, sbo = opt_acquisition(X, model, sbo, test_function_dimension, region_support[i,:,:], rng)
             actual = calculate_robustness(np.array(min_bo), test_function)
             print("*****************************")
             print(min_bo)

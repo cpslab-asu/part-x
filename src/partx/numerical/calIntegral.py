@@ -10,13 +10,13 @@ from scipy import stats
 def calculate_mc_integral(samples_in, samples_out, region_support, region_dimension, R, M, rng):
     X = samples_in[0]
     Y = np.transpose(samples_out)
-    model = OK_Rmodel_kd_nugget(X, Y, 0, 2)
+    model = OK_Rmodel_kd_nugget(X, Y, 0, 2, 16)
     # model.fit(X, Y)
 
     cdf_all = []
     for r in range(R):
         samples = lhs_sampling(M, region_support, region_dimension, rng)
-        y_pred, var = OK_Rpredict(model, samples[0], 0, Y)
+        y_pred, var = OK_Rpredict(model, samples[0], 0)
         pred_sigma = np.sqrt(var[:,0].astype(float))
         for x in range(M):
             # print(stats.norm.cdf(0,y_pred[x],sigma_st[x]))
