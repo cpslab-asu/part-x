@@ -16,6 +16,14 @@ from kriging_gpr.interface.OK_Rpredict import OK_Rpredict
 from scipy.optimize import minimize, dual_annealing
 from scipy.optimize import Bounds
 
+def exists_in(X, sample, dimension):
+    
+    for x_ in X:
+        if sum(sample == x_) == dimension:
+            return True
+        else:
+            return False
+
 def surrogate(model, X:np.array):
     """Surrogate Model function
 
@@ -108,12 +116,12 @@ def opt_acquisition(X: np.array, model, sbo:list ,test_function_dimension:int, r
     # print(params_2)
     min_bo = params_2.x
 
-    # while min_bo in X.tolist():
-    #     print("Rerunning Optimizer to avoid duplicate point")
-    #     random_sample = uniform_sampling(1, region_support, test_function_dimension, rng)
-    #     params_2 = dual_annealing(fun, bounds = list(zip(lower_bound_theta, upper_bound_theta)), no_local_search = False, x0 = np.ndarray.flatten(random_sample[:,0,:]))
+    while exists_in(X, min_bo, test_function_dimension):
+        # print("Rerunning Optimizer to avoid duplicate point")
+        random_sample = uniform_sampling(1, region_support, test_function_dimension, rng)
+        params_2 = dual_annealing(fun, bounds = list(zip(lower_bound_theta, upper_bound_theta)), no_local_search = False, x0 = np.ndarray.flatten(random_sample[:,0,:]))
     
-    #     min_bo = params_2.x
+        min_bo = params_2.x
 
     new_sbo = np.delete(sbo, 0, axis = 1)
     return np.array(min_bo), new_sbo
@@ -188,10 +196,10 @@ def bayesian_optimization(test_function, samples_in: np.array, corresponding_rob
             model = OK_Rmodel_kd_nugget(X, Y, 0, 2, 16)
             min_bo, sbo = opt_acquisition(X, model, sbo, test_function_dimension, region_support[i,:,:], rng)
             actual = calculate_robustness(np.array(min_bo), test_function)
-            print("*****************************")
-            print(min_bo)
-            print(actual)
-            print("*****************************")
+            # print("*****************************")
+            # print(min_bo)
+            # print(actual)
+            # print("*****************************")
             X = np.vstack((X, np.array(min_bo)))
             Y = np.vstack((Y, np.array(actual)))
         samples_in_new.append(np.expand_dims(X, axis = 0))
