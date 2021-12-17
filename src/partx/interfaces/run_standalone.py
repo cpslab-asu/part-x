@@ -11,6 +11,7 @@ from treelib import Tree
 from ..numerical.calIntegral import calculate_mc_integral
 from ..executables.single_replication import run_single_replication
 from ..executables.generate_statistics import generate_statistics
+from ..models.results import Result
 from pathos.multiprocessing import ProcessingPool as Pool
 import pickle
 import logging
@@ -78,10 +79,13 @@ def run_partx(benchmark_name, test_function, test_function_dimension, region_sup
 
     today = time.strftime("%m/%d/%Y")
     file_date = today.replace("/","_")
+    values = []
     with open(results_csv.joinpath(options.BENCHMARK_NAME+"_"+file_date+ "_results.csv"), 'w') as csv_file:  
         writer = csv.writer(csv_file)
         for key, value in result_dictionary.items():
             writer.writerow([key, value])
+            values.append(value)
 
+    result = Result(*values)
 
-    return [result_dictionary]
+    return [result]

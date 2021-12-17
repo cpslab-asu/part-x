@@ -2,8 +2,8 @@ import numpy as np
 # from sklearn.gaussian_process import GaussianProcessRegressor
 from scipy import stats
 from .sampling import lhs_sampling
-from kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
-from kriging_gpr.interface.OK_Rpredict import OK_Rpredict
+from ..kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
+from ..kriging_gpr.interface.OK_Rpredict import OK_Rpredict
 
 
 def calculateQuantile(y_pred, sigma_st, alpha):

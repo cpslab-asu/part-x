@@ -9,23 +9,35 @@ The working paper can be accessed [here](https://arxiv.org/abs/2110.10729#).
 ## Installation
 We use the Poetry tool which is a dependency management and packaging tool in Python. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you. Please follow the installation of poetry at [https://python-poetry.org/docs/#installation](https://python-poetry.org/docs/#installation)
 
-To install the package:
-```bash
-cd part_x
-poetry update
+After you've installed poetry, you can install partx by running the following command in the root of the project: 
+
+```
+poetry install
 ```
 
-To run the non-linear optimization benchmarks, download the following github repo - [Bookish Umbrella](https://github.com/DaitTan/bookish-umbrella)
+## Usage
+This project provides implementations for four example test functions. 
 
-It is important to download both the repositories in a single folder.
-To run these non-linear benchmarks:
-```bash
-cd bookish_umbrella
-poetry update
-poetry run python BENCHMARK_NAME.py
+1. Rosenbrock function:
 
-# To run driver_goldstein_1 benchmark:
-poetry run python driver_goldstein_1.py
+```
+poetry run python demos/non_linear_rosenbrock.py
+```
+
+2. Himmelblau function:
+
+```
+poetry run python demos/non_linear_himmelblaus.py
+```
+
+3. Goldstein-Price function:
+```
+poetry run python demos/non_linear_goldstein.py
+```
+
+4. F16 GCAS (from ARCH benchmarks):
+```
+poetry run python demos/arch_benchmarks_f16.py
 ```
 
 ## Citation

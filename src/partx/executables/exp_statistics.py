@@ -9,8 +9,8 @@ from scipy import stats
 from ..numerical.calculate_robustness import calculate_robustness
 from ..models.testFunction import callCounter
 import pathlib
-from kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
-from kriging_gpr.interface.OK_Rpredict import OK_Rpredict
+from ..kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
+from ..kriging_gpr.interface.OK_Rpredict import OK_Rpredict
 
 def load_tree(tree_name):
     """Load the tree

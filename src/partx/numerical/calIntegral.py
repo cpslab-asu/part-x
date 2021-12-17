@@ -1,5 +1,5 @@
-from kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
-from kriging_gpr.interface.OK_Rpredict import OK_Rpredict
+from ..kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
+from ..kriging_gpr.interface.OK_Rpredict import OK_Rpredict
 
 from .sampling import lhs_sampling
 import numpy as np

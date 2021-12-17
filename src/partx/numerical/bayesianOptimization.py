@@ -10,8 +10,8 @@ from .calculate_robustness import calculate_robustness
 from .sampling import lhs_sampling
 from .sampling import uniform_sampling
 
-from kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
-from kriging_gpr.interface.OK_Rpredict import OK_Rpredict
+from ..kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
+from ..kriging_gpr.interface.OK_Rpredict import OK_Rpredict
 
 from scipy.optimize import minimize, dual_annealing
 from scipy.optimize import Bounds
