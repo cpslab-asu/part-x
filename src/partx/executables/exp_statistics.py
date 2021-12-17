@@ -78,8 +78,8 @@ def falsification_volume_using_gp(ftree, options, quantiles_at, rng):
         quantile_values_r= []
         for r in range(options.R):
             samples = uniform_sampling(options.M, node_data.region_support, options.test_function_dimension, rng)
-            y_pred, pred_var = OK_Rpredict(model, np.array(samples)[0], 0)
-            sigma_st = np.sqrt(pred_var[:,0].astype(float))
+            y_pred, sigma_st = OK_Rpredict(model, np.array(samples)[0], 0)
+            # sigma_st = np.sqrt(pred_var[:,0].astype(float))
             quantile_values_m = []
             for x in range(options.M):
                 quantiles_values_alp = []

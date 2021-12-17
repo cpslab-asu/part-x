@@ -58,7 +58,7 @@ def acquisition(X: np.array, Xsamples: np.array, model):
     ei_0 = []
     # print(std)
     # print("******************************")
-    pred_var = np.sqrt(std)
+    pred_var = std
     if pred_var > 0:
         
         var_1 = curr_best-mu
@@ -107,6 +107,13 @@ def opt_acquisition(X: np.array, model, sbo:list ,test_function_dimension:int, r
     # print("DA result below")
     # print(params_2)
     min_bo = params_2.x
+
+    # while min_bo in X.tolist():
+    #     print("Rerunning Optimizer to avoid duplicate point")
+    #     random_sample = uniform_sampling(1, region_support, test_function_dimension, rng)
+    #     params_2 = dual_annealing(fun, bounds = list(zip(lower_bound_theta, upper_bound_theta)), no_local_search = False, x0 = np.ndarray.flatten(random_sample[:,0,:]))
+    
+    #     min_bo = params_2.x
 
     new_sbo = np.delete(sbo, 0, axis = 1)
     return np.array(min_bo), new_sbo
