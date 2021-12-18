@@ -40,7 +40,7 @@ class partx_node(object):
 
         #insert sbo points
         samples_fr_grid_for_gp = self.grid[:,0:options.NGP,:]
-        final_new_samples_in, final_new_samples_out = bayesian_optimization(test_function, new_samples_in, new_samples_out, options.number_of_BO_samples, options.test_function_dimension, self.region_support, samples_fr_grid_for_gp, rng)
+        final_new_samples_in, final_new_samples_out = bayesian_optimization(test_function, new_samples_in, new_samples_out, options.number_of_BO_samples, options.test_function_dimension, self.region_support, samples_fr_grid_for_gp, options.gpr_params, rng)
         self.samples_in = final_new_samples_in[0]
         self.samples_out = final_new_samples_out[0]
         # self.bo_samples = []
@@ -56,7 +56,7 @@ class partx_node(object):
 
     def calculate_and_classifiy(self, options,rng):
         
-        self.lower_bound, self.upper_bound = estimate_quantiles(self.samples_in, self.samples_out, self.grid, self.region_support, options.test_function_dimension, options.alpha,options.R,options.M, rng)
+        self.lower_bound, self.upper_bound = estimate_quantiles(self.samples_in, self.samples_out, self.grid, self.region_support, options.test_function_dimension, options.alpha,options.R,options.M, options.gpr_params, rng)
         
         self.region_class = classification(self.region_support, self.region_class, options.min_volume, self.lower_bound, self.upper_bound)
         return self.region_class

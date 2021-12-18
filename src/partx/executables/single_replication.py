@@ -138,7 +138,7 @@ def run_single_replication(inputs):
                 node = ftree.get_node(temp_node_id)
                 parent = node.identifier
                 node = node.data
-                cdf_sum = calculate_mc_integral(node.samples_in, node.samples_out, node.region_support, options.test_function_dimension, options.R, options.M, rng)
+                cdf_sum = calculate_mc_integral(node.samples_in, node.samples_out, node.region_support, options.test_function_dimension, options.R, options.M, options.gpr_params, rng)
                 volumes.append(cdf_sum * calculate_volume(node.region_support)[0])
             
             if np.sum(volumes) != 0.0:
@@ -199,7 +199,7 @@ def run_single_replication(inputs):
                 node = ftree.get_node(temp_node_id)
                 parent = node.identifier
                 node = node.data
-                cdf_sum = calculate_mc_integral(node.samples_in, node.samples_out, node.region_support, options.test_function_dimension, options.R, options.M,rng)
+                cdf_sum = calculate_mc_integral(node.samples_in, node.samples_out, node.region_support, options.test_function_dimension, options.R, options.M, options.gpr_params,rng)
                 volumes.append(cdf_sum * calculate_volume(node.region_support)[0])
 
             volume_distribution = volumes/np.sum(volumes)

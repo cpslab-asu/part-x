@@ -74,7 +74,7 @@ def falsification_volume_using_gp(ftree, options, quantiles_at, rng):
         node_data = temp_node_id.data
         X = node_data.samples_in[0]
         Y = np.transpose(node_data.samples_out)
-        model = OK_Rmodel_kd_nugget(X, Y, 0, 2, 16)
+        model = OK_Rmodel_kd_nugget(X, Y, 0, 2, options.gpr_params)
         quantile_values_r= []
         for r in range(options.R):
             samples = uniform_sampling(options.M, node_data.region_support, options.test_function_dimension, rng)

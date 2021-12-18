@@ -35,6 +35,7 @@ class PartX(Optimizer[PartXResult]):
     results_folder_name: str
     max_budget: int
     seed: int
+    gpr_params: float
 
     def optimize(self, func: OptimizationFn, bounds: Bounds) -> PartXResult:
         print(bounds)
@@ -65,6 +66,7 @@ class PartX(Optimizer[PartXResult]):
             initial_seed=self.seed,
             fv_quantiles_for_gp = self.fv_quantiles_for_gp,
             results_at_confidence = self.results_at_confidence,
+            gpr_params = self.gpr_params,
             results_folder_name = self.results_folder_name
         )
 

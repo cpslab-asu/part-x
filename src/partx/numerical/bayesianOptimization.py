@@ -160,7 +160,7 @@ def opt_acquisition(X: np.array, model, sbo:list ,test_function_dimension:int, r
 
 
 
-def bayesian_optimization(test_function, samples_in: np.array, corresponding_robustness: np.array, number_of_samples_to_generate: list, test_function_dimension:int, region_support:list, random_points_for_gp: list, rng) -> list:
+def bayesian_optimization(test_function, samples_in: np.array, corresponding_robustness: np.array, number_of_samples_to_generate: list, test_function_dimension:int, region_support:list, random_points_for_gp: list, gpr_params, rng) -> list:
     """Sample using Bayesian Optimization
     https://machinelearningmastery.com/what-is-bayesian-optimization/
 
@@ -193,7 +193,7 @@ def bayesian_optimization(test_function, samples_in: np.array, corresponding_rob
         Y = corresponding_robustness[i,:].reshape((corresponding_robustness.shape[1],1))
         
         for j in range(number_of_samples_to_generate[i]):
-            model = OK_Rmodel_kd_nugget(X, Y, 0, 2, 16)
+            model = OK_Rmodel_kd_nugget(X, Y, 0, 2, gpr_params)
             min_bo, sbo = opt_acquisition(X, model, sbo, test_function_dimension, region_support[i,:,:], rng)
             actual = calculate_robustness(np.array(min_bo), test_function)
             # print("*****************************")

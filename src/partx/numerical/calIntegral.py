@@ -7,10 +7,10 @@ from scipy import stats
 # from calculate_robustness import calculate_robustness
 
 
-def calculate_mc_integral(samples_in, samples_out, region_support, region_dimension, R, M, rng):
+def calculate_mc_integral(samples_in, samples_out, region_support, region_dimension, R, M, gpr_params, rng):
     X = samples_in[0]
     Y = np.transpose(samples_out)
-    model = OK_Rmodel_kd_nugget(X, Y, 0, 2, 16)
+    model = OK_Rmodel_kd_nugget(X, Y, 0, 2, gpr_params)
     # model.fit(X, Y)
 
     cdf_all = []

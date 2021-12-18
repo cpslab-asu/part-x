@@ -24,7 +24,7 @@ import os
 def run_partx(benchmark_name, test_function, test_function_dimension, region_support, 
               initialization_budget, maximum_budget, continued_sampling_budget, number_of_BO_samples, 
               NGP, M, R, branching_factor, nugget_mean, nugget_std_dev, alpha, delta,
-              number_of_macro_replications, initial_seed, fv_quantiles_for_gp, results_at_confidence, results_folder_name):
+              number_of_macro_replications, initial_seed, fv_quantiles_for_gp, results_at_confidence, gpr_params, results_folder_name):
     
     
     # create a directory for storing result files
@@ -42,7 +42,7 @@ def run_partx(benchmark_name, test_function, test_function_dimension, region_sup
     # create partx options
     options = partx_options(region_support, branching_factor, test_function_dimension, number_of_BO_samples, alpha, M, R,  
                             delta, True, initialization_budget, maximum_budget, continued_sampling_budget, 
-                            nugget_mean, nugget_std_dev, initial_seed, fv_quantiles_for_gp, benchmark_name, NGP)
+                            nugget_mean, nugget_std_dev, initial_seed, fv_quantiles_for_gp, benchmark_name, NGP, gpr_params)
     
     f = open(benchmark_result_pickle_files.joinpath(options.BENCHMARK_NAME + "_options.pkl"), "wb")
     pickle.dump(options,f)

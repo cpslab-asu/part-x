@@ -71,6 +71,7 @@ optimizer = PartX(
         macro_replication=NUMBER_OF_MACRO_REPLICATIONS,
         fv_quantiles_for_gp = [0.5,0.95,0.99],
         results_at_confidence = 0.95,
+        gpr_params = 8,
         results_folder_name = "results"
     )
 
