@@ -27,4 +27,5 @@ class Result:
     con_int_fv_with_gp_quan_0_99_confidence_0_95: Any
     falsification_corr_point: Any
     unfalsification_corr_point: Any
+    best_robustness_points: Any
     
