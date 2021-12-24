@@ -85,7 +85,7 @@ def falsification_volume_using_gp(ftree, options, quantiles_at, rng):
                 quantiles_values_alp = []
                 for alp in quantiles_at:
                     
-                    quantiles_values = (stats.norm.ppf(alp,y_pred[x][0],sigma_st[x]))
+                    quantiles_values = (stats.norm.ppf(alp,y_pred[x][0],sigma_st[x][0]))
                     # print(quantiles_values)
                     quantiles_values_alp.append(quantiles_values)
                 quantile_values_m.append(quantiles_values_alp)
