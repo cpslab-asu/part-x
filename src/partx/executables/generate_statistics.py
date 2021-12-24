@@ -8,7 +8,7 @@ from ..kriging_gpr.interface.OK_Rpredict import OK_Rpredict
 
 def cal_std_err(x):
     num_macro_rep = len(x)
-    print(num_macro_rep)
+    # print(num_macro_rep)
     unbiased_std_dev = (np.sum((x - np.mean(x))**2))/(num_macro_rep-1)
     std_err = unbiased_std_dev / num_macro_rep
     return std_err
@@ -66,7 +66,7 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
         vol_classified, vol_unclassified = falsification_volume(ftree, options)
         volume_wo_gp_rep_classified.append(vol_classified)
         volume_wo_gp_rep_unclassified.append(vol_unclassified)
-    print("FR Count is {}".format(fr_count))
+    # print("FR Count is {}".format(fr_count))
 
     result_generating_dictionary_for_verif = {
         "volume_wo_gp_rep_classified" : volume_wo_gp_rep_classified,
@@ -126,8 +126,7 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
 
     result_dictionary["falsification_corr_point"] = falsification_corresponding_points
     result_dictionary["unfalsification_corr_point"] = unfalsification_corresponding_points
-    result["best_robustness_points"] = best_robustness_points
-    print(best_robustness)
+    result_dictionary["best_robustness_points"] = best_robustness_points
     f = open(result_directory.joinpath(BENCHMARK_NAME + "_all_result.pkl"), "wb")
     pickle.dump(result_dictionary, f)
     f.close
