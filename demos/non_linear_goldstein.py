@@ -37,7 +37,6 @@ number_of_macro_replications = 2
 start_seed = 1000
 fv_quantiles_for_gp = [0.5,0.95,0.99]
 
-points_for_unif_sampling = 10000
 gpr_params = 5
 
 results_folder_name = "results"
