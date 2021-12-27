@@ -85,7 +85,7 @@ def run_partx(benchmark_name, test_function, test_function_dimension, region_sup
         for key, value in result_dictionary.items():
             writer.writerow([key, value])
             values.append(value)
-
+    print("Done")
     result = Result(*values)
 
     return [result]

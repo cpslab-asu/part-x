@@ -5,6 +5,7 @@ import pathlib
 import pickle
 from ..kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
 from ..kriging_gpr.interface.OK_Rpredict import OK_Rpredict
+import pandas as pd 
 
 def cal_std_err(x):
     num_macro_rep = len(x)
@@ -66,16 +67,14 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
         vol_classified, vol_unclassified = falsification_volume(ftree, options)
         volume_wo_gp_rep_classified.append(vol_classified)
         volume_wo_gp_rep_unclassified.append(vol_unclassified)
-    # print("FR Count is {}".format(fr_count))
 
     result_generating_dictionary_for_verif = {
         "volume_wo_gp_rep_classified" : volume_wo_gp_rep_classified,
         "volume_wo_gp_rep_unclassified": volume_wo_gp_rep_unclassified,
         "volume_w_gp_rep" : volume_w_gp_rep
     }
-    # print("******************************")
     volume_w_gp_rep = np.array([volume_w_gp_rep[i] for i in range(len(volume_w_gp_rep))])
-    # print(volume_w_gp_rep[:,0].tolist())
+
     f = open(result_directory.joinpath(BENCHMARK_NAME + "_arrays_for_verif_result.pkl"), "wb")
     pickle.dump(result_generating_dictionary_for_verif, f)
     f.close
@@ -87,46 +86,44 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
     vol_wo_gp_classified_sd = cal_std_err(volume_wo_gp_rep_classified)
     vol_wo_gp_unclassified_sd = cal_std_err(volume_wo_gp_rep_unclassified)
 
-    confidence_at_string = str(confidence_at).replace(".","_")
-
-    result_dictionary["con_int_fv_wo_gp_classified_quan_confidence_"+confidence_at_string] = con_int_wo_gp_classified
-    result_dictionary["con_int_fv_wo_gp_classified_unclassified_quan_confidence_"+confidence_at_string] = con_int_wo_gp_unclassified
-    result_dictionary["mean_fv_wo_gp_classified"] = vol_wo_gp_classified
-    result_dictionary["mean_fv_wo_gp_classified_unclassified"] = vol_wo_gp_unclassified
-    result_dictionary["std_dev_fv_wo_gp_classified"] = vol_wo_gp_classified_sd
-    result_dictionary["std_dev_fv_wo_gp_classified_unclassified"] = vol_wo_gp_unclassified_sd
-
-
-    con_int_w_gp_50 = con_int(np.array(volume_w_gp_rep)[:,0], confidence_at)
-    con_int_w_gp_95 = con_int(np.array(volume_w_gp_rep)[:,1], confidence_at)
-    con_int_w_gp_99 = con_int(np.array(volume_w_gp_rep)[:,2], confidence_at)
-
+    fv_wo_gp = np.array([[vol_wo_gp_classified,  vol_wo_gp_classified_sd, con_int_wo_gp_classified[0], con_int_wo_gp_classified[1]],
+                [vol_wo_gp_unclassified,  vol_wo_gp_unclassified_sd, con_int_wo_gp_unclassified[0], con_int_wo_gp_unclassified[1]]])
+    
+    fv_wo_gp_table = pd.DataFrame(fv_wo_gp, index = ['Classified Regions only', 'Classified + Unclassified Regions'], 
+                                    columns=['Mean', 'Std Error', 'UCB', 'LCB'])
     vol_w_gp = np.mean(volume_w_gp_rep, axis =0)
     vol_w_gp_sd = [cal_std_err(volume_w_gp_rep[:,i]) for i in range(len(quantiles_at))]
-    # vol_w_gp_sd = np.std(volume_w_gp_rep, axis =0)
-    
+
+    fv_stats_complete = []
+    for iterate in range(len(quantiles_at)):
+        conf_interval = con_int(np.array(volume_w_gp_rep)[:,iterate], confidence_at)
+        fv_stats_temp = [vol_w_gp[iterate], vol_w_gp_sd[iterate], conf_interval[0], conf_interval[1]]
+        fv_stats_complete.append(fv_stats_temp)
+    fv_stats_with_gp = np.array(fv_stats_complete)
+
+    fv_stats_with_gp_table = pd.DataFrame(data = fv_stats_with_gp, index = quantiles_at, columns = ['Mean', 'Std Error', 'UCB', 'LCB'])
+    result_dictionary['fv_stats_with_gp'] = fv_stats_with_gp_table
+    result_dictionary['fv_stats_wo_gp'] = fv_wo_gp_table
+
+
+
     result_dictionary['falsified_true'] = falsified_true
     falsification_rate = np.sum(falsified_true)
     numpoints_fin_first_f_mean = np.mean(first_falsification)
     numpoints_fin_first_f_min = np.min(first_falsification)
     numpoints_fin_first_f_max = np.max(first_falsification)
     numpoints_fin_first_f_median = np.median(first_falsification)
-    result_dictionary['numpoints_fin_first_f_mean'] = numpoints_fin_first_f_mean
-    result_dictionary['numpoints_fin_first_f_median'] = numpoints_fin_first_f_median
-    result_dictionary['numpoints_fin_first_f_min'] = numpoints_fin_first_f_min
-    result_dictionary['numpoints_fin_first_f_max'] = numpoints_fin_first_f_max
+    result_dictionary['first_falsification_mean'] = numpoints_fin_first_f_mean
+    result_dictionary['first_falsification_median'] = numpoints_fin_first_f_median
+    result_dictionary['first_falsification_min'] = numpoints_fin_first_f_min
+    result_dictionary['first_falsification_max'] = numpoints_fin_first_f_max
     result_dictionary['falsification_rate'] = falsification_rate
     result_dictionary['best_robustness'] = np.min(best_robustness)
-    for iterate in range(len(quantiles_at)):
-        quantile_string = str(quantiles_at[iterate]).replace(".","_")
-        result_dictionary["mean_fv_with_gp_quan" + quantile_string] = vol_w_gp[iterate]
-        result_dictionary["std_dev_fv_with_gp_quan" + quantile_string] = vol_w_gp_sd[iterate]
-        conf_interval = con_int(np.array(volume_w_gp_rep)[:,iterate], confidence_at)
-        result_dictionary["con_int_fv_with_gp_quan_"+quantile_string+"_confidence_"+confidence_at_string] = conf_interval
 
-    result_dictionary["falsification_corr_point"] = falsification_corresponding_points
-    result_dictionary["unfalsification_corr_point"] = unfalsification_corresponding_points
-    result_dictionary["best_robustness_points"] = best_robustness_points
+    
+    result_dictionary["first_falsification_point"] = falsification_corresponding_points
+    result_dictionary["non_falsification_points"] = unfalsification_corresponding_points
+    result_dictionary["best_falsification_points"] = best_robustness_points
     f = open(result_directory.joinpath(BENCHMARK_NAME + "_all_result.pkl"), "wb")
     pickle.dump(result_dictionary, f)
     f.close

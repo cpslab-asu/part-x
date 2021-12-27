@@ -2,16 +2,13 @@ import logging
 import math
 
 import numpy as np
-import plotly.graph_objects as go
 from aerobench.run_f16_sim import run_f16_sim
 from aerobench.examples.gcas.gcas_autopilot import GcasAutopilot
 from numpy.typing import NDArray
-from staliro.core.model import Failure
 from staliro.models import StaticInput, SignalTimes, SignalValues, ModelData, blackbox
-from staliro.optimizers import DualAnnealing
 from staliro.options import Options
 from staliro.specifications import TLTK
-from staliro.staliro import staliro, simulate_model
+from staliro.staliro import staliro
 from partx.interfaces.staliro import PartX
 
 
