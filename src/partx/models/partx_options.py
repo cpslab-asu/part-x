@@ -5,7 +5,7 @@ class partx_options:
     def __init__(self, initial_region_support, branching_factor, test_function_dimension,
                 number_of_BO_samples, alpha, M, R, 
                 delta, uniform_partitioning, initialization_budget, max_budget, 
-                continued_sampling_budget, start_seed, fv_quantiles_for_gp, BENCHMARK_NAME, NGP, gpr_params):
+                continued_sampling_budget, start_seed, fv_quantiles_for_gp, BENCHMARK_NAME, gpr_params):
                 
         self.initial_region_support = initial_region_support.astype('float64')
         self.test_function_dimension = test_function_dimension
@@ -24,5 +24,5 @@ class partx_options:
         self.start_seed = start_seed
         self.fv_quantiles_for_gp = fv_quantiles_for_gp
         self.BENCHMARK_NAME = BENCHMARK_NAME
-        self.NGP = NGP
+        # self.NGP = NGP
         self.gpr_params = gpr_params

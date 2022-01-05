@@ -12,12 +12,11 @@ region_support = np.array([[[-5., 5.], [-5., 5.]]])
 initialization_budget = 10
 max_budget = 5000
 continued_sampling_budget = 100
-
-# BO grid size : number_of_BO_samples * number_of_samples_gen_GP
 number_of_BO_samples = [10]
+
+# Quantile Estimation Parameters
 R = 20
 M = 500
-NGP = R*M
 
 # Mostly not changes. change with caution
 branching_factor = 2
@@ -43,5 +42,5 @@ num_cores = 2
 results_at_confidence = 0.95
 run_partx(BENCHMARK_NAME, test_function, test_function_dimension, region_support, 
               initialization_budget, max_budget, continued_sampling_budget, number_of_BO_samples, 
-              NGP, M, R, branching_factor, alpha, delta,
+              M, R, branching_factor, alpha, delta,
               number_of_macro_replications, start_seed, fv_quantiles_for_gp, results_at_confidence, gpr_params, results_folder_name, num_cores)

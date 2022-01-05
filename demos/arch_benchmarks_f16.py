@@ -57,7 +57,6 @@ optimizer = PartX(
         initialization_budget = 30,
         continued_sampling_budget=100,
         number_of_BO_samples=[10],
-        NGP=10000,
         M = 500,
         R = 20,
         branching_factor=2,

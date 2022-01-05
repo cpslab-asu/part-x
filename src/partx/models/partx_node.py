@@ -39,8 +39,7 @@ class partx_node(object):
 
 
         #insert sbo points
-        samples_fr_grid_for_gp = self.grid[:,0:options.NGP,:]
-        final_new_samples_in, final_new_samples_out = bayesian_optimization(test_function, new_samples_in, new_samples_out, options.number_of_BO_samples, options.test_function_dimension, self.region_support, samples_fr_grid_for_gp, options.gpr_params, rng)
+        final_new_samples_in, final_new_samples_out = bayesian_optimization(test_function, new_samples_in, new_samples_out, options.number_of_BO_samples, options.test_function_dimension, self.region_support, options.gpr_params, rng)
         self.samples_in = final_new_samples_in[0]
         self.samples_out = final_new_samples_out[0]
         # self.bo_samples = []

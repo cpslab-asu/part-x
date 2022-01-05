@@ -19,7 +19,6 @@ class PartX(Optimizer[PartXResult]):
     initialization_budget: int
     continued_sampling_budget: int
     number_of_BO_samples: int
-    NGP: Any
     M: Any
     R: Any
     branching_factor: float
@@ -47,7 +46,6 @@ class PartX(Optimizer[PartXResult]):
             maximum_budget=budget,
             continued_sampling_budget=self.continued_sampling_budget,
             number_of_BO_samples=self.number_of_BO_samples,
-            NGP=self.NGP,
             M = self.M,
             R = self.R,
             branching_factor=self.branching_factor,
