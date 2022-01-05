@@ -12,7 +12,7 @@ from staliro.staliro import staliro
 from partx.interfaces.staliro import PartX
 
 
-MAX_BUDGET = 5
+MAX_BUDGET = 500
 NUMBER_OF_MACRO_REPLICATIONS = 1
 ALTITUDE = 2300
 
