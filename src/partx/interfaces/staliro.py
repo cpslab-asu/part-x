@@ -23,8 +23,6 @@ class PartX(Optimizer[PartXResult]):
     M: Any
     R: Any
     branching_factor: float
-    nugget_mean: float
-    nugget_std_dev: float
     alpha: float
     delta: float
     macro_replication: int
@@ -32,6 +30,7 @@ class PartX(Optimizer[PartXResult]):
     results_at_confidence: float
     gpr_params: float
     results_folder_name: str
+    num_cores: int
 
     def optimize(self, func: ObjectiveFn, bounds: Bounds, budget:int, seed: int) -> PartXResult:
         region_support = np.array((tuple(bound.astuple() for bound in bounds),))
@@ -52,8 +51,6 @@ class PartX(Optimizer[PartXResult]):
             M = self.M,
             R = self.R,
             branching_factor=self.branching_factor,
-            nugget_mean=self.nugget_mean,
-            nugget_std_dev=self.nugget_std_dev,
             alpha=self.alpha,
             delta=self.delta,
             number_of_macro_replications=self.macro_replication,
@@ -61,7 +58,8 @@ class PartX(Optimizer[PartXResult]):
             fv_quantiles_for_gp = self.fv_quantiles_for_gp,
             results_at_confidence = self.results_at_confidence,
             gpr_params = self.gpr_params,
-            results_folder_name = self.results_folder_name
+            results_folder_name = self.results_folder_name,
+            num_cores = self.num_cores
         )
 
 @dataclass(frozen=True)

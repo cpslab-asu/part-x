@@ -26,6 +26,7 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
     
     volume_wo_gp_rep_classified = []
     volume_wo_gp_rep_unclassified = []
+    volume_wo_gp_rep_class_unclass = []    
     volume_w_gp_rep = []
     first_falsification = []
     falsification_corresponding_points = []
@@ -67,10 +68,12 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
         vol_classified, vol_unclassified = falsification_volume(ftree, options)
         volume_wo_gp_rep_classified.append(vol_classified)
         volume_wo_gp_rep_unclassified.append(vol_unclassified)
+        volume_wo_gp_rep_class_unclass.append(vol_unclassified + vol_classified)
 
     result_generating_dictionary_for_verif = {
         "volume_wo_gp_rep_classified" : volume_wo_gp_rep_classified,
         "volume_wo_gp_rep_unclassified": volume_wo_gp_rep_unclassified,
+        "volume_wo_gp_rep_class_unclass": volume_wo_gp_rep_class_unclass,
         "volume_w_gp_rep" : volume_w_gp_rep
     }
     volume_w_gp_rep = np.array([volume_w_gp_rep[i] for i in range(len(volume_w_gp_rep))])
@@ -81,15 +84,21 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
     
     con_int_wo_gp_classified = con_int(np.array(volume_wo_gp_rep_classified), confidence_at)
     con_int_wo_gp_unclassified = con_int(np.array(volume_wo_gp_rep_unclassified), confidence_at)
+    cont_int_wo_gp_class_unclass = con_int(np.array(volume_wo_gp_rep_class_unclass), confidence_at)
+
     vol_wo_gp_classified = np.mean(volume_wo_gp_rep_classified)
     vol_wo_gp_unclassified = np.mean(volume_wo_gp_rep_unclassified)
+    vol_wo_gp_class_unclass = np.mean(volume_wo_gp_rep_class_unclass)
+
     vol_wo_gp_classified_sd = cal_std_err(volume_wo_gp_rep_classified)
     vol_wo_gp_unclassified_sd = cal_std_err(volume_wo_gp_rep_unclassified)
+    vol_wo_gp_class_unclass_sd = cal_std_err(volume_wo_gp_rep_class_unclass)
 
     fv_wo_gp = np.array([[vol_wo_gp_classified,  vol_wo_gp_classified_sd, con_int_wo_gp_classified[0], con_int_wo_gp_classified[1]],
-                [vol_wo_gp_unclassified,  vol_wo_gp_unclassified_sd, con_int_wo_gp_unclassified[0], con_int_wo_gp_unclassified[1]]])
+                [vol_wo_gp_unclassified,  vol_wo_gp_unclassified_sd, con_int_wo_gp_unclassified[0], con_int_wo_gp_unclassified[1]],
+                [vol_wo_gp_class_unclass, vol_wo_gp_class_unclass_sd, cont_int_wo_gp_class_unclass[0], cont_int_wo_gp_class_unclass[1]]])
     
-    fv_wo_gp_table = pd.DataFrame(fv_wo_gp, index = ['Classified Regions only', 'Classified + Unclassified Regions'], 
+    fv_wo_gp_table = pd.DataFrame(fv_wo_gp, index = ['Classified Regions only', 'Unclassified Regions only', 'Classified + Unclassified Regions'], 
                                     columns=['Mean', 'Std Error', 'UCB', 'LCB'])
     vol_w_gp = np.mean(volume_w_gp_rep, axis =0)
     vol_w_gp_sd = [cal_std_err(volume_w_gp_rep[:,i]) for i in range(len(quantiles_at))]

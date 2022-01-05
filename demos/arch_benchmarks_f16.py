@@ -12,7 +12,7 @@ from staliro.staliro import staliro
 from partx.interfaces.staliro import PartX
 
 
-MAX_BUDGET = 500
+MAX_BUDGET = 5
 NUMBER_OF_MACRO_REPLICATIONS = 1
 ALTITUDE = 2300
 
@@ -61,15 +61,14 @@ optimizer = PartX(
         M = 500,
         R = 20,
         branching_factor=2,
-        nugget_mean=0,
-        nugget_std_dev=0.001,
         alpha=[0.05],
         delta=0.001,
         macro_replication=NUMBER_OF_MACRO_REPLICATIONS,
         fv_quantiles_for_gp = [0.5,0.95,0.99],
         results_at_confidence = 0.95,
         gpr_params = 8,
-        results_folder_name = "results"
+        results_folder_name = "results",
+        num_cores = 2
     )
 
 #####################################################################################################################

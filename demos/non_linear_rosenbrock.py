@@ -30,7 +30,7 @@ delta = 0.001
 # Other Parameters
 number_of_macro_replications = 1
 start_seed = 1000
-fv_quantiles_for_gp = [0.5,0.95,0.99]
+fv_quantiles_for_gp = [0.01, 0.05, 0.5]
 
 
 results_folder_name = "results"
@@ -38,8 +38,10 @@ BENCHMARK_NAME = "rosenbrock"
 results_at_confidence = 0.95
 gpr_params = 5
 
+num_cores = 2
+
+results_at_confidence = 0.95
 run_partx(BENCHMARK_NAME, test_function, test_function_dimension, region_support, 
               initialization_budget, max_budget, continued_sampling_budget, number_of_BO_samples, 
-              NGP, M, R, branching_factor, nugget_mean, nugget_std_dev, alpha, delta,
-              number_of_macro_replications, start_seed, fv_quantiles_for_gp, results_at_confidence, gpr_params, results_folder_name)
-                
+              NGP, M, R, branching_factor, alpha, delta,
+              number_of_macro_replications, start_seed, fv_quantiles_for_gp, results_at_confidence, gpr_params, results_folder_name, num_cores)

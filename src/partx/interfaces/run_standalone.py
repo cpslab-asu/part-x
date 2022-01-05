@@ -23,8 +23,8 @@ import os
 
 def run_partx(benchmark_name, test_function, test_function_dimension, region_support, 
               initialization_budget, maximum_budget, continued_sampling_budget, number_of_BO_samples, 
-              NGP, M, R, branching_factor, nugget_mean, nugget_std_dev, alpha, delta,
-              number_of_macro_replications, initial_seed, fv_quantiles_for_gp, results_at_confidence, gpr_params, results_folder_name):
+              NGP, M, R, branching_factor, alpha, delta,
+              number_of_macro_replications, initial_seed, fv_quantiles_for_gp, results_at_confidence, gpr_params, results_folder_name, num_cores):
     
     
     # create a directory for storing result files
@@ -41,8 +41,7 @@ def run_partx(benchmark_name, test_function, test_function_dimension, region_sup
     
     # create partx options
     options = partx_options(region_support, branching_factor, test_function_dimension, number_of_BO_samples, alpha, M, R,  
-                            delta, True, initialization_budget, maximum_budget, continued_sampling_budget, 
-                            nugget_mean, nugget_std_dev, initial_seed, fv_quantiles_for_gp, benchmark_name, NGP, gpr_params)
+                            delta, True, initialization_budget, maximum_budget, continued_sampling_budget, initial_seed, fv_quantiles_for_gp, benchmark_name, NGP, gpr_params)
     
     f = open(benchmark_result_pickle_files.joinpath(options.BENCHMARK_NAME + "_options.pkl"), "wb")
     pickle.dump(options,f)
@@ -52,28 +51,27 @@ def run_partx(benchmark_name, test_function, test_function_dimension, region_sup
     # Start running
 
     inputs = []
-
-    for replication_number in range(number_of_macro_replications):
-        data = [replication_number, options, test_function, benchmark_result_directory]
-        inputs.append(data)
-        results = run_single_replication(data)
-    
-        
-    # print("Starting run for {} macro replications".format(len(inputs)))
-    # pool = Pool()
-
-    # with Pool(processes=os.cpu_count() - 1) as pool:
-    #     for replication_number in range(number_of_macro_replications):
-    #         result = pool.apply_async(run_single_replication, (inputs[replication_number],))
-            # result_objs.append(result)
-        
-        # results = [result.get() for result in result_objs]
-        # print(len(results), np.mean(results), np.var(results))
-
-    # with Pool(10) as pool:
-    #     results = list(pool.map(run_single_replication, inputs))
-
-    # results = list(pool.map(run_single_replication, inputs))
+    if num_cores == 0:
+        raise Exception("Number of cores to use cannot be 0")
+    elif num_cores == 1:
+        print("Running without parallalization")
+        for replication_number in range(number_of_macro_replications):
+            data = [replication_number, options, test_function, benchmark_result_directory]
+            inputs.append(data)
+            results = run_single_replication(data)
+    elif num_cores != 1:
+        num_cores_available = min((os.cpu_count() - 1), num_cores)
+        if num_cores == num_cores_available:
+            print("Running with {} cores".format(num_cores_available))
+        elif num_cores > num_cores_available:
+            print("Cannot run with {} cores. Instead running with {} cores.".format(num_cores, num_cores_available))
+        elif num_cores < num_cores_available:
+            print("Max cores uitilised can be {}. Instead running with {} cores.".format((os.cpu_count() - 1), num_cores_available))
+        for replication_number in range(number_of_macro_replications):
+            data = [replication_number, options, test_function, benchmark_result_directory]
+            inputs.append(data)
+        pool = Pool(num_cores_available)
+        results = list(pool.map(run_single_replication, inputs))
 
     result_dictionary = generate_statistics(options.BENCHMARK_NAME, number_of_macro_replications, options.fv_quantiles_for_gp, results_at_confidence,results_folder_name)
 
