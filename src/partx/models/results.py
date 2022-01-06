@@ -7,10 +7,10 @@ class Result:
     fv_stats_with_gp: Any
     falsification_rate: Any
     falsified_true: Any
-    first_falsification_mean_mean: Any
-    first_falsification_mean_median: Any
-    first_falsification_mean_min: Any
-    first_falsification_mean_max: Any
+    first_falsification_mean: Any
+    first_falsification_median: Any
+    first_falsification_min: Any
+    first_falsification_max: Any
     best_robustness: Any
     best_falsification_points: Any
     falsification_points: Any
