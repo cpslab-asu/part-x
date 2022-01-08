@@ -99,7 +99,7 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
                 [vol_wo_gp_class_unclass, vol_wo_gp_class_unclass_sd, cont_int_wo_gp_class_unclass[0], cont_int_wo_gp_class_unclass[1]]])
     
     fv_wo_gp_table = pd.DataFrame(fv_wo_gp, index = ['Classified Regions only', 'Unclassified Regions only', 'Classified + Unclassified Regions'], 
-                                    columns=['Mean', 'Std Error', 'UCB', 'LCB'])
+                                    columns=['Mean', 'Std Error', 'LCB', 'UCB'])
     vol_w_gp = np.mean(volume_w_gp_rep, axis =0)
     vol_w_gp_sd = [cal_std_err(volume_w_gp_rep[:,i]) for i in range(len(quantiles_at))]
 
@@ -110,7 +110,7 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
         fv_stats_complete.append(fv_stats_temp)
     fv_stats_with_gp = np.array(fv_stats_complete)
 
-    fv_stats_with_gp_table = pd.DataFrame(data = fv_stats_with_gp, index = quantiles_at, columns = ['Mean', 'Std Error', 'UCB', 'LCB'])
+    fv_stats_with_gp_table = pd.DataFrame(data = fv_stats_with_gp, index = quantiles_at, columns = ['Mean', 'Std Error', 'LCB', 'UCB'])
     result_dictionary['fv_stats_with_gp'] = fv_stats_with_gp_table
     result_dictionary['fv_stats_wo_gp'] = fv_wo_gp_table
 
