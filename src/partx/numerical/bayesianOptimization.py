@@ -9,6 +9,7 @@ from pathos.multiprocessing import ProcessingPool as Pool
 from .calculate_robustness import calculate_robustness
 from .sampling import lhs_sampling
 from .sampling import uniform_sampling
+from ..models.gaussian_process_regressor import gpRegressorModel
 
 from ..kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
 from ..kriging_gpr.interface.OK_Rpredict import OK_Rpredict
@@ -16,6 +17,7 @@ from ..kriging_gpr.interface.OK_Rpredict import OK_Rpredict
 from scipy.optimize import minimize, dual_annealing
 from scipy.optimize import Bounds
 
+from itertools import chain
 def exists_in(X, sample, dimension):
     
     for x_ in X:
@@ -39,7 +41,8 @@ def surrogate(model, X:np.array):
         # ignore generated warnings
         simplefilter("ignore")
         # return model.predict(X, return_std=True)
-        return OK_Rpredict(model, X, 0)
+        # return OK_Rpredict(model, X, 0)
+        return model.call_predict(X)
 
 
 def acquisition(X: np.array, Xsamples: np.array, model):
@@ -60,10 +63,9 @@ def acquisition(X: np.array, Xsamples: np.array, model):
     curr_best = np.min(yhat)
     # calculate mean and stdev via surrogate function
     mu, std = surrogate(model, Xsamples)
-    
     mu = mu[0,0]
-    std = std[0,0]
-    ei_0 = []
+    std = std[0]
+    # ei_0 = []
     # print(std)
     # print("******************************")
     pred_var = std
@@ -148,7 +150,10 @@ def bayesian_optimization(test_function, samples_in: np.array, corresponding_rob
         Y = corresponding_robustness[i,:].reshape((corresponding_robustness.shape[1],1))
         
         for j in range(number_of_samples_to_generate[i]):
-            model = OK_Rmodel_kd_nugget(X, Y, 0, 2, gpr_params)
+            # model = OK_Rmodel_kd_nugget(X, Y, 0, 2, gpr_params)
+            model = gpRegressorModel(gpr_params[0], gpr_params[1])
+            model.call_fit(X, Y)
+
             min_bo = opt_acquisition(X, model, test_function_dimension, region_support[i,:,:], rng)
             actual = calculate_robustness(np.array(min_bo), test_function)
             X = np.vstack((X, np.array(min_bo)))

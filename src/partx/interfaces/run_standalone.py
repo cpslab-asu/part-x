@@ -39,9 +39,10 @@ def run_partx(benchmark_name, test_function, test_function_dimension, region_sup
     results_csv = benchmark_result_directory.joinpath(benchmark_name + "_results_csv")
     results_csv.mkdir(exist_ok=True)
     
+    
     # create partx options
     options = partx_options(region_support, branching_factor, test_function_dimension, number_of_BO_samples, alpha, M, R,  
-                            delta, True, initialization_budget, maximum_budget, continued_sampling_budget, initial_seed, fv_quantiles_for_gp, benchmark_name, gpr_params)
+                            delta, True, initialization_budget, maximum_budget, continued_sampling_budget, initial_seed, fv_quantiles_for_gp, gpr_params,benchmark_name)
     
     f = open(benchmark_result_pickle_files.joinpath(options.BENCHMARK_NAME + "_options.pkl"), "wb")
     pickle.dump(options,f)

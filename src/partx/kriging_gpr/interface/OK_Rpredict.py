@@ -49,6 +49,9 @@ def OK_Rpredict(gp_model, Xtest, regr_model):
         
         mse_temp = sigma_z * (1 - R_pred[:,r].transpose()@Rinv_Rpred[:,r] + (OneMinusFcrossR).transpose()@FRFinv@(OneMinusFcrossR))
         mse[r,0] = np.sqrt(mse_temp[0,0])
+        if np.isnan(mse[r,0]):
+            raise Exception("Value of Krigin parameter too high, Try decreasing the value.")
+
 
 
 
@@ -61,4 +64,5 @@ def OK_Rpredict(gp_model, Xtest, regr_model):
 
     #     mse[r,0] = (sigma_z * (term_1 + term_2@term_3@term_4))[0,0]
 
+    mse = mse.flat
     return f, mse

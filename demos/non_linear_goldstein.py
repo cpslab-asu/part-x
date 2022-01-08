@@ -1,5 +1,8 @@
 import numpy as np
 from partx.interfaces.run_standalone import run_partx
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.gaussian_process.kernels import Matern, ConstantKernel, RBF,WhiteKernel
+from partx.numerical.optimizer_gpr import optimizer_lbfgs_b
 
 def test_function(X):
     return (1 + (X[0] + X[1] + 1) ** 2 * (
@@ -32,7 +35,7 @@ alpha = [0.05]
 delta = 0.001
 
 # Other Parameters
-number_of_macro_replications = 1
+number_of_macro_replications = 2
 start_seed = 1000
 fv_quantiles_for_gp = [0.01, 0.05, 0.5]
 
@@ -40,9 +43,19 @@ fv_quantiles_for_gp = [0.01, 0.05, 0.5]
 results_folder_name = "results"
 BENCHMARK_NAME = "goldstein_price"
 results_at_confidence = 0.95
-gpr_params = 5
 
 num_cores = 2
+
+
+model = GaussianProcessRegressor(
+            kernel=Matern(nu=1.5),
+            normalize_y=True,
+            alpha=1e-6,
+            n_restarts_optimizer=5,
+            optimizer = optimizer_lbfgs_b)
+
+gpr_params = list(["kriging",6])
+
 
 results_at_confidence = 0.95
 run_partx(BENCHMARK_NAME, test_function, test_function_dimension, region_support, 

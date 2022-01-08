@@ -11,6 +11,8 @@ from ..models.testFunction import callCounter
 import pathlib
 from ..kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
 from ..kriging_gpr.interface.OK_Rpredict import OK_Rpredict
+from ..models.gaussian_process_regressor import gpRegressorModel
+
 
 def load_tree(tree_name):
     """Load the tree
@@ -74,18 +76,21 @@ def falsification_volume_using_gp(ftree, options, quantiles_at, rng):
         node_data = temp_node_id.data
         X = node_data.samples_in[0]
         Y = np.transpose(node_data.samples_out)
-        model = OK_Rmodel_kd_nugget(X, Y, 0, 2, options.gpr_params)
+        # model = OK_Rmodel_kd_nugget(X, Y, 0, 2, options.gpr_params)
+        model = gpRegressorModel(options.gpr_params[0], options.gpr_params[1])
+        model.call_fit(X, Y)
         quantile_values_r= []
         for r in range(options.R):
             samples = uniform_sampling(options.M, node_data.region_support, options.test_function_dimension, rng)
-            y_pred, sigma_st = OK_Rpredict(model, np.array(samples)[0], 0)
+            # y_pred, sigma_st = OK_Rpredict(model, np.array(samples)[0], 0)
+            y_pred, sigma_st = model.call_predict(np.array(samples)[0])
             # sigma_st = np.sqrt(pred_var[:,0].astype(float))
             quantile_values_m = []
             for x in range(options.M):
                 quantiles_values_alp = []
                 for alp in quantiles_at:
                     
-                    quantiles_values = (stats.norm.ppf(alp,y_pred[x][0],sigma_st[x][0]))
+                    quantiles_values = (stats.norm.ppf(alp,y_pred[x][0],sigma_st[x]))
                     # print(quantiles_values)
                     quantiles_values_alp.append(quantiles_values)
                 quantile_values_m.append(quantiles_values_alp)

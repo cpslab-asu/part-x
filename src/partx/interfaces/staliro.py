@@ -27,7 +27,7 @@ class PartX(Optimizer[PartXResult]):
     macro_replication: int
     fv_quantiles_for_gp: int
     results_at_confidence: float
-    gpr_params: float
+    gpr_params: list
     results_folder_name: str
     num_cores: int
 

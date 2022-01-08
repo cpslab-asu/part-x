@@ -4,6 +4,7 @@ from scipy import stats
 from .sampling import lhs_sampling
 from ..kriging_gpr.interface.OK_Rmodel_kd_nugget import OK_Rmodel_kd_nugget
 from ..kriging_gpr.interface.OK_Rpredict import OK_Rpredict
+from ..models.gaussian_process_regressor import gpRegressorModel
 
 
 def calculateQuantile(y_pred, sigma_st, alpha):
@@ -61,14 +62,16 @@ def mc_Step(samples_in, samples_out, grid, region_support, regionDimensions, alp
     for iterate in range(R):
         X = samples_in[0]
         Y = np.transpose(samples_out)
-        model = OK_Rmodel_kd_nugget(X, Y, 0, 2, gpr_params)
-        
+        # model = OK_Rmodel_kd_nugget(X, Y, 0, 2, gpr_params)
+        model = gpRegressorModel(gpr_params[0], gpr_params[1])
+        model.call_fit(X, Y)
 
 
         samples = reshaped_grid[iterate]
         # print((np.array(samples)[0]))
             # https://scikit-learn.org/stable/auto_examples/gaussian_process/plot_gpr_noisy_targets.html#sphx-glr-auto-examples-gaussian-process-plot-gpr-noisy-targets-py
-        y_pred, sigma_st = OK_Rpredict(model, np.array(samples)[0], 0)
+        # y_pred, sigma_st = OK_Rpredict(model, np.array(samples)[0], 0)
+        y_pred, sigma_st = model.call_predict(np.array(samples)[0])
         # sigma_st = np.sqrt(pred_var[:,0].astype(float))
         for alpha_iter in range(len(alpha)):
             minq, maxq = calculateQuantile(y_pred, sigma_st, alpha[alpha_iter])

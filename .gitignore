@@ -4,3 +4,4 @@ make.bat
 Makefile
 build/
 source/
+test_gpr_class.py

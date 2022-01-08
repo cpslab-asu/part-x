@@ -35,7 +35,7 @@ fv_quantiles_for_gp = [0.01, 0.05, 0.5]
 results_folder_name = "results"
 BENCHMARK_NAME = "rosenbrock"
 results_at_confidence = 0.95
-gpr_params = 5
+gpr_params = list(["kriging",5])
 
 num_cores = 2
 

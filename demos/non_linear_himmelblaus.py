@@ -35,7 +35,7 @@ results_at_confidence = 0.95
 results_folder_name = "results"
 BENCHMARK_NAME = "himmelblaus"
 results_at_confidence = 0.95
-gpr_params = 5
+gpr_params = list(["kriging",5])
 
 num_cores = 2
 
