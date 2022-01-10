@@ -19,7 +19,7 @@ region_support = np.array([[[-1., 1.], [-1., 1.]]])
 
 # Budgets
 initialization_budget = 10
-max_budget = 5000
+max_budget = 50
 continued_sampling_budget = 100
 number_of_BO_samples = [10]
 
@@ -37,7 +37,7 @@ delta = 0.001
 # Other Parameters
 number_of_macro_replications = 2
 start_seed = 1000
-fv_quantiles_for_gp = [0.01, 0.05, 0.5]
+fv_quantiles_for_gp = [0.5, 0.05, 0.01]
 
 
 results_folder_name = "results"
@@ -47,15 +47,7 @@ results_at_confidence = 0.95
 num_cores = 2
 
 
-model = GaussianProcessRegressor(
-            kernel=Matern(nu=1.5),
-            normalize_y=True,
-            alpha=1e-6,
-            n_restarts_optimizer=5,
-            optimizer = optimizer_lbfgs_b)
-
 gpr_params = list(["kriging",6])
-
 
 results_at_confidence = 0.95
 run_partx(BENCHMARK_NAME, test_function, test_function_dimension, region_support, 

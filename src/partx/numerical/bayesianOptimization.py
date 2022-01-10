@@ -18,13 +18,16 @@ from scipy.optimize import minimize, dual_annealing
 from scipy.optimize import Bounds
 
 from itertools import chain
-def exists_in(X, sample, dimension):
+# def exists_in(X, sample, dimension):
+    # print(X)
+    # print("***********************")
+    # print(sample)
+    # for x_ in X:
+    #     if sum(sample == x_) == dimension:
+    #         return True
+    #     else:
+    #         return False
     
-    for x_ in X:
-        if sum(sample == x_) == dimension:
-            return True
-        else:
-            return False
 
 def surrogate(model, X:np.array):
     """Surrogate Model function
@@ -107,14 +110,14 @@ def opt_acquisition(X: np.array, model, test_function_dimension:int, region_supp
     fun = lambda x_: -1*acquisition(X,x_,model)
     params_2 = dual_annealing(fun, bounds = list(zip(lower_bound_theta, upper_bound_theta)), no_local_search = False)
     min_bo = params_2.x
-
-    while exists_in(X, min_bo, test_function_dimension):
-        # print("Rerunning Optimizer to avoid duplicate point")
+    flag = 0
+   
+    while (min_bo in X) & (flag <= 4):
         random_sample = uniform_sampling(1, region_support, test_function_dimension, rng)
         params_2 = dual_annealing(fun, bounds = list(zip(lower_bound_theta, upper_bound_theta)), no_local_search = False, x0 = np.ndarray.flatten(random_sample[:,0,:]))
-    
         min_bo = params_2.x
-
+        flag = flag + 1
+        
     return np.array(min_bo)
 
 
