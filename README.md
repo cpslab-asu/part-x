@@ -16,7 +16,8 @@ poetry install
 ```
 
 ## Usage
-This project provides implementations for four example test functions. 
+
+This project provides implementations for four example test functions. Detailed documentation can be found [here](https://part-x-documentation.readthedocs.io/en/latest/index.html).
 
 1. Rosenbrock function:
 
