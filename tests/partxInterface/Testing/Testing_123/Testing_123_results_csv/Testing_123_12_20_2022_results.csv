@@ -1,0 +1,34 @@
+fv_stats_with_gp,"        Mean  Std Error       LCB       UCB
+0.01  0.7750   0.000793  0.651608  0.898392
+0.05  0.7364   0.001273  0.580029  0.892771
+0.50  0.1186   0.000349  0.036672  0.200528"
+fv_stats_wo_gp,"                                   Mean  Std Error  LCB  UCB
+Classified Regions only             0.0        0.0  NaN  NaN
+Unclassified Regions only           1.0        0.0  NaN  NaN
+Classified + Unclassified Regions   1.0        0.0  NaN  NaN"
+falsified_true,"[1, 1, 1, 1, 1]"
+first_falsification_mean,8.4
+first_falsification_median,6.0
+first_falsification_min,2
+first_falsification_max,18
+falsification_rate,5
+best_robustness,-45.094123431972946
+first_falsification_point,"[array([18, array([ 0.17852355, -1.        ]), -32.5901936662317],
+      dtype=object), array([2, array([-0.54961195, -0.53111016]), -9.351798715019498],
+      dtype=object), array([12, array([ 0.24259564, -1.        ]), -10.402542631168416],
+      dtype=object), array([6, array([-0.22050736, -0.82079543]), -27.165691015288747],
+      dtype=object), array([4, array([-0.76284829, -0.2536009 ]), -0.8029061419183208],
+      dtype=object)]"
+non_falsification_points,[]
+best_falsification_points,"[array([18, array([ 0.17852355, -1.        ]), -32.5901936662317],
+      dtype=object), array([14, array([-0.08280317, -1.        ]), -45.094123431972946],
+      dtype=object), array([20, array([-0.13496921, -1.        ]), -41.050923029463675],
+      dtype=object), array([27, array([ 0.09936013, -0.99492958]), -44.05433013392003],
+      dtype=object), array([17, array([-0.13819942, -1.        ]), -40.691144628531255],
+      dtype=object)]"
+simulation_time_history,"[0.0002750052371993661, 0.0003211187431588769, 0.0003239938523620367, 0.0003475520061329007, 0.0005079819820821285]"
+non_simulation_time_history,"[8.133216395741329, 9.138704501325265, 8.861899973126128, 8.84516581601929, 9.537410943070427]"
+total_time_history,"[8.133491400978528, 9.139025620068423, 8.86222396697849, 8.845513368025422, 9.537918925052509]"
+mean_simulation_time,0.0003551303641870618
+mean_non_simulation_time,8.903279525856487
+mean_total_time,8.903634656220675

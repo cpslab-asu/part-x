@@ -1,0 +1,639 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Part-X with PsyTaLiRo &#8212; Part-X  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Outputs" href="Outputs.html" />
+    <link rel="prev" title="Standalone Usage" href="Standalone%20Usage.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="part-x-with-psytaliro">
+<h1>Part-X with PsyTaLiRo<a class="headerlink" href="#part-x-with-psytaliro" title="Permalink to this heading">¶</a></h1>
+<section id="black-box-function">
+<h2>Black-Box Function<a class="headerlink" href="#black-box-function" title="Permalink to this heading">¶</a></h2>
+<p>The black-box function is the function for whom we need to find the falsifying behaviors. Below, we show to two examples.</p>
+<p>1) A blackbox function can also be defined which can be used for checking against a certain specification using <a class="reference external" href="https://sbtg.gitlab.io/psy-taliro/">PSY-TaLiRo 1.0.0a14</a>.
+Here, we define the Automatic Transmission Blackbox.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">AutotransModel</span><span class="p">(</span><span class="n">Model</span><span class="p">[</span><span class="n">AutotransDataT</span><span class="p">,</span> <span class="kc">None</span><span class="p">]):</span>
+   <span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;Autotrans_shift&quot;</span>
+
+   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">_has_matlab</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+               <span class="s2">&quot;Simulink support requires the MATLAB Engine for Python to be installed&quot;</span>
+            <span class="p">)</span>
+
+      <span class="n">engine</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">start_matlab</span><span class="p">()</span>
+      <span class="c1"># engine.addpath(&quot;examples&quot;)</span>
+      <span class="n">model_opts</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">simget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MODEL_NAME</span><span class="p">)</span>
+
+      <span class="bp">self</span><span class="o">.</span><span class="n">sampling_step</span> <span class="o">=</span> <span class="mf">0.05</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">engine</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">model_opts</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">simset</span><span class="p">(</span><span class="n">model_opts</span><span class="p">,</span> <span class="s2">&quot;SaveFormat&quot;</span><span class="p">,</span> <span class="s2">&quot;Array&quot;</span><span class="p">)</span>
+
+   <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">static</span><span class="p">:</span> <span class="n">StaticInput</span><span class="p">,</span> <span class="n">signals</span><span class="p">:</span> <span class="n">Signals</span><span class="p">,</span> <span class="n">intrvl</span><span class="p">:</span> <span class="n">Interval</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AutotransResultT</span><span class="p">:</span>
+      <span class="n">sim_t</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">double</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">intrvl</span><span class="o">.</span><span class="n">upper</span><span class="p">])</span>
+      <span class="n">n_times</span> <span class="o">=</span> <span class="p">(</span><span class="n">intrvl</span><span class="o">.</span><span class="n">length</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_step</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span>
+      <span class="n">signal_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">intrvl</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">intrvl</span><span class="o">.</span><span class="n">upper</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_times</span><span class="p">))</span>
+      <span class="n">signal_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">signal</span><span class="o">.</span><span class="n">at_time</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">signal_times</span><span class="p">]</span> <span class="k">for</span> <span class="n">signal</span> <span class="ow">in</span> <span class="n">signals</span><span class="p">])</span>
+
+      <span class="n">model_input</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">double</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">row_stack</span><span class="p">((</span><span class="n">signal_times</span><span class="p">,</span> <span class="n">signal_values</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+      <span class="n">timestamps</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">sim</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">sim_t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_opts</span><span class="p">,</span> <span class="n">model_input</span><span class="p">,</span> <span class="n">nargout</span><span class="o">=</span><span class="mi">3</span>
+      <span class="p">)</span>
+
+      <span class="n">timestamps_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">timestamps</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+      <span class="n">data_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+      <span class="k">return</span> <span class="n">ModelData</span><span class="p">(</span><span class="n">data_array</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">timestamps_array</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="specification-and-signals-using-psy-taliro">
+<h2>Specification and Signals using Psy-TaLiRo:<a class="headerlink" href="#specification-and-signals-using-psy-taliro" title="Permalink to this heading">¶</a></h2>
+<p>The Specification against which the signal are to be tested is written as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">AT1_phi</span> <span class="o">=</span> <span class="s2">&quot;G[0, 20] (speed &lt;= 120)&quot;</span>
+<span class="n">specification</span> <span class="o">=</span> <span class="n">RTAMTDense</span><span class="p">(</span><span class="n">AT1_phi</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;speed&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>The Signal options are using psy-taliro. Below is an example:</p>
+<p>In this example, we have two signals from time 0 to time 50.</p>
+<ol class="arabic simple">
+<li><p>The first signal has 7 control points and the range for all the 7 control points are [0,100].</p></li>
+<li><p>The second signal has 3 control points and the range for all the 3 control points are [0,325]:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">signals</span> <span class="o">=</span> <span class="p">[</span>
+     <span class="n">SignalOptions</span><span class="p">(</span><span class="n">control_points</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)]</span><span class="o">*</span><span class="mi">7</span><span class="p">,</span> <span class="n">signal_times</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">50.</span><span class="p">,</span><span class="mi">7</span><span class="p">)),</span>
+     <span class="n">SignalOptions</span><span class="p">(</span><span class="n">control_points</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">325</span><span class="p">)]</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span> <span class="n">signal_times</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">50.</span><span class="p">,</span><span class="mi">3</span><span class="p">)),</span>
+ <span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="defining-gpr-model">
+<span id="gpr-definition-pxpsy"></span><h2>Defining GPR Model<a class="headerlink" href="#defining-gpr-model" title="Permalink to this heading">¶</a></h2>
+<p>The Gaussian Process Regressor(GPR) is an essential part of the Part-X algorithm.
+While one can choose the internal GPR model by importing it:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">partxv2.gprInterface</span> <span class="kn">import</span> <span class="n">InternalGPR</span>
+<span class="n">gpr_model</span> <span class="o">=</span> <span class="n">InternalGPR</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This <em>gpr_model</em> can be passed to Part-X algorithm.</p>
+<p>However, we even provide a way for users to use their own GPR.</p>
+<p>To use this, the user has to import the GPR interface and write their GPR model as shown below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">.gprInterface</span> <span class="kn">import</span> <span class="n">GaussianProcessRegressorStructure</span>
+<span class="kn">from</span> <span class="nn">sklearn.gaussian_process</span> <span class="kn">import</span> <span class="n">GaussianProcessRegressor</span>
+<span class="kn">from</span> <span class="nn">sklearn.gaussian_process.kernels</span> <span class="kn">import</span> <span class="n">Matern</span><span class="p">,</span> <span class="n">ConstantKernel</span><span class="p">,</span> <span class="n">RBF</span><span class="p">,</span> <span class="n">WhiteKernel</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">fmin_l_bfgs_b</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">catch_warnings</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+
+<span class="k">def</span> <span class="nf">optimizer_lbfgs_b</span><span class="p">(</span><span class="n">obj_func</span><span class="p">,</span> <span class="n">initial_theta</span><span class="p">):</span>
+   <span class="k">with</span> <span class="n">catch_warnings</span><span class="p">():</span>
+      <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+      <span class="n">params</span> <span class="o">=</span> <span class="n">fmin_l_bfgs_b</span><span class="p">(</span>
+            <span class="n">obj_func</span><span class="p">,</span> <span class="n">initial_theta</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">30000</span><span class="p">,</span> <span class="n">maxfun</span><span class="o">=</span><span class="mf">1e10</span>
+      <span class="p">)</span>
+   <span class="k">return</span> <span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">UserDefinedGPR</span><span class="p">(</span><span class="n">GaussianProcessRegressorStructure</span><span class="p">):</span>
+   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">12345</span><span class="p">):</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">gpr_model</span> <span class="o">=</span> <span class="n">GaussianProcessRegressor</span><span class="p">(</span>
+            <span class="n">kernel</span><span class="o">=</span><span class="n">Matern</span><span class="p">(</span><span class="n">nu</span><span class="o">=</span><span class="mf">2.5</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">normalize_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_restarts_optimizer</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="n">random_state</span>
+      <span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+
+   <span class="k">def</span> <span class="nf">fit_gpr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;Method to fit gpr Model</span>
+
+<span class="sd">      Args:</span>
+<span class="sd">            x_train: Samples from Training set.</span>
+<span class="sd">            y_train: Evaluated values of samples from Trainig set.</span>
+
+
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">X_scaled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+      <span class="k">with</span> <span class="n">catch_warnings</span><span class="p">():</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gpr_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+
+   <span class="k">def</span> <span class="nf">predict_gpr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;Method to predict mean and std_dev from gpr model</span>
+
+<span class="sd">      Args:</span>
+<span class="sd">            x_train: Samples from Training set.</span>
+
+
+<span class="sd">      Returns:</span>
+<span class="sd">            mean</span>
+<span class="sd">            std_dev</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">x_scaled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+      <span class="k">with</span> <span class="n">catch_warnings</span><span class="p">():</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+            <span class="n">yPred</span><span class="p">,</span> <span class="n">predSigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpr_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_scaled</span><span class="p">,</span> <span class="n">return_std</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">yPred</span><span class="p">,</span> <span class="n">predSigma</span>
+</pre></div>
+</div>
+</section>
+<section id="defining-bayesian-optimization-model">
+<span id="bo-definition-pxpsy"></span><h2>Defining Bayesian Optimization Model<a class="headerlink" href="#defining-bayesian-optimization-model" title="Permalink to this heading">¶</a></h2>
+<p>Like the GPR, the Bayesian Optimization (BO) is also an essential part of the Part-X algorithm.
+While one can choose the internal BO model by importing it:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">partxv2.bayesianOptimization</span> <span class="kn">import</span> <span class="n">InternalBO</span>
+<span class="n">bo_model</span> <span class="o">=</span> <span class="n">InternalBO</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This <em>bo_model</em> can be passed to Part-X algorithm.</p>
+<p>However, we even provide a way for users to use their own BO code.</p>
+<p>To use this, the user has to import the BO interface and write their BO model as shown below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">NDArray</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
+
+<span class="kn">from</span> <span class="nn">.bointerface</span> <span class="kn">import</span> <span class="n">BO_Interface</span>
+<span class="kn">from</span> <span class="nn">..gprInterface</span> <span class="kn">import</span> <span class="n">GPR</span>
+<span class="kn">from</span> <span class="nn">..sampling</span> <span class="kn">import</span> <span class="n">uniform_sampling</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">compute_robustness</span>
+
+
+
+<span class="k">class</span> <span class="nc">InternalBO</span><span class="p">(</span><span class="n">BO_Interface</span><span class="p">):</span>
+   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="k">pass</span>
+
+   <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">test_function</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+      <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+      <span class="n">x_train</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">,</span>
+      <span class="n">y_train</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">,</span>
+      <span class="n">region_support</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">,</span>
+      <span class="n">gpr_model</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+      <span class="n">rng</span><span class="p">,</span>
+   <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">NDArray</span><span class="p">]:</span>
+
+      <span class="sd">&quot;&quot;&quot;Internal BO Model</span>
+
+<span class="sd">      Args:</span>
+<span class="sd">            test_function: Function of System Under Test.</span>
+<span class="sd">            num_samples: Number of samples to generate from BO.</span>
+<span class="sd">            x_train: Samples from Training set.</span>
+<span class="sd">            y_train: Evaluated values of samples from Trainig set.</span>
+<span class="sd">            region_support: Min and Max of all dimensions</span>
+<span class="sd">            gpr_model: Gaussian Process Regressor Model developed using Factory</span>
+<span class="sd">            rng: RNG object from numpy</span>
+
+<span class="sd">      Raises:</span>
+<span class="sd">            TypeError: If x_train is not 2 dimensional numpy array or does not match dimensions</span>
+<span class="sd">            TypeError: If y_train is not (n,) numpy array</span>
+<span class="sd">            TypeError: If there is a mismatch between x_train and y_train</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">            x_complete</span>
+<span class="sd">            y_complete</span>
+<span class="sd">            x_new</span>
+<span class="sd">            y_new</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+
+      <span class="n">x_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">region_support</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+      <span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+      <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_samples</span><span class="p">):</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">GPR</span><span class="p">(</span><span class="n">gpr_model</span><span class="p">)</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+            <span class="n">pred_sample_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_opt_acquisition</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">region_support</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
+
+            <span class="n">pred_sample_y</span> <span class="o">=</span> <span class="n">compute_robustness</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pred_sample_x</span><span class="p">]),</span> <span class="n">test_function</span><span class="p">)</span>
+            <span class="n">x_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">x_train</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pred_sample_x</span><span class="p">])))</span>
+            <span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">y_train</span><span class="p">,</span> <span class="n">pred_sample_y</span><span class="p">))</span>
+
+            <span class="n">x_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pred_sample_x</span><span class="p">])))</span>
+            <span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">pred_sample_y</span><span class="p">))</span>
+      <span class="k">return</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_pred</span><span class="p">,</span> <span class="n">y_pred</span>
+
+   <span class="k">def</span> <span class="nf">_opt_acquisition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_train</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">,</span> <span class="n">gpr_model</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">region_support</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
+      <span class="sd">&quot;&quot;&quot;Get the sample points</span>
+
+<span class="sd">      Args:</span>
+<span class="sd">            X: sample points</span>
+<span class="sd">            y: corresponding robustness values</span>
+<span class="sd">            model: the GP models</span>
+<span class="sd">            sbo: sample points to construct the robustness values</span>
+<span class="sd">            test_function_dimension: The dimensionality of the region. (Dimensionality of the test function)</span>
+<span class="sd">            region_support: The bounds of the region within which the sampling is to be done.</span>
+<span class="sd">                                       Region Bounds is M x N x O where;</span>
+<span class="sd">                                          M = number of regions;</span>
+<span class="sd">                                          N = test_function_dimension (Dimensionality of the test function);</span>
+<span class="sd">                                          O = Lower and Upper bound. Should be of length 2;</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">            The new sample points by BO</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+
+      <span class="n">tf_dim</span> <span class="o">=</span> <span class="n">region_support</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+      <span class="n">lower_bound_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">region_support</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+      <span class="n">upper_bound_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">region_support</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+
+      <span class="n">curr_best</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span>
+
+      <span class="c1"># bnds = Bounds(lower_bound_theta, upper_bound_theta)</span>
+      <span class="n">fun</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x_</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_acquisition</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">x_</span><span class="p">,</span> <span class="n">gpr_model</span><span class="p">)</span>
+
+      <span class="n">random_samples</span> <span class="o">=</span> <span class="n">uniform_sampling</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="n">region_support</span><span class="p">,</span> <span class="n">tf_dim</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
+      <span class="n">min_bo_val</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_acquisition</span><span class="p">(</span>
+            <span class="n">y_train</span><span class="p">,</span> <span class="n">random_samples</span><span class="p">,</span> <span class="n">gpr_model</span><span class="p">,</span> <span class="s2">&quot;multiple&quot;</span>
+      <span class="p">)</span>
+
+      <span class="n">min_bo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">random_samples</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">min_bo_val</span><span class="p">),</span> <span class="p">:]])</span>
+      <span class="n">min_bo_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">min_bo_val</span><span class="p">)</span>
+
+      <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">):</span>
+            <span class="n">new_params</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span>
+               <span class="n">fun</span><span class="p">,</span>
+               <span class="n">bounds</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">lower_bound_theta</span><span class="p">,</span> <span class="n">upper_bound_theta</span><span class="p">)),</span>
+               <span class="n">x0</span><span class="o">=</span><span class="n">min_bo</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">new_params</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+               <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">min_bo</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">fun</span><span class="p">(</span><span class="n">new_params</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">min_bo_val</span><span class="p">:</span>
+               <span class="n">min_bo</span> <span class="o">=</span> <span class="n">new_params</span><span class="o">.</span><span class="n">x</span>
+               <span class="n">min_bo_val</span> <span class="o">=</span> <span class="n">fun</span><span class="p">(</span><span class="n">min_bo</span><span class="p">)</span>
+      <span class="n">new_params</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span>
+            <span class="n">fun</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">lower_bound_theta</span><span class="p">,</span> <span class="n">upper_bound_theta</span><span class="p">)),</span> <span class="n">x0</span><span class="o">=</span><span class="n">min_bo</span>
+      <span class="p">)</span>
+      <span class="n">min_bo</span> <span class="o">=</span> <span class="n">new_params</span><span class="o">.</span><span class="n">x</span>
+
+      <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">min_bo</span><span class="p">)</span>
+
+   <span class="k">def</span> <span class="nf">_surrogate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gpr_model</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">x_train</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;_surrogate Model function</span>
+
+<span class="sd">      Args:</span>
+<span class="sd">            model: Gaussian process model</span>
+<span class="sd">            X: Input points</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">            Predicted values of points using gaussian process model</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+
+      <span class="k">return</span> <span class="n">gpr_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_train</span><span class="p">)</span>
+
+   <span class="k">def</span> <span class="nf">_acquisition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_train</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">,</span> <span class="n">sample</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">,</span> <span class="n">gpr_model</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">sample_type</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span><span class="s2">&quot;single&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
+      <span class="sd">&quot;&quot;&quot;Acquisition Model: Expected Improvement</span>
+
+<span class="sd">      Args:</span>
+<span class="sd">            y_train: corresponding robustness values</span>
+<span class="sd">            sample: Sample(s) whose EI is to be calculated</span>
+<span class="sd">            gpr_model: GPR model</span>
+<span class="sd">            sample_type: Single sample or list of model. Defaults to &quot;single&quot;. other options is &quot;multiple&quot;.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">            EI of samples</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">curr_best</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span>
+
+      <span class="k">if</span> <span class="n">sample_type</span> <span class="o">==</span> <span class="s2">&quot;multiple&quot;</span><span class="p">:</span>
+            <span class="n">mu</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surrogate</span><span class="p">(</span><span class="n">gpr_model</span><span class="p">,</span> <span class="n">sample</span><span class="p">)</span>
+            <span class="n">ei_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">mu_iter</span><span class="p">,</span> <span class="n">std_iter</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">std</span><span class="p">):</span>
+               <span class="n">pred_var</span> <span class="o">=</span> <span class="n">std_iter</span>
+               <span class="k">if</span> <span class="n">pred_var</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                  <span class="n">var_1</span> <span class="o">=</span> <span class="n">curr_best</span> <span class="o">-</span> <span class="n">mu_iter</span>
+                  <span class="n">var_2</span> <span class="o">=</span> <span class="n">var_1</span> <span class="o">/</span> <span class="n">pred_var</span>
+
+                  <span class="n">ei</span> <span class="o">=</span> <span class="p">(</span><span class="n">var_1</span> <span class="o">*</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">var_2</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span>
+                        <span class="n">pred_var</span> <span class="o">*</span> <span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">var_2</span><span class="p">)</span>
+                  <span class="p">)</span>
+               <span class="k">else</span><span class="p">:</span>
+                  <span class="n">ei</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+               <span class="n">ei_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ei</span><span class="p">)</span>
+            <span class="c1"># print(np.array(ei_list).shape)</span>
+            <span class="c1"># print(&quot;*****&quot;)</span>
+            <span class="c1"># return np.array(ei_list)</span>
+      <span class="k">elif</span> <span class="n">sample_type</span> <span class="o">==</span> <span class="s2">&quot;single&quot;</span><span class="p">:</span>
+            <span class="c1"># print(&quot;kfkf&quot;)</span>
+            <span class="n">mu</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surrogate</span><span class="p">(</span><span class="n">gpr_model</span><span class="p">,</span> <span class="n">sample</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">pred_var</span> <span class="o">=</span> <span class="n">std</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">pred_var</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+               <span class="n">var_1</span> <span class="o">=</span> <span class="n">curr_best</span> <span class="o">-</span> <span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+               <span class="n">var_2</span> <span class="o">=</span> <span class="n">var_1</span> <span class="o">/</span> <span class="n">pred_var</span>
+
+               <span class="n">ei</span> <span class="o">=</span> <span class="p">(</span><span class="n">var_1</span> <span class="o">*</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">var_2</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span>
+                  <span class="n">pred_var</span> <span class="o">*</span> <span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">var_2</span><span class="p">)</span>
+               <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+               <span class="n">ei</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="c1"># return ei</span>
+
+      <span class="k">if</span> <span class="n">sample_type</span> <span class="o">==</span> <span class="s2">&quot;multiple&quot;</span><span class="p">:</span>
+            <span class="n">return_ei</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ei_list</span><span class="p">)</span>
+      <span class="k">elif</span> <span class="n">sample_type</span> <span class="o">==</span> <span class="s2">&quot;single&quot;</span><span class="p">:</span>
+            <span class="n">return_ei</span> <span class="o">=</span> <span class="n">ei</span>
+
+      <span class="k">return</span> <span class="n">return_ei</span>
+</pre></div>
+</div>
+</section>
+<section id="parameters-for-part-x">
+<h2>Parameters for Part-X<a class="headerlink" href="#parameters-for-part-x" title="Permalink to this heading">¶</a></h2>
+<p>The parameters that need to be defined for Part-X are mentioned below.
+The usage of these parameters are defined in the <span class="xref std std-ref">reference_examples</span></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>BENCHMARK_NAME</strong>: string</dt><dd><p>Name of the benchmark</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>num_macro_rep</strong>: int</dt><dd><p>The number of replications</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>init_budget</strong>: int</dt><dd><p>The initiliazation budget of the algorithm. This refers to minimimum nunmber of samples that are required to be present in a region in order to generate samples from bayesian optimization and classify the region.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>bo_budget</strong>: int</dt><dd><p>The number of samples that needs to be generated from Bayesian Optimization</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>cs_budget</strong>: int</dt><dd><p>The number of samples that must sampled from continuous sampling phase.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>alpha</strong>: float, [0,1]</dt><dd><p>Region Classification percentile</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>R</strong>: int</dt><dd><p>The number of monte-carlo iterations. This is used in calculation of quantiles of a region.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>M</strong>: int</dt><dd><p>The number of evaluation of per monte-carlo iteration. This is used in calculation of quantiles of a region.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>delta</strong>: float, int</dt><dd><p>A number used to define the fraction of dimension, below which no further brnching in that dimension takes place. It is used for clsssificastion of a region.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>fv_quantiles_for_gp</strong> list</dt><dd><p>List of values used for calculation at certain quantile values.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>branching_factor</strong>: int</dt><dd><p>Number of sub-regions in which a region is branched.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>uniform_partitioning</strong> True/False</dt><dd><p>Wether to perform Uniform Partitioning or not.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>start_seed</strong>: int</dt><dd><p>Starting seed of the experiment to ensure reproducibility.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><p><strong>gpr_model</strong>: The Gaussian Process Regressor model. Described in detail <span class="xref std std-ref">_gpr_definition_pxpsy</span>.</p></li>
+</ul>
+<ul class="simple">
+<li><p><strong>bo_model</strong>: The Bayesian Optimization model. Described in detail <span class="xref std std-ref">_bo_definition_pxpsy</span>.</p></li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>init_sampling_type</strong>: str</dt><dd><p>Initial Sampling Algorithms. Defaults to “lhs_sampling”. Can also use “uniform_sampling”</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>cs_sampling_type</strong>: str</dt><dd><p>Continued Sampling Mechanism. Defaults to “lhs_sampling”. Can also use “uniform_sampling”</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>q_estim_sampling</strong>: str</dt><dd><p>Quantile estimation sampling Mechanism. Defaults to “lhs_sampling”. Can also use “uniform_sampling”</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>mc_integral_sampling_type</strong>: str</dt><dd><p>Monte Carlo Integral Sampling Mechanism. Defaults to “lhs_sampling”. Can also use “uniform_sampling”</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>results_sampling_type</strong>: str</dt><dd><p>Results Sampling Mechanism. Defaults to “lhs_sampling”. Can also use “uniform_sampling”</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>results_at_confidence</strong>: float</dt><dd><p>Confidence level at which result to be computed</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>results_folder_name</strong>:</dt><dd><p>Results folder name,</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>num_cores</strong>: int</dt><dd><p>Number of cores to use. If value is 1, no parallalization is used. If value is greater than 1, various macro-replication will be spread over the cores.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>It would be advisable to refer to Algorithm 1, 2, 3, 4 in the paper <a class="reference external" href="https://arxiv.org/pdf/2110.10729.pdf">Part-X</a> to get a deeper understanding of these paramters and where they are used.</p>
+</section>
+<section id="defining-the-options-from-psy-taliro">
+<h2>Defining the Options from psy-taliro<a class="headerlink" href="#defining-the-options-from-psy-taliro" title="Permalink to this heading">¶</a></h2>
+<p>The maximum budget and evaluation time for signal are defined using psy-taliro options.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">(</span><span class="n">runs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MAX_BUDGET</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>  <span class="n">signals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">signals</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="running-the-optimizer">
+<h2>Running the Optimizer<a class="headerlink" href="#running-the-optimizer" title="Permalink to this heading">¶</a></h2>
+<p>Once the all of it defined, we can run the code.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+
+<span class="n">staliro</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">specification</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Part-X</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Getting%20Started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Standalone%20Usage.html">Standalone Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Part-X with PsyTaLiRo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#black-box-function">Black-Box Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#specification-and-signals-using-psy-taliro">Specification and Signals using Psy-TaLiRo:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#defining-gpr-model">Defining GPR Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#defining-bayesian-optimization-model">Defining Bayesian Optimization Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameters-for-part-x">Parameters for Part-X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#defining-the-options-from-psy-taliro">Defining the Options from psy-taliro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-optimizer">Running the Optimizer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Outputs.html">Outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Demo%201%20-%20Standalone%20Part-X.html">Demo 1 - Standalone Part-X</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Demo%202%20-%20Part-X%20with%20Psy-TaLiRo.html">Demo 2 - Part-X with Psy-TaLiRo</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="Getting%20Started.html">Getting Started</a><ul>
+      <li>Previous: <a href="Standalone%20Usage.html" title="previous chapter">Standalone Usage</a></li>
+      <li>Next: <a href="Outputs.html" title="next chapter">Outputs</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Tanmay Bhaskar Khandait.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/Part-X with PsyTaLiRo.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

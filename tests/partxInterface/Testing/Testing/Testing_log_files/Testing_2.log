@@ -1,0 +1,70 @@
+Fri, 01 Jul 2022 14:38:57 :: Information about Replication 2
+Fri, 01 Jul 2022 14:38:57 :: Running Testing Replication 2 with seed 125
+Fri, 01 Jul 2022 14:38:57 :: **************************************************
+Fri, 01 Jul 2022 14:38:57 :: Options File:
+Fri, 01 Jul 2022 14:38:57 :: BENCHMARK_NAME : Testing
+Fri, 01 Jul 2022 14:38:57 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Fri, 01 Jul 2022 14:38:57 :: tf_dim : 2
+Fri, 01 Jul 2022 14:38:57 :: max_budget : 100
+Fri, 01 Jul 2022 14:38:57 :: init_budget : 10
+Fri, 01 Jul 2022 14:38:57 :: bo_budget : 10
+Fri, 01 Jul 2022 14:38:57 :: cs_budget : 10
+Fri, 01 Jul 2022 14:38:57 :: init_sampling_type : lhs_sampling
+Fri, 01 Jul 2022 14:38:57 :: cs_sampling_type : lhs_sampling
+Fri, 01 Jul 2022 14:38:57 :: q_estim_sampling : lhs_sampling
+Fri, 01 Jul 2022 14:38:57 :: mc_integral_sampling_type : lhs_sampling
+Fri, 01 Jul 2022 14:38:57 :: results_sampling_type : lhs_sampling
+Fri, 01 Jul 2022 14:38:57 :: alpha : 0.05
+Fri, 01 Jul 2022 14:38:57 :: R : 10
+Fri, 01 Jul 2022 14:38:57 :: M : 100
+Fri, 01 Jul 2022 14:38:57 :: delta : 0.001
+Fri, 01 Jul 2022 14:38:57 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Fri, 01 Jul 2022 14:38:57 :: min_volume : 4e-06
+Fri, 01 Jul 2022 14:38:57 :: branching_factor : 2
+Fri, 01 Jul 2022 14:38:57 :: uniform_partitioning : True
+Fri, 01 Jul 2022 14:38:57 :: start_seed : 123
+Fri, 01 Jul 2022 14:38:57 :: gpr_model : <class 'partxv2.gprInterface.internalGPR.InternalGPR'>
+Fri, 01 Jul 2022 14:38:57 :: bo_model : <class 'partxv2.bayesianOptimization.internalBO.InternalBO'>
+Fri, 01 Jul 2022 14:38:57 :: **************************************************
+Fri, 01 Jul 2022 14:38:57 :: Budget Used = 0
+Fri, 01 Jul 2022 14:38:57 :: Budget Available (Max Budget) = 100
+Fri, 01 Jul 2022 14:38:57 :: **************************************************
+Fri, 01 Jul 2022 14:38:57 :: **************************************************
+Fri, 01 Jul 2022 14:38:57 :: ***************Replication Start******************
+Fri, 01 Jul 2022 14:39:25 :: **************************************************
+Fri, 01 Jul 2022 14:39:25 :: Remaining Regions: [2, 1]
+Fri, 01 Jul 2022 14:39:25 :: Classified Regions: []
+Fri, 01 Jul 2022 14:39:25 :: Unidentified Regions: []
+Fri, 01 Jul 2022 14:39:25 :: 44 Evaluations completed
+Fri, 01 Jul 2022 14:39:25 :: 56 left
+Fri, 01 Jul 2022 14:39:25 :: **************************************************
+Fri, 01 Jul 2022 14:40:03 :: **************************************************
+Fri, 01 Jul 2022 14:40:03 :: Remaining Regions: [6, 5, 4, 3]
+Fri, 01 Jul 2022 14:40:03 :: Classified Regions: []
+Fri, 01 Jul 2022 14:40:03 :: Unidentified Regions: []
+Fri, 01 Jul 2022 14:40:03 :: 85 Evaluations completed
+Fri, 01 Jul 2022 14:40:03 :: 15 left
+Fri, 01 Jul 2022 14:40:03 :: **************************************************
+Fri, 01 Jul 2022 14:40:03 :: **************************************************
+Fri, 01 Jul 2022 14:40:03 :: Entering Last Phase
+Fri, 01 Jul 2022 14:40:03 :: Remaining Regions: [7, 8, 9, 10, 11, 12, 13, 14]
+Fri, 01 Jul 2022 14:40:03 :: Classified Regions: []
+Fri, 01 Jul 2022 14:40:03 :: Unidentified Regions: []
+Fri, 01 Jul 2022 14:40:03 :: **************************************************
+Fri, 01 Jul 2022 14:40:07 :: **************************************************
+Fri, 01 Jul 2022 14:40:07 :: Remaining Regions: [7, 8, 9, 10, 11, 12, 13, 14]
+Fri, 01 Jul 2022 14:40:07 :: Classified Regions: []
+Fri, 01 Jul 2022 14:40:07 :: Unidentified Regions: []
+Fri, 01 Jul 2022 14:40:07 :: 100 Evaluations completed
+Fri, 01 Jul 2022 14:40:07 :: 0 left
+Fri, 01 Jul 2022 14:40:07 :: **************************************************
+Fri, 01 Jul 2022 14:40:07 :: **************************************************
+Fri, 01 Jul 2022 14:40:07 :: *********Replication 2 Finished*****************
+Fri, 01 Jul 2022 14:40:07 :: Remaining Regions: [7, 8, 9, 10, 11, 12, 13, 14]
+Fri, 01 Jul 2022 14:40:07 :: Classified Regions: []
+Fri, 01 Jul 2022 14:40:07 :: Unidentified Regions: []
+Fri, 01 Jul 2022 14:40:07 :: 100 Evaluations completed
+Fri, 01 Jul 2022 14:40:07 :: 0 left
+Fri, 01 Jul 2022 14:40:07 :: **************************************************
+Fri, 01 Jul 2022 14:40:07 :: Ended Testing Replication 2 with seed 125

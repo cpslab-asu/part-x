@@ -1,0 +1,477 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Part-X + PsyTaLiRo &#8212; Part-X  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Inputs" href="Inputs.html" />
+    <link rel="prev" title="Standalone Usage" href="Standalone%20Usage.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="part-x-psytaliro">
+<h1>Part-X + PsyTaLiRo<a class="headerlink" href="#part-x-psytaliro" title="Permalink to this heading">¶</a></h1>
+<section id="black-box-function">
+<h2>Black-Box Function<a class="headerlink" href="#black-box-function" title="Permalink to this heading">¶</a></h2>
+<p>The black-box function is the function for whom we need to find the falsifying behaviors. Below, we show to two examples.</p>
+<p>1) A blackbox function can also be defined which can be used for checking against a certain specification using <a class="reference external" href="https://sbtg.gitlab.io/psy-taliro/">PSY-TaLiRo 1.0.0a14</a>.
+Here, we define the Automatic Transmission Blackbox.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">AutotransModel</span><span class="p">(</span><span class="n">Model</span><span class="p">[</span><span class="n">AutotransDataT</span><span class="p">,</span> <span class="kc">None</span><span class="p">]):</span>
+   <span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;Autotrans_shift&quot;</span>
+
+   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">_has_matlab</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+               <span class="s2">&quot;Simulink support requires the MATLAB Engine for Python to be installed&quot;</span>
+            <span class="p">)</span>
+
+      <span class="n">engine</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">start_matlab</span><span class="p">()</span>
+      <span class="c1"># engine.addpath(&quot;examples&quot;)</span>
+      <span class="n">model_opts</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">simget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MODEL_NAME</span><span class="p">)</span>
+
+      <span class="bp">self</span><span class="o">.</span><span class="n">sampling_step</span> <span class="o">=</span> <span class="mf">0.05</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">engine</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">model_opts</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">simset</span><span class="p">(</span><span class="n">model_opts</span><span class="p">,</span> <span class="s2">&quot;SaveFormat&quot;</span><span class="p">,</span> <span class="s2">&quot;Array&quot;</span><span class="p">)</span>
+
+   <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">static</span><span class="p">:</span> <span class="n">StaticInput</span><span class="p">,</span> <span class="n">signals</span><span class="p">:</span> <span class="n">Signals</span><span class="p">,</span> <span class="n">intrvl</span><span class="p">:</span> <span class="n">Interval</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AutotransResultT</span><span class="p">:</span>
+      <span class="n">sim_t</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">double</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">intrvl</span><span class="o">.</span><span class="n">upper</span><span class="p">])</span>
+      <span class="n">n_times</span> <span class="o">=</span> <span class="p">(</span><span class="n">intrvl</span><span class="o">.</span><span class="n">length</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_step</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span>
+      <span class="n">signal_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">intrvl</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">intrvl</span><span class="o">.</span><span class="n">upper</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_times</span><span class="p">))</span>
+      <span class="n">signal_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">signal</span><span class="o">.</span><span class="n">at_time</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">signal_times</span><span class="p">]</span> <span class="k">for</span> <span class="n">signal</span> <span class="ow">in</span> <span class="n">signals</span><span class="p">])</span>
+
+      <span class="n">model_input</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">double</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">row_stack</span><span class="p">((</span><span class="n">signal_times</span><span class="p">,</span> <span class="n">signal_values</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+      <span class="n">timestamps</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">sim</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">sim_t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_opts</span><span class="p">,</span> <span class="n">model_input</span><span class="p">,</span> <span class="n">nargout</span><span class="o">=</span><span class="mi">3</span>
+      <span class="p">)</span>
+
+      <span class="n">timestamps_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">timestamps</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+      <span class="n">data_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+      <span class="k">return</span> <span class="n">ModelData</span><span class="p">(</span><span class="n">data_array</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">timestamps_array</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="specification-and-signals-using-psy-taliro">
+<h2>Specification and Signals using Psy-TaLiRo:<a class="headerlink" href="#specification-and-signals-using-psy-taliro" title="Permalink to this heading">¶</a></h2>
+<p>The Specification against which the signal are to be tested is written as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">AT1_phi</span> <span class="o">=</span> <span class="s2">&quot;G[0, 20] (speed &lt;= 120)&quot;</span>
+<span class="n">specification</span> <span class="o">=</span> <span class="n">RTAMTDense</span><span class="p">(</span><span class="n">AT1_phi</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;speed&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>The Signal options are using psy-taliro. Below is an example:</p>
+<p>In this example, we have two signals from time 0 to time 50.</p>
+<ol class="arabic simple">
+<li><p>The first signal has 7 control points and the range for all the 7 control points are [0,100].</p></li>
+<li><p>The second signal has 3 control points and the range for all the 3 control points are [0,325]:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">signals</span> <span class="o">=</span> <span class="p">[</span>
+     <span class="n">SignalOptions</span><span class="p">(</span><span class="n">control_points</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)]</span><span class="o">*</span><span class="mi">7</span><span class="p">,</span> <span class="n">signal_times</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">50.</span><span class="p">,</span><span class="mi">7</span><span class="p">)),</span>
+     <span class="n">SignalOptions</span><span class="p">(</span><span class="n">control_points</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">325</span><span class="p">)]</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span> <span class="n">signal_times</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">50.</span><span class="p">,</span><span class="mi">3</span><span class="p">)),</span>
+ <span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="parameters-for-part-x">
+<h2>Parameters for Part-X<a class="headerlink" href="#parameters-for-part-x" title="Permalink to this heading">¶</a></h2>
+<p>The parameters that need to be defined for Part-X are mentioned below.
+The usage of these parameters are defined in the <span class="xref std std-ref">reference_examples</span></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>BENCHMARK_NAME</strong>: string</dt><dd><p>Name of the benchmark</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>num_macro_rep</strong>: int</dt><dd><p>The number of replications</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>init_budget</strong>: int</dt><dd><p>The initiliazation budget of the algorithm. This refers to minimimum nunmber of samples that are required to be present in a region in order to generate samples from bayesian optimization and classify the region.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>bo_budget</strong>: int</dt><dd><p>The number of samples that needs to be generated from Bayesian Optimization</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>cs_budget</strong>: int</dt><dd><p>The number of samples that must sampled from continuous sampling phase.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>alpha</strong>: float, [0,1]</dt><dd><p>Region Classification percentile</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>R</strong>: int</dt><dd><p>The number of monte-carlo iterations. This is used in calculation of quantiles of a region.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>M</strong>: int</dt><dd><p>The number of evaluation of per monte-carlo iteration. This is used in calculation of quantiles of a region.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>delta</strong>: float, int</dt><dd><p>A number used to define the fraction of dimension, below which no further brnching in that dimension takes place. It is used for clsssificastion of a region.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>fv_quantiles_for_gp</strong> list</dt><dd><p>List of values used for calculation at certain quantile values.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>branching_factor</strong>: int</dt><dd><p>Number of sub-regions in which a region is branched.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>uniform_partitioning</strong> True/False</dt><dd><p>Wether to perform Uniform Partitioning or not.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>start_seed</strong>: int</dt><dd><p>Starting seed of the experiment to ensure reproducibility.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><p><strong>gpr_model</strong>: The Gaussian Process Regressor model. Described in detail here.</p></li>
+</ul>
+<ul class="simple">
+<li><p><strong>bo_model</strong>: The Bayesian Optimization model. Described in detail here.</p></li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>init_sampling_type</strong>: str</dt><dd><p>Initial Sampling Algorithms. Defaults to “lhs_sampling”. Can also use “uniform_sampling”</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>cs_sampling_type</strong>: str</dt><dd><p>Continued Sampling Mechanism. Defaults to “lhs_sampling”. Can also use “uniform_sampling”</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>q_estim_sampling</strong>: str</dt><dd><p>Quantile estimation sampling Mechanism. Defaults to “lhs_sampling”. Can also use “uniform_sampling”</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>mc_integral_sampling_type</strong>: str</dt><dd><p>Monte Carlo Integral Sampling Mechanism. Defaults to “lhs_sampling”. Can also use “uniform_sampling”</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>results_sampling_type</strong>: str</dt><dd><p>Results Sampling Mechanism. Defaults to “lhs_sampling”. Can also use “uniform_sampling”</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>results_at_confidence</strong>: float</dt><dd><p>Confidence level at which result to be computed</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>results_folder_name</strong>:</dt><dd><p>Results folder name,</p>
+</dd>
+</dl>
+</li>
+</ul>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>num_cores</strong>: int</dt><dd><p>Number of cores to use. If value is 1, no parallalization is used. If value is greater than 1, various macro-replication will be spread over the cores.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>It would be advisable to refer to Algorithm 1, 2, 3, 4 in the paper <a class="reference external" href="https://arxiv.org/pdf/2110.10729.pdf">Part-X</a> to get a deeper understanding of these paramters and where they are used.</p>
+</section>
+<section id="defining-the-options-from-psy-taliro">
+<h2>Defining the Options from psy-taliro<a class="headerlink" href="#defining-the-options-from-psy-taliro" title="Permalink to this heading">¶</a></h2>
+<p>The maximum budget and evaluation time for signal are defined using psy-taliro options.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">(</span><span class="n">runs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MAX_BUDGET</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>  <span class="n">signals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">signals</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="running-the-optimizer">
+<h2>Running the Optimizer<a class="headerlink" href="#running-the-optimizer" title="Permalink to this heading">¶</a></h2>
+<p>Once the all of it defined, we can run the code.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+
+<span class="n">staliro</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">specification</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-running-part-x-on-at1-specification">
+<h2>Example - Running Part-X on AT1 Specification:<a class="headerlink" href="#example-running-part-x-on-at1-specification" title="Permalink to this heading">¶</a></h2>
+<p>We define the model as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">NDArray</span>
+<span class="kn">from</span> <span class="nn">staliro.core.interval</span> <span class="kn">import</span> <span class="n">Interval</span>
+<span class="kn">from</span> <span class="nn">staliro.core.model</span> <span class="kn">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">ModelData</span><span class="p">,</span> <span class="n">Failure</span><span class="p">,</span> <span class="n">StaticInput</span><span class="p">,</span> <span class="n">Signals</span>
+<span class="kn">from</span> <span class="nn">staliro.options</span> <span class="kn">import</span> <span class="n">Options</span><span class="p">,</span> <span class="n">SignalOptions</span>
+<span class="kn">from</span> <span class="nn">staliro.specifications</span> <span class="kn">import</span> <span class="n">RTAMTDense</span>
+<span class="kn">from</span> <span class="nn">staliro.staliro</span> <span class="kn">import</span> <span class="n">staliro</span><span class="p">,</span> <span class="n">simulate_model</span>
+
+
+<span class="k">try</span><span class="p">:</span>
+   <span class="kn">import</span> <span class="nn">matlab</span>
+   <span class="kn">import</span> <span class="nn">matlab.engine</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+   <span class="n">_has_matlab</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">else</span><span class="p">:</span>
+   <span class="n">_has_matlab</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="n">AutotransDataT</span> <span class="o">=</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]</span>
+<span class="n">AutotransResultT</span> <span class="o">=</span> <span class="n">ModelData</span><span class="p">[</span><span class="n">AutotransDataT</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">AutotransModel</span><span class="p">(</span><span class="n">Model</span><span class="p">[</span><span class="n">AutotransDataT</span><span class="p">,</span> <span class="kc">None</span><span class="p">]):</span>
+   <span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;Autotrans_shift&quot;</span>
+
+   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">_has_matlab</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+               <span class="s2">&quot;Simulink support requires the MATLAB Engine for Python to be installed&quot;</span>
+            <span class="p">)</span>
+
+      <span class="n">engine</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">start_matlab</span><span class="p">()</span>
+      <span class="c1"># engine.addpath(&quot;examples&quot;)</span>
+      <span class="n">model_opts</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">simget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MODEL_NAME</span><span class="p">)</span>
+
+      <span class="bp">self</span><span class="o">.</span><span class="n">sampling_step</span> <span class="o">=</span> <span class="mf">0.05</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">engine</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">model_opts</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">simset</span><span class="p">(</span><span class="n">model_opts</span><span class="p">,</span> <span class="s2">&quot;SaveFormat&quot;</span><span class="p">,</span> <span class="s2">&quot;Array&quot;</span><span class="p">)</span>
+
+   <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">static</span><span class="p">:</span> <span class="n">StaticInput</span><span class="p">,</span> <span class="n">signals</span><span class="p">:</span> <span class="n">Signals</span><span class="p">,</span> <span class="n">intrvl</span><span class="p">:</span> <span class="n">Interval</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AutotransResultT</span><span class="p">:</span>
+      <span class="n">sim_t</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">double</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">intrvl</span><span class="o">.</span><span class="n">upper</span><span class="p">])</span>
+      <span class="n">n_times</span> <span class="o">=</span> <span class="p">(</span><span class="n">intrvl</span><span class="o">.</span><span class="n">length</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_step</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span>
+      <span class="n">signal_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">intrvl</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">intrvl</span><span class="o">.</span><span class="n">upper</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_times</span><span class="p">))</span>
+      <span class="n">signal_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">signal</span><span class="o">.</span><span class="n">at_time</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">signal_times</span><span class="p">]</span> <span class="k">for</span> <span class="n">signal</span> <span class="ow">in</span> <span class="n">signals</span><span class="p">])</span>
+
+      <span class="n">model_input</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">double</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">row_stack</span><span class="p">((</span><span class="n">signal_times</span><span class="p">,</span> <span class="n">signal_values</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+      <span class="n">timestamps</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">sim</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">sim_t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_opts</span><span class="p">,</span> <span class="n">model_input</span><span class="p">,</span> <span class="n">nargout</span><span class="o">=</span><span class="mi">3</span>
+      <span class="p">)</span>
+
+      <span class="n">timestamps_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">timestamps</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+      <span class="n">data_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+      <span class="k">return</span> <span class="n">ModelData</span><span class="p">(</span><span class="n">data_array</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">timestamps_array</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We then run part-X as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import All the necessary packges</span>
+
+<span class="kn">from</span> <span class="nn">AT_benchmark.AT_specifications</span> <span class="kn">import</span> <span class="n">load_specification_dict</span>
+<span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">AutotransModel</span>
+<span class="kn">from</span> <span class="nn">Benchmark</span> <span class="kn">import</span> <span class="n">Benchmark</span>
+<span class="kn">from</span> <span class="nn">partxv2.partxInterface.staliroIntegration</span> <span class="kn">import</span> <span class="n">PartX</span>
+<span class="kn">from</span> <span class="nn">partxv2.bayesianOptimization.internalBO</span> <span class="kn">import</span> <span class="n">InternalBO</span>
+<span class="kn">from</span> <span class="nn">partxv2.gprInterface.internalGPR</span> <span class="kn">import</span> <span class="n">InternalGPR</span>
+
+<span class="kn">from</span> <span class="nn">staliro.staliro</span> <span class="kn">import</span> <span class="n">staliro</span>
+<span class="kn">from</span> <span class="nn">staliro.options</span> <span class="kn">import</span> <span class="n">Options</span>
+
+<span class="c1"># Define Signals and Specification</span>
+<span class="n">benchmark</span> <span class="o">=</span> <span class="s2">&quot;AT1&quot;</span>
+<span class="n">results_folder</span> <span class="o">=</span> <span class="s2">&quot;Arch_Partx_Demo&quot;</span>
+
+<span class="n">AT1_phi</span> <span class="o">=</span> <span class="s2">&quot;G[0, 20] (speed &lt;= 120)&quot;</span>
+<span class="n">specification</span> <span class="o">=</span> <span class="n">RTAMTDense</span><span class="p">(</span><span class="n">AT1_phi</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;speed&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+
+<span class="n">signals</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="n">SignalOptions</span><span class="p">(</span><span class="n">control_points</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)]</span><span class="o">*</span><span class="mi">7</span><span class="p">,</span> <span class="n">signal_times</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">50.</span><span class="p">,</span><span class="mi">7</span><span class="p">)),</span>
+      <span class="n">SignalOptions</span><span class="p">(</span><span class="n">control_points</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">325</span><span class="p">)]</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span> <span class="n">signal_times</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">50.</span><span class="p">,</span><span class="mi">3</span><span class="p">)),</span>
+   <span class="p">]</span>
+
+<span class="n">MAX_BUDGET</span> <span class="o">=</span> <span class="mi">2000</span>
+<span class="n">NUMBER_OF_MACRO_REPLICATIONS</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutotransModel</span><span class="p">()</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">PartX</span><span class="p">(</span>
+         <span class="n">BENCHMARK_NAME</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">benchmark</span><span class="si">}</span><span class="s2">_budget_</span><span class="si">{</span><span class="n">MAX_BUDGET</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">NUMBER_OF_MACRO_REPLICATIONS</span><span class="si">}</span><span class="s2">_reps&quot;</span><span class="p">,</span>
+         <span class="n">num_macro_reps</span> <span class="o">=</span> <span class="n">NUMBER_OF_MACRO_REPLICATIONS</span><span class="p">,</span>
+         <span class="n">init_budget</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+         <span class="n">bo_budget</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+         <span class="n">cs_budget</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+         <span class="n">R</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+         <span class="n">M</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span>
+         <span class="n">delta</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
+         <span class="n">fv_quantiles_for_gp</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.01</span><span class="p">],</span>
+         <span class="n">branching_factor</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+         <span class="n">uniform_partitioning</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+         <span class="n">seed</span> <span class="o">=</span> <span class="mi">12345</span><span class="p">,</span>
+         <span class="n">gpr_model</span> <span class="o">=</span> <span class="n">InternalGPR</span><span class="p">(),</span>
+         <span class="n">bo_model</span> <span class="o">=</span> <span class="n">InternalBO</span><span class="p">(),</span>
+         <span class="n">init_sampling_type</span> <span class="o">=</span> <span class="s2">&quot;lhs_sampling&quot;</span><span class="p">,</span>
+         <span class="n">cs_sampling_type</span> <span class="o">=</span> <span class="s2">&quot;lhs_sampling&quot;</span><span class="p">,</span>
+         <span class="n">q_estim_sampling</span> <span class="o">=</span> <span class="s2">&quot;lhs_sampling&quot;</span><span class="p">,</span>
+         <span class="n">mc_integral_sampling_type</span> <span class="o">=</span> <span class="s2">&quot;uniform_sampling&quot;</span><span class="p">,</span>
+         <span class="n">results_sampling_type</span> <span class="o">=</span> <span class="s2">&quot;uniform_sampling&quot;</span><span class="p">,</span>
+         <span class="n">results_at_confidence</span> <span class="o">=</span> <span class="mf">0.95</span><span class="p">,</span>
+         <span class="n">results_folder_name</span> <span class="o">=</span> <span class="n">results_folder</span><span class="p">,</span>
+         <span class="n">num_cores</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+   <span class="p">)</span>
+
+<span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">(</span><span class="n">runs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="n">MAX_BUDGET</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>  <span class="n">signals</span><span class="o">=</span><span class="n">signals</span><span class="p">)</span>
+
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">staliro</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">specification</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Part-X</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="Getting%20Started.html">Getting Started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Getting%20Started.html#installation">Installation</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="Getting%20Started.html#basic-usage">Basic Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Inputs.html">Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Outputs.html">Outputs</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="Getting%20Started.html">Getting Started</a><ul>
+      <li>Previous: <a href="Standalone%20Usage.html" title="previous chapter">Standalone Usage</a></li>
+      <li>Next: <a href="Inputs.html" title="next chapter">Inputs</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Tanmay Bhaskar Khandait.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/Part-X + PsyTaLiRo.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

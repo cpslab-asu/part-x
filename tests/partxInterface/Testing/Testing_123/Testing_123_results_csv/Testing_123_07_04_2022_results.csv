@@ -1,0 +1,28 @@
+fv_stats_with_gp,"        Mean  Std Error       LCB       UCB
+0.01  3.1796   0.011842  2.702677  3.656523
+0.05  3.0068   0.015486  2.461411  3.552189
+0.50  0.2220   0.003054 -0.020212  0.464212"
+fv_stats_wo_gp,"                                   Mean  Std Error  LCB  UCB
+Classified Regions only             0.0        0.0  NaN  NaN
+Unclassified Regions only           4.0        0.0  NaN  NaN
+Classified + Unclassified Regions   4.0        0.0  NaN  NaN"
+falsified_true,"[0, 1, 1, 1, 1]"
+first_falsification_mean,11.6
+first_falsification_median,6.0
+first_falsification_min,2
+first_falsification_max,30
+falsification_rate,4
+best_robustness,-46.8353476373515
+first_falsification_point,"[array([2, array([-0.54961195, -0.53111016]), -9.351798715019498],
+      dtype=object), array([16, array([ 0.02526637, -1.        ]), -46.8353476373515],
+      dtype=object), array([6, array([-0.22050736, -0.82079543]), -27.165691015288747],
+      dtype=object), array([4, array([-0.76284829, -0.2536009 ]), -0.8029061419183208],
+      dtype=object)]"
+non_falsification_points,"[array([18, array([-0.49050396, -0.66974729]), 20.287962427229047],
+      dtype=object)]"
+best_falsification_points,"[array([18, array([-0.49050396, -0.66974729]), 20.287962427229047],
+      dtype=object), array([14, array([-0.04270791, -1.        ]), -46.53112985165217],
+      dtype=object), array([16, array([ 0.02526637, -1.        ]), -46.8353476373515],
+      dtype=object), array([20, array([-0.03151362, -1.        ]), -46.747787907933024],
+      dtype=object), array([23, array([-0.12657327, -0.97574048]), -41.37680097027503],
+      dtype=object)]"
