@@ -54,6 +54,3 @@ Please cite the following paper if you use the work in your research.
 }
 ```
 
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
-
