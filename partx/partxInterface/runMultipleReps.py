@@ -7,11 +7,12 @@ from typing import Callable
 from numpy.typing import NDArray
 from pathos.multiprocessing import ProcessingPool as Pool
 
-from ..coreAlgorithm import PartXOptions, run_single_replication
+from ..coreAlgorithm import PartXOptions, OracleCreator, run_single_replication
 from ..results import generate_statistics
 
-def run_partx(BENCHMARK_NAME:str, test_function:Callable, num_macro_reps:int, init_reg_sup:NDArray, tf_dim:int,
+def run_partx(BENCHMARK_NAME:str, test_function:Callable, oracle_function, num_macro_reps:int, init_reg_sup:NDArray, tf_dim:int,
                 max_budget:int, init_budget:int, bo_budget:int, cs_budget:int, 
+                n_tries_randomsampling:int, n_tries_BO:int, 
                 alpha:float, R:int, M:int, delta:float, fv_quantiles_for_gp:list,
                 branching_factor:int, uniform_partitioning:bool, start_seed:int, 
                 gpr_model:Callable, bo_model:Callable, 
@@ -58,6 +59,7 @@ def run_partx(BENCHMARK_NAME:str, test_function:Callable, num_macro_reps:int, in
         dict: dictionary of results
     """
     # create a directory for storing result files
+    
     base_path = pathlib.Path()
     result_directory = base_path.joinpath(results_folder_name)
     result_directory.mkdir(exist_ok=True)
@@ -81,12 +83,11 @@ def run_partx(BENCHMARK_NAME:str, test_function:Callable, num_macro_reps:int, in
                 q_estim_sampling, mc_integral_sampling_type, 
                 results_sampling_type)
     
+    oracle_info = OracleCreator(oracle_function, n_tries_randomsampling, n_tries_BO)
     
-
     with open(benchmark_result_pickle_files.joinpath(options.BENCHMARK_NAME + "_options.pkl"), "wb") as f:
         pickle.dump(options,f)
     
-
 
     # Start running
 
@@ -97,7 +98,7 @@ def run_partx(BENCHMARK_NAME:str, test_function:Callable, num_macro_reps:int, in
         print("Running without parallalization")
         results = []
         for replication_number in range(num_macro_reps):
-            data = [replication_number, options, test_function, benchmark_result_directory]
+            data = [replication_number, options, test_function, oracle_info, benchmark_result_directory]
             inputs.append(data)
             res = run_single_replication(data)
             results.append(res)
@@ -110,13 +111,13 @@ def run_partx(BENCHMARK_NAME:str, test_function:Callable, num_macro_reps:int, in
         elif num_cores < num_cores_available:
             print("Max cores uitilised can be {}. Instead running with {} cores.".format((os.cpu_count() - 1), num_cores_available))
         for replication_number in range(num_macro_reps):
-            data = [replication_number, options, test_function, benchmark_result_directory]
+            data = [replication_number, options,  test_function, oracle_info, benchmark_result_directory]
             inputs.append(data)
         with Pool(num_cores_available) as pool:
             results = list(pool.map(run_single_replication, inputs))
         pool.close()
     result_dictionary = generate_statistics(options.BENCHMARK_NAME, num_macro_reps, options.fv_quantiles_for_gp, results_at_confidence,results_folder_name)
-
+    
     today = time.strftime("%m/%d/%Y")
     file_date = today.replace("/","_")
     values = []

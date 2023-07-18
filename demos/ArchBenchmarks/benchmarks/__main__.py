@@ -4,19 +4,13 @@ from argparse import ArgumentParser
 from importlib import import_module
 from sys import exit
 
-ALL_BENCHMARKS = {"AT1", "AT2", "AT51", "AT52", "AT53", "AT54", "AT61", "AT62", "AT63", "AT64", "CC1", "CC2", "CC3", "CC4", "CC5", "CCx", "NN1", "NNx", "F16_alt4040", "SC1"}
+ALL_BENCHMARKS = {"AT1", "AT2", "AT51", "AT52", "AT53", "AT54", "AT61", "AT62", "AT63", "AT64", "CC1", "CC2", "CC3", "CC4", "CC5", "CCx"}
 
 def _get_benchmark(name, results_folder):
     if "AT" in name:
         mod = import_module(f"AT_benchmark.run_{name}")
     elif "CC" in name:
         mod = import_module(f"CC_benchmark.run_{name}")
-    elif "NN" in name:
-        mod = import_module(f"NN_benchmark.run_{name}")
-    elif "F16" in name:
-        mod = import_module(f"F16_benchmark.run_{name}")        
-    elif "SC" in name:
-        mod = import_module(f"SC_benchmark.run_{name}")        
 
     cls_name = f"Benchmark_{name}"
     ctor = getattr(mod, cls_name)

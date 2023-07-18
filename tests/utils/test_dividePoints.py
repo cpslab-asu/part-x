@@ -5,17 +5,21 @@ import pickle
 from partx.sampling import uniform_sampling, lhs_sampling
 from partx.utils import branch_region, compute_robustness, Fn, divide_points
 from partx.utils.pointInSubRegion import testPointInSubRegion
+from partx.coreAlgorithm import OracleCreator
+
+def oracle_func(X):
+    return True
 
 class TestDividePoints(unittest.TestCase):
     def test1_divide_points(self):
         def test_function(X):
             return X[0] ** 2 + X[1] ** 2
-        
+        oracle_info = OracleCreator(oracle_func, 1,1)
         funct = Fn(test_function)
         
         region_support = np.array([[-1., 1.], [-1., 2.]])
         rng = np.random.default_rng(12345)
-        samples = lhs_sampling(1000, region_support, 2, rng)
+        samples = lhs_sampling(1000, region_support, 2, oracle_info, rng)
         samples_out = compute_robustness(samples, funct)
 
         reg_sup = branch_region(region_support, 1, False, 4, rng)

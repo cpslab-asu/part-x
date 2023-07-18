@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Getting Started &#8212; Part-X  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Standalone Usage" href="Standalone%20Usage.html" />
+    <link rel="prev" title="Welcome to Part-X!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading">¶</a></h1>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
+<p>We use the Poetry tool which is a dependency management and packaging tool in Python. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you. Please follow the installation of <a class="reference external" href="https://python-poetry.org/docs/#installation">poetry</a> .</p>
+<p>After you’ve installed poetry, you can install partx by running the following command in the root of the project:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">install</span>
+</pre></div>
+</div>
+</section>
+<section id="basic-usage">
+<h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this heading">¶</a></h2>
+<p>To run Part-X, we need a black-box function and initialize the parameters of Part-X. Once the black-box function the parameters are passed to the algorith, the algorithm outputs information including the best point, the statistics and much more. During the course of the algorithm, various files are generated to log the information from the optimizer, store various intermediate representations of the algorithms and files that speed up the process of result generation.
+These ideas are explored in detail.</p>
+<p>There are two ways to run Part-X algorithms.</p>
+<ol class="arabic">
+<li><p>Standalone Usage</p>
+<p>The idea here is to find 0-Level Set of a function. To run Part-X standalone, the inputs and the ouputs are decribed on the following pages.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Standalone%20Usage.html">Standalone Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Standalone%20Usage.html#black-box-function">Black-Box Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Standalone%20Usage.html#oracle-function">Oracle Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Standalone%20Usage.html#defining-gpr-model">Defining GPR Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Standalone%20Usage.html#defining-bayesian-optimization-model">Defining Bayesian Optimization Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Standalone%20Usage.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Standalone%20Usage.html#running-the-optimizer">Running the Optimizer</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Examples in demos/Non-LinearBenchmarks. To run these:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Goldstein-Price function without any constraint:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="n">demos</span><span class="o">/</span><span class="n">Non</span><span class="o">-</span><span class="n">LinearBenchmarks</span><span class="o">/</span><span class="n">GoldsteinPrice_noConstraints</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Goldstein-Price function with constraint:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="n">demos</span><span class="o">/</span><span class="n">Non</span><span class="o">-</span><span class="n">LinearBenchmarks</span><span class="o">/</span><span class="n">GoldsteinPrice_withConstraints</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Usage with Psy-Taliro</p></li>
+</ol>
+<dl>
+<dt>The Part-X is used along with Psy-TaLiRo tool to generate falsifying points as well as provide probabilistic guarantees. Examples are as follows:</dt><dd><div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Part-X%20with%20PsyTaLiRo.html">Part-X with PsyTaLiRo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Part-X%20with%20PsyTaLiRo.html#black-box-function">Black-Box Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Part-X%20with%20PsyTaLiRo.html#oracle-function">Oracle Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Part-X%20with%20PsyTaLiRo.html#specification-and-signals-using-psy-taliro">Specification and Signals using Psy-TaLiRo:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Part-X%20with%20PsyTaLiRo.html#defining-gpr-model">Defining GPR Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Part-X%20with%20PsyTaLiRo.html#defining-bayesian-optimization-model">Defining Bayesian Optimization Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Part-X%20with%20PsyTaLiRo.html#parameters-for-part-x">Parameters for Part-X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Part-X%20with%20PsyTaLiRo.html#defining-the-options-from-psy-taliro">Defining the Options from psy-taliro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Part-X%20with%20PsyTaLiRo.html#running-the-optimizer">Running the Optimizer</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Examples in demos/ArchBenchmarks. To run these:</p>
+<ol class="arabic">
+<li><p>Automatic Transmission Benchmark with the AT1 Specification:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="n">demos</span><span class="o">/</span><span class="n">ArchBenchmarks</span><span class="o">/</span><span class="n">benchmarks</span> <span class="n">AT1</span> <span class="o">-</span><span class="n">f</span> <span class="s2">&quot;demo_partx_AT1&quot;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note:
+To run the simulink model, you have to install MATLAB engine in the environment in order to run the MATLAB Engine in python.
+Current experiments involving simuulink model have been test with MATLAB R2021b and python3.8. To install, here are instructions:</p>
+<ol class="arabic">
+<li><p>Copy the poetry environment information:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">env</span> <span class="n">info</span> <span class="o">--</span><span class="n">path</span>
+</pre></div>
+</div>
+</li>
+<li><p>Change directory to engine folder in MATLAB R2021b</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">MATLAB</span><span class="o">/</span><span class="n">R2021b</span><span class="o">/</span><span class="n">extern</span><span class="o">/</span><span class="n">engines</span><span class="o">/</span><span class="n">python</span><span class="o">/</span>
+</pre></div>
+</div>
+</li>
+<li><p>Install MATLAB engine in python by running the following command, where  &lt;PATH&gt; is from Step 1</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">python3</span><span class="mf">.8</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span> <span class="o">--</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&lt;PATH&gt;&quot;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+</dd>
+</dl>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Part-X</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-usage">Basic Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Standalone%20Usage.html">Standalone Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Part-X%20with%20PsyTaLiRo.html">Part-X with PsyTaLiRo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Outputs.html">Outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Demo%201%20-%20Standalone%20Part-X.html">Demo 1 - Standalone Part-X</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Demo%202%20-%20Part-X%20with%20Psy-TaLiRo.html">Demo 2 - Part-X with Psy-TaLiRo</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to Part-X!</a></li>
+      <li>Next: <a href="Standalone%20Usage.html" title="next chapter">Standalone Usage</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Tanmay Bhaskar Khandait.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/Getting Started.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -9,6 +9,9 @@ from partx.gprInterface.internalGPR import InternalGPR
 from staliro.staliro import staliro
 from staliro.options import Options
 
+def oracle_func(sample):
+    return True
+
 # Define Signals and Specification
 class Benchmark_AT52(Benchmark):
     def __init__(self, benchmark, results_folder) -> None:
@@ -19,15 +22,18 @@ class Benchmark_AT52(Benchmark):
         self.specification, self.signals = load_specification_dict(benchmark)
         print(self.specification)
         print(self.signals)
-        self.MAX_BUDGET = 2000
+        self.MAX_BUDGET = 100
         self.NUMBER_OF_MACRO_REPLICATIONS = 10
         self.model = AutotransModel()
         self.optimizer = PartX(
             BENCHMARK_NAME=f"{benchmark}_budget_{self.MAX_BUDGET}_{self.NUMBER_OF_MACRO_REPLICATIONS}_reps",
+            oracle_function = oracle_func,
             num_macro_reps = self.NUMBER_OF_MACRO_REPLICATIONS,
             init_budget = 20,
             bo_budget = 10,
             cs_budget = 20,
+            n_tries_randomsampling = 1,
+            n_tries_BO = 1,
             alpha=0.05,
             R = 20,
             M = 500,
@@ -47,6 +53,8 @@ class Benchmark_AT52(Benchmark):
             results_folder_name = results_folder,
             num_cores = 1,
         )
+
+        
 
         self.options = Options(runs=1, iterations=self.MAX_BUDGET, interval=(0, 50),  signals=self.signals)
 

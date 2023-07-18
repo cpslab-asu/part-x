@@ -5,7 +5,7 @@ import numpy as np
 from scipy import stats
 
 
-def calculate_mc_integral(x_train, y_train, region_support, tf_dim, R, M, gpr_model, rng, sampling_type):
+def calculate_mc_integral(x_train, y_train, region_support, tf_dim, R, M, gpr_model, oracle_info, rng, sampling_type):
     model = GPR(gpr_model)
     model.fit(x_train, y_train)
 
@@ -13,9 +13,9 @@ def calculate_mc_integral(x_train, y_train, region_support, tf_dim, R, M, gpr_mo
     
     for _ in range(R):
         if sampling_type == "lhs_sampling":
-            samples = lhs_sampling(M, region_support, tf_dim, rng)
+            samples = lhs_sampling(M, region_support, tf_dim, oracle_info, rng)
         elif sampling_type == "uniform_sampling":
-            samples = uniform_sampling(M, region_support, tf_dim, rng)
+            samples = uniform_sampling(M, region_support, tf_dim, oracle_info, rng)
         else:
             raise ValueError(f"{sampling_type} not defined. Currently only Latin Hypercube Sampling and Uniform Sampling is supported.")
         

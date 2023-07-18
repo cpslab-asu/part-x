@@ -6,6 +6,7 @@ from partx.partxInterface import run_partx
 from partx.gprInterface import InternalGPR
 from partx.bayesianOptimization import InternalBO
 
+
 class TestClassification(unittest.TestCase):
 
     def test1_Classification(self):
@@ -15,6 +16,9 @@ class TestClassification(unittest.TestCase):
                 19 - 14 * X[0] + 3 * X[0] ** 2 - 14 * X[1] + 6 * X[0] * X[1] + 3 * X[1] ** 2)) * (
                        30 + (2 * X[0] - 3 * X[1]) ** 2 * (
                            18 - 32 * X[0] + 12 * X[0] ** 2 + 48 * X[1] - 36 * X[0] * X[1] + 27 * X[1] ** 2)) - 50
+        
+        def oracle_func(X):
+            return True
 
         BENCHMARK_NAME = "Testing_123"
         init_reg_sup = np.array([[-1., 1.], [-1., 1.]])
@@ -23,6 +27,8 @@ class TestClassification(unittest.TestCase):
         init_budget = 10
         bo_budget = 10
         cs_budget = 10
+        n_tries_randomsampling = 1
+        n_tries_BO = 1
         alpha = 0.05
         R = 10
         M = 100
@@ -45,8 +51,8 @@ class TestClassification(unittest.TestCase):
         num_macro_reps = 5
         results_folder_name = "tests/partxInterface/Testing"
         num_cores = 5
-        x = run_partx(BENCHMARK_NAME, test_function, num_macro_reps, init_reg_sup, tf_dim,
-                        max_budget, init_budget, bo_budget, cs_budget, 
+        x = run_partx(BENCHMARK_NAME, test_function, oracle_func, num_macro_reps, init_reg_sup, tf_dim,
+                        max_budget, init_budget, bo_budget, cs_budget, n_tries_randomsampling, n_tries_BO,
                         alpha, R, M, delta, fv_quantiles_for_gp,
                         branching_factor, uniform_partitioning, start_seed, 
                         gpr_model, bo_model, 

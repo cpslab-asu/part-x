@@ -2,7 +2,7 @@ from typing import Callable
 import numpy as np
 from numpy.typing import NDArray
 
-from ..sampling import lhs_sampling, uniform_sampling
+from ..sampling import lhs_sampling, uniform_sampling, OOBError
 from ..quantileClassification import estimate_quantiles, classification
 from ..utils import compute_robustness
 from ..bayesianOptimization import BOSampling
@@ -30,11 +30,12 @@ class PartXNode:
         self.samples_out = samples_out
         self.branch_dir = branch_dir
 
+
         # if self.parent_id != 0 and self.samples_in.shape[0] == 0:
         #     self.region_class = "u"
         
 
-    def samples_management_unclassified(self, test_function: Callable, options, rng):
+    def samples_management_unclassified(self, test_function: Callable, options, oracle_info, rng):
         """Method to manage samples in subregion which is unclassified (r, r+, r-)
 
         Args:
@@ -48,42 +49,46 @@ class PartXNode:
         Returns:
             Class of new region
         """
+        
         assert self.region_class == "r" or self.region_class == "r+" or self.region_class == "r-"
         samples_present = self.samples_out.shape[0]
         init_sampling_left = options.init_budget - samples_present
         
-        if init_sampling_left > 0:
-            if options.init_sampling_type == "lhs_sampling":
-                x_init_extra = lhs_sampling(init_sampling_left, self.region_support, options.tf_dim, rng)
-            elif options.init_sampling_type == "uniform_sampling":
-                x_init_extra = uniform_sampling(init_sampling_left, self.region_support, options.tf_dim, rng)
+        try:
+            if init_sampling_left > 0:
+                if options.init_sampling_type == "lhs_sampling":
+                    x_init_extra = lhs_sampling(init_sampling_left, self.region_support, options.tf_dim, oracle_info, rng)
+                elif options.init_sampling_type == "uniform_sampling":
+                    x_init_extra = uniform_sampling(init_sampling_left, self.region_support, options.tf_dim, oracle_info, rng)
+                else:
+                    raise ValueError(f"{options.init_sampling_type} not defined. Currently only Latin Hypercube Sampling and Uniform Sampling is supported.")
+                
+                y_init_extra = compute_robustness(x_init_extra, test_function)
+                if self.samples_out.shape[0] == 0:
+                    new_samples_in = x_init_extra
+                    new_samples_out = y_init_extra
+                else:
+                    new_samples_in = np.concatenate((self.samples_in,x_init_extra), axis = 0)
+                    new_samples_out = np.concatenate((self.samples_out,y_init_extra), axis = 0)
             else:
-                raise ValueError(f"{options.init_sampling_type} not defined. Currently only Latin Hypercube Sampling and Uniform Sampling is supported.")
+                new_samples_in = self.samples_in
+                new_samples_out = self.samples_out
+
+            bo = BOSampling(options.bo_model)
+            final_new_samples_in, final_new_samples_out, _, _ = bo.sample(test_function, options.bo_budget, new_samples_in, new_samples_out, self.region_support, options.gpr_model, oracle_info, rng)
+            self.samples_in = final_new_samples_in
+            self.samples_out = final_new_samples_out
+
+            self.lower_bound, self.upper_bound = estimate_quantiles(self.samples_in, self.samples_out, self.region_support, options.tf_dim, options.alpha,options.R,options.M, options.gpr_model, oracle_info, rng, options.q_estim_sampling)
             
-            y_init_extra = compute_robustness(x_init_extra, test_function)
-            if self.samples_out.shape[0] == 0:
-                new_samples_in = x_init_extra
-                new_samples_out = y_init_extra
-            else:
-                new_samples_in = np.concatenate((self.samples_in,x_init_extra), axis = 0)
-                new_samples_out = np.concatenate((self.samples_out,y_init_extra), axis = 0)
-        else:
-            new_samples_in = self.samples_in
-            new_samples_out = self.samples_out
-
-        bo = BOSampling(options.bo_model)
-        final_new_samples_in, final_new_samples_out, _, _ = bo.sample(test_function, options.bo_budget, new_samples_in, new_samples_out, self.region_support, options.gpr_model, rng)
-        self.samples_in = final_new_samples_in
-        self.samples_out = final_new_samples_out
-
-        self.lower_bound, self.upper_bound = estimate_quantiles(self.samples_in, self.samples_out, self.region_support, options.tf_dim, options.alpha,options.R,options.M, options.gpr_model, rng, options.q_estim_sampling)
-        
-        self.new_region_class = classification(self.region_support, self.region_class, options.min_volume, self.lower_bound, self.upper_bound)
-        self.region_class = self.new_region_class
-
+            self.new_region_class = classification(self.region_support, self.region_class, options.min_volume, self.lower_bound, self.upper_bound)
+            self.region_class = self.new_region_class
+        except OOBError:
+            self.new_region_class = "i"
+            self.region_class = "i"
         return self.new_region_class
     
-    def samples_management_classified(self, num_samples: int, test_function: Callable, options, rng, fin_cs = False):
+    def samples_management_classified(self, num_samples: int, test_function: Callable, options, oracle_info, rng, fin_cs = False):
         """Method to manage samples in where continued sampling is to be performed.
 
         Args:
@@ -105,9 +110,9 @@ class PartXNode:
             assert self.region_class == "r" or self.region_class == "r+" or self.region_class == "r-" or self.region_class == "+" or self.region_class == "-"
         
         if options.cs_sampling_type == "lhs_sampling":
-            cs_samples_in = lhs_sampling(num_samples, self.region_support, options.tf_dim, rng)
+            cs_samples_in = lhs_sampling(num_samples, self.region_support, options.tf_dim, oracle_info, rng)
         elif options.cs_sampling_type == "uniform_sampling":
-            cs_samples_in = uniform_sampling(num_samples, self.region_support, options.tf_dim, rng)
+            cs_samples_in = uniform_sampling(num_samples, self.region_support, options.tf_dim, oracle_info, rng)
         else:
             raise ValueError(f"{options.cs_sampling_type} not defined. Currently only Latin Hypercube Sampling and Uniform Sampling is supported.")
 
@@ -116,7 +121,7 @@ class PartXNode:
         self.samples_in = np.concatenate((self.samples_in, cs_samples_in), axis=0)
         self.samples_out = np.concatenate((self.samples_out, cs_samples_out), axis=0)
         
-        self.lower_bound, self.upper_bound = estimate_quantiles(self.samples_in, self.samples_out, self.region_support, options.tf_dim, options.alpha,options.R,options.M, options.gpr_model, rng)
+        self.lower_bound, self.upper_bound = estimate_quantiles(self.samples_in, self.samples_out, self.region_support, options.tf_dim, options.alpha,options.R,options.M, options.gpr_model, oracle_info, rng)
         
         self.new_region_class = classification(self.region_support, self.region_class, options.min_volume, self.lower_bound, self.upper_bound)
         self.region_class = self.new_region_class

@@ -5,16 +5,20 @@ import unittest
 
 from partx.sampling import lhs_sampling, uniform_sampling
 from partx.utils import Fn
+from partx.coreAlgorithm import OracleCreator
 
+def oracle_func(X):
+    return True
 
 class TestFunction(unittest.TestCase):
     def test1_uniform_sampling(self):
         region_support = np.array([[-1, 1], [-3, -2]])
+        oracle_info = OracleCreator(oracle_func, 1,1)
         tf_dim = 2
         num_samples = 10
         seed = 10001
         rng = np.random.default_rng(seed)
-        samples_in_unif = uniform_sampling(num_samples, region_support, tf_dim, rng)
+        samples_in_unif = uniform_sampling(num_samples, region_support, tf_dim, oracle_info, rng)
 
         def test_function(X):
             return X[0] ** 2 + X[1] ** 2

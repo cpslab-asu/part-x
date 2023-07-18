@@ -20,6 +20,8 @@ def classification(region_support: np.array, region_class:chr, min_volume:float,
 
     if volume <= min_volume:
         region_class = 'u'
+    elif max_delta_q is None and min_delta_q is None:
+        region_class = "i"
     elif region_class == "+":
         if max_delta_q <= 0:
             region_class = 'r+'

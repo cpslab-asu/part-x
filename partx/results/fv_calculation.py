@@ -32,7 +32,7 @@ def fv_without_gp(ftree, options):
     
     return np.sum(volumes_classified) / calculate_volume(options.init_reg_sup), np.sum(volumes_unclassified) / calculate_volume(options.init_reg_sup)
 
-def fv_using_gp(ftree, options, quantiles_at, rng):
+def fv_using_gp(ftree, options, oracle_info, quantiles_at, rng):
     """Calculate falsification volume using GP 
 
     Args:
@@ -51,29 +51,29 @@ def fv_using_gp(ftree, options, quantiles_at, rng):
         
         quantiles_falsification = np.empty((options.R, len(quantiles_at)))
         node_data = temp_node_id.data
-        # if node_data.region_class != "u":
+        # 
         X = node_data.samples_in
         Y = node_data.samples_out
-        
-        model = GPR(options.gpr_model)
-        model.fit(X, Y)
-        
-        
-        for r in range(options.R):
-            if sampling_type == "lhs_sampling":
-                samples = lhs_sampling(options.M, node_data.region_support, options.tf_dim, rng)
-            elif sampling_type == "uniform_sampling":
-                samples = uniform_sampling(options.M, node_data.region_support, options.tf_dim, rng)
-            else:
-                raise ValueError(f"{sampling_type} not defined. Currently only Latin Hypercube Sampling and Uniform Sampling is supported.")
-        
-            y_pred, pred_sigma = model.predict(samples)
-            for q_at_iterate in range(len(quantiles_at)):
-                q_at = quantiles_at[q_at_iterate]
-                quantiles_values = (stats.norm.ppf(q_at,y_pred,pred_sigma))
-                quantiles_falsification[r, q_at_iterate] = (np.array(quantiles_values) < 0.0).sum(axis = 0)
+        if node_data.region_class != "u" and  node_data.region_class != "i":
+            model = GPR(options.gpr_model)
+            model.fit(X, Y)
             
-        falsified_volume_region = (quantiles_falsification.sum(axis=0) / (options.R*options.M)) * calculate_volume(node_data.region_support)
-        falsification_volumes.append(falsified_volume_region)
+            
+            for r in range(options.R):
+                if sampling_type == "lhs_sampling":
+                    samples = lhs_sampling(options.M, node_data.region_support, options.tf_dim, oracle_info, rng)
+                elif sampling_type == "uniform_sampling":
+                    samples = uniform_sampling(options.M, node_data.region_support, options.tf_dim, oracle_info, rng)
+                else:
+                    raise ValueError(f"{sampling_type} not defined. Currently only Latin Hypercube Sampling and Uniform Sampling is supported.")
+            
+                y_pred, pred_sigma = model.predict(samples)
+                for q_at_iterate in range(len(quantiles_at)):
+                    q_at = quantiles_at[q_at_iterate]
+                    quantiles_values = (stats.norm.ppf(q_at,y_pred,pred_sigma))
+                    quantiles_falsification[r, q_at_iterate] = (np.array(quantiles_values) < 0.0).sum(axis = 0)
+                
+            falsified_volume_region = (quantiles_falsification.sum(axis=0) / (options.R*options.M)) * calculate_volume(node_data.region_support)
+            falsification_volumes.append(falsified_volume_region)
     
     return np.array(falsification_volumes) / calculate_volume(options.init_reg_sup)

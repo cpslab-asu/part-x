@@ -11,12 +11,17 @@ from partx.gprInterface import (
     InternalGPR,
 )
 
+from partx.coreAlgorithm import OracleCreator
+
+def oracle_func(X):
+    return True
+
 
 class Test_GPR(unittest.TestCase):
     def test1_GPR(self):
         gpr_model = InternalGPR()
         gpr = GPR(gpr_model)
-
+        oracle_info = OracleCreator(oracle_func,1,1)
         def internal_function(X):
             return X[0] ** 2 + X[1] ** 2 + X[2] ** 2
 
@@ -24,12 +29,12 @@ class Test_GPR(unittest.TestCase):
         region_support = np.array([[-1, 1], [-2, 2], [-3, 3]])
 
         func1 = Fn(internal_function)
-        in_samples_1 = uniform_sampling(20, region_support, 3, rng)
+        in_samples_1 = uniform_sampling(20, region_support, 3, oracle_info, rng)
         out_samples_1 = compute_robustness(in_samples_1, func1)
         # gpr.fit(in_samples_1, out_samples_1)
 
         func2 = Fn(internal_function)
-        in_samples_2 = uniform_sampling(1, region_support, 3, rng)
+        in_samples_2 = uniform_sampling(1, region_support, 3, oracle_info, rng)
         out_samples_2 = compute_robustness(in_samples_2, func2)
 
         self.assertRaises(TypeError, gpr.fit,  np.array([in_samples_1]), out_samples_1)

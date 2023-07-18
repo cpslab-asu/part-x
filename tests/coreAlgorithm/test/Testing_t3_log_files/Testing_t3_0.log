@@ -1480,3 +1480,338 @@ Tue, 20 Dec 2022 19:01:33 :: 1000 Evaluations completed
 Tue, 20 Dec 2022 19:01:33 :: 0 left
 Tue, 20 Dec 2022 19:01:33 :: **************************************************
 Tue, 20 Dec 2022 19:01:37 :: Ended Testing_t3 Replication 0 with seed 123
+Thu, 06 Jul 2023 10:48:46 :: Information about Replication 0
+Thu, 06 Jul 2023 10:48:46 :: Running Testing_t3 Replication 0 with seed 123
+Thu, 06 Jul 2023 10:48:46 :: **************************************************
+Thu, 06 Jul 2023 10:48:46 :: Options File:
+Thu, 06 Jul 2023 10:48:46 :: BENCHMARK_NAME : Testing_t3
+Thu, 06 Jul 2023 10:48:46 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Thu, 06 Jul 2023 10:48:46 :: tf_dim : 2
+Thu, 06 Jul 2023 10:48:46 :: max_budget : 1000
+Thu, 06 Jul 2023 10:48:46 :: init_budget : 10
+Thu, 06 Jul 2023 10:48:46 :: bo_budget : 10
+Thu, 06 Jul 2023 10:48:46 :: cs_budget : 10
+Thu, 06 Jul 2023 10:48:46 :: init_sampling_type : uniform_sampling
+Thu, 06 Jul 2023 10:48:46 :: cs_sampling_type : uniform_sampling
+Thu, 06 Jul 2023 10:48:46 :: q_estim_sampling : uniform_sampling
+Thu, 06 Jul 2023 10:48:46 :: mc_integral_sampling_type : lhs_sampling
+Thu, 06 Jul 2023 10:48:46 :: results_sampling_type : lhs_sampling
+Thu, 06 Jul 2023 10:48:46 :: alpha : 0.05
+Thu, 06 Jul 2023 10:48:46 :: R : 20
+Thu, 06 Jul 2023 10:48:46 :: M : 500
+Thu, 06 Jul 2023 10:48:46 :: delta : 0.001
+Thu, 06 Jul 2023 10:48:46 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Thu, 06 Jul 2023 10:48:46 :: min_volume : 4e-06
+Thu, 06 Jul 2023 10:48:46 :: branching_factor : 2
+Thu, 06 Jul 2023 10:48:46 :: uniform_partitioning : True
+Thu, 06 Jul 2023 10:48:46 :: start_seed : 123
+Thu, 06 Jul 2023 10:48:46 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7f2e9e3a6580>
+Thu, 06 Jul 2023 10:48:46 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7f2e90a6c6a0>
+Thu, 06 Jul 2023 10:48:46 :: **************************************************
+Thu, 06 Jul 2023 10:48:46 :: Budget Used = 0
+Thu, 06 Jul 2023 10:48:46 :: Budget Available (Max Budget) = 1000
+Thu, 06 Jul 2023 10:48:46 :: **************************************************
+Thu, 06 Jul 2023 10:48:46 :: **************************************************
+Thu, 06 Jul 2023 10:48:46 :: ***************Replication Start******************
+Thu, 06 Jul 2023 10:48:51 :: **************************************************
+Thu, 06 Jul 2023 10:48:51 :: Remaining Regions: [0]
+Thu, 06 Jul 2023 10:48:51 :: Classified Regions: []
+Thu, 06 Jul 2023 10:48:51 :: Unidentified Regions: []
+Thu, 06 Jul 2023 10:48:51 :: 20 Evaluations completed
+Thu, 06 Jul 2023 10:48:51 :: 980 left
+Thu, 06 Jul 2023 10:48:51 :: **************************************************
+Thu, 06 Jul 2023 10:49:01 :: **************************************************
+Thu, 06 Jul 2023 10:49:01 :: Remaining Regions: [2, 1]
+Thu, 06 Jul 2023 10:49:01 :: Classified Regions: []
+Thu, 06 Jul 2023 10:49:01 :: Unidentified Regions: []
+Thu, 06 Jul 2023 10:49:01 :: 40 Evaluations completed
+Thu, 06 Jul 2023 10:49:01 :: 960 left
+Thu, 06 Jul 2023 10:49:01 :: **************************************************
+Thu, 06 Jul 2023 10:49:22 :: **************************************************
+Thu, 06 Jul 2023 10:49:22 :: Remaining Regions: [6, 5, 4, 3]
+Thu, 06 Jul 2023 10:49:22 :: Classified Regions: []
+Thu, 06 Jul 2023 10:49:22 :: Unidentified Regions: []
+Thu, 06 Jul 2023 10:49:22 :: 90 Evaluations completed
+Thu, 06 Jul 2023 10:49:22 :: 910 left
+Thu, 06 Jul 2023 10:49:22 :: **************************************************
+Thu, 06 Jul 2023 10:50:08 :: **************************************************
+Thu, 06 Jul 2023 10:50:08 :: Remaining Regions: [14, 13, 10, 9]
+Thu, 06 Jul 2023 10:50:08 :: Classified Regions: [12, 11, 8, 7]
+Thu, 06 Jul 2023 10:50:08 :: Unidentified Regions: []
+Thu, 06 Jul 2023 10:50:08 :: 182 Evaluations completed
+Thu, 06 Jul 2023 10:50:08 :: 818 left
+Thu, 06 Jul 2023 10:50:08 :: **************************************************
+Thu, 06 Jul 2023 10:50:55 :: **************************************************
+Thu, 06 Jul 2023 10:50:55 :: Remaining Regions: [22, 21, 20, 19, 17, 15]
+Thu, 06 Jul 2023 10:50:55 :: Classified Regions: [12, 11, 8, 7, 18, 16]
+Thu, 06 Jul 2023 10:50:55 :: Unidentified Regions: []
+Thu, 06 Jul 2023 10:50:55 :: 291 Evaluations completed
+Thu, 06 Jul 2023 10:50:55 :: 709 left
+Thu, 06 Jul 2023 10:50:55 :: **************************************************
+Thu, 06 Jul 2023 10:52:05 :: **************************************************
+Thu, 06 Jul 2023 10:52:05 :: Remaining Regions: [33, 32, 31, 30, 29, 27, 26, 24, 23]
+Thu, 06 Jul 2023 10:52:05 :: Classified Regions: [12, 11, 8, 7, 18, 16, 34, 28, 25]
+Thu, 06 Jul 2023 10:52:05 :: Unidentified Regions: []
+Thu, 06 Jul 2023 10:52:05 :: 446 Evaluations completed
+Thu, 06 Jul 2023 10:52:05 :: 554 left
+Thu, 06 Jul 2023 10:52:05 :: **************************************************
+Thu, 06 Jul 2023 10:53:52 :: **************************************************
+Thu, 06 Jul 2023 10:53:52 :: Remaining Regions: [52, 51, 50, 49, 48, 45, 44, 43, 42, 40, 38, 37, 36]
+Thu, 06 Jul 2023 10:53:52 :: Classified Regions: [12, 11, 8, 7, 18, 16, 34, 28, 25, 47, 46, 41, 39, 35]
+Thu, 06 Jul 2023 10:53:52 :: Unidentified Regions: []
+Thu, 06 Jul 2023 10:53:52 :: 684 Evaluations completed
+Thu, 06 Jul 2023 10:53:52 :: 316 left
+Thu, 06 Jul 2023 10:53:52 :: **************************************************
+Thu, 06 Jul 2023 10:53:52 :: **************************************************
+Thu, 06 Jul 2023 10:53:52 :: Entering Last Phase with 316 left
+Thu, 06 Jul 2023 10:53:52 :: Remaining Regions: [52, 51, 50, 49, 48, 45, 44, 43, 42, 40, 38, 37, 36]
+Thu, 06 Jul 2023 10:53:52 :: Classified Regions: [12, 11, 8, 7, 18, 16, 34, 28, 25, 47, 46, 41, 39, 35]
+Thu, 06 Jul 2023 10:53:52 :: Unidentified Regions: []
+Thu, 06 Jul 2023 10:53:52 :: **************************************************
+Thu, 06 Jul 2023 10:54:36 :: **************************************************
+Thu, 06 Jul 2023 10:54:36 :: Remaining Regions: [52, 51, 50, 49, 48, 45, 44, 43, 42, 40, 38, 37, 36]
+Thu, 06 Jul 2023 10:54:36 :: Classified Regions: [12, 11, 8, 7, 18, 16, 34, 28, 25, 47, 46, 41, 39, 35]
+Thu, 06 Jul 2023 10:54:36 :: Unidentified Regions: []
+Thu, 06 Jul 2023 10:54:36 :: 1000 Evaluations completed
+Thu, 06 Jul 2023 10:54:36 :: 0 left
+Thu, 06 Jul 2023 10:54:36 :: **************************************************
+Thu, 06 Jul 2023 10:54:36 :: **************************************************
+Thu, 06 Jul 2023 10:54:36 :: *********Replication 0 Finished*****************
+Thu, 06 Jul 2023 10:54:36 :: Remaining Regions: [52, 51, 50, 49, 48, 45, 44, 43, 42, 40, 38, 37, 36]
+Thu, 06 Jul 2023 10:54:36 :: Classified Regions: [12, 11, 8, 7, 18, 16, 34, 28, 25, 47, 46, 41, 39, 35]
+Thu, 06 Jul 2023 10:54:36 :: Unidentified Regions: []
+Thu, 06 Jul 2023 10:54:36 :: 1000 Evaluations completed
+Thu, 06 Jul 2023 10:54:36 :: 0 left
+Thu, 06 Jul 2023 10:54:36 :: **************************************************
+Thu, 06 Jul 2023 10:54:40 :: Ended Testing_t3 Replication 0 with seed 123
+Tue, 18 Jul 2023 10:16:31 :: Information about Replication 0
+Tue, 18 Jul 2023 10:16:31 :: Running Testing_t3 Replication 0 with seed 123
+Tue, 18 Jul 2023 10:16:31 :: **************************************************
+Tue, 18 Jul 2023 10:16:31 :: Options File:
+Tue, 18 Jul 2023 10:16:31 :: BENCHMARK_NAME : Testing_t3
+Tue, 18 Jul 2023 10:16:31 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Tue, 18 Jul 2023 10:16:31 :: tf_dim : 2
+Tue, 18 Jul 2023 10:16:31 :: max_budget : 1000
+Tue, 18 Jul 2023 10:16:31 :: init_budget : 10
+Tue, 18 Jul 2023 10:16:31 :: bo_budget : 10
+Tue, 18 Jul 2023 10:16:31 :: cs_budget : 10
+Tue, 18 Jul 2023 10:16:31 :: init_sampling_type : uniform_sampling
+Tue, 18 Jul 2023 10:16:31 :: cs_sampling_type : uniform_sampling
+Tue, 18 Jul 2023 10:16:31 :: q_estim_sampling : uniform_sampling
+Tue, 18 Jul 2023 10:16:31 :: mc_integral_sampling_type : lhs_sampling
+Tue, 18 Jul 2023 10:16:31 :: results_sampling_type : lhs_sampling
+Tue, 18 Jul 2023 10:16:31 :: alpha : 0.05
+Tue, 18 Jul 2023 10:16:31 :: R : 20
+Tue, 18 Jul 2023 10:16:31 :: M : 500
+Tue, 18 Jul 2023 10:16:31 :: delta : 0.001
+Tue, 18 Jul 2023 10:16:31 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Tue, 18 Jul 2023 10:16:31 :: min_volume : 4e-06
+Tue, 18 Jul 2023 10:16:31 :: branching_factor : 2
+Tue, 18 Jul 2023 10:16:31 :: uniform_partitioning : True
+Tue, 18 Jul 2023 10:16:31 :: start_seed : 123
+Tue, 18 Jul 2023 10:16:31 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7f264c6c7b50>
+Tue, 18 Jul 2023 10:16:31 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7f264c501450>
+Tue, 18 Jul 2023 10:16:31 :: **************************************************
+Tue, 18 Jul 2023 10:16:31 :: Budget Used = 0
+Tue, 18 Jul 2023 10:16:31 :: Budget Available (Max Budget) = 1000
+Tue, 18 Jul 2023 10:16:31 :: **************************************************
+Tue, 18 Jul 2023 10:16:31 :: **************************************************
+Tue, 18 Jul 2023 10:16:31 :: ***************Replication Start******************
+Tue, 18 Jul 2023 10:16:38 :: **************************************************
+Tue, 18 Jul 2023 10:16:38 :: Remaining Regions: [0]
+Tue, 18 Jul 2023 10:16:38 :: Classified Regions: []
+Tue, 18 Jul 2023 10:16:38 :: Unidentified Regions: []
+Tue, 18 Jul 2023 10:16:38 :: Infeasible Regions: []
+Tue, 18 Jul 2023 10:16:38 :: 20 Evaluations completed
+Tue, 18 Jul 2023 10:16:38 :: 980 left
+Tue, 18 Jul 2023 10:16:38 :: **************************************************
+Tue, 18 Jul 2023 10:16:51 :: **************************************************
+Tue, 18 Jul 2023 10:16:51 :: Remaining Regions: [2, 1]
+Tue, 18 Jul 2023 10:16:51 :: Classified Regions: []
+Tue, 18 Jul 2023 10:16:51 :: Unidentified Regions: []
+Tue, 18 Jul 2023 10:16:51 :: Infeasible Regions: []
+Tue, 18 Jul 2023 10:16:51 :: 41 Evaluations completed
+Tue, 18 Jul 2023 10:16:51 :: 959 left
+Tue, 18 Jul 2023 10:16:51 :: **************************************************
+Tue, 18 Jul 2023 10:17:19 :: **************************************************
+Tue, 18 Jul 2023 10:17:19 :: Remaining Regions: [5, 4, 3, 6]
+Tue, 18 Jul 2023 10:17:19 :: Classified Regions: []
+Tue, 18 Jul 2023 10:17:19 :: Unidentified Regions: []
+Tue, 18 Jul 2023 10:17:19 :: Infeasible Regions: []
+Tue, 18 Jul 2023 10:17:19 :: 100 Evaluations completed
+Tue, 18 Jul 2023 10:17:19 :: 900 left
+Tue, 18 Jul 2023 10:17:19 :: **************************************************
+Tue, 18 Jul 2023 10:18:20 :: **************************************************
+Tue, 18 Jul 2023 10:18:20 :: Remaining Regions: [12, 11, 8, 7]
+Tue, 18 Jul 2023 10:18:20 :: Classified Regions: [14, 13, 10, 9]
+Tue, 18 Jul 2023 10:18:20 :: Unidentified Regions: []
+Tue, 18 Jul 2023 10:18:20 :: Infeasible Regions: []
+Tue, 18 Jul 2023 10:18:20 :: 195 Evaluations completed
+Tue, 18 Jul 2023 10:18:20 :: 805 left
+Tue, 18 Jul 2023 10:18:20 :: **************************************************
+Tue, 18 Jul 2023 10:19:19 :: **************************************************
+Tue, 18 Jul 2023 10:19:19 :: Remaining Regions: [22, 21, 20, 19, 17, 15]
+Tue, 18 Jul 2023 10:19:19 :: Classified Regions: [14, 13, 10, 9, 18, 16]
+Tue, 18 Jul 2023 10:19:19 :: Unidentified Regions: []
+Tue, 18 Jul 2023 10:19:19 :: Infeasible Regions: []
+Tue, 18 Jul 2023 10:19:19 :: 303 Evaluations completed
+Tue, 18 Jul 2023 10:19:19 :: 697 left
+Tue, 18 Jul 2023 10:19:19 :: **************************************************
+Tue, 18 Jul 2023 10:20:52 :: **************************************************
+Tue, 18 Jul 2023 10:20:52 :: Remaining Regions: [33, 32, 31, 30, 29, 27, 26, 24, 23]
+Tue, 18 Jul 2023 10:20:52 :: Classified Regions: [14, 13, 10, 9, 18, 16, 34, 28, 25]
+Tue, 18 Jul 2023 10:20:52 :: Unidentified Regions: []
+Tue, 18 Jul 2023 10:20:52 :: Infeasible Regions: []
+Tue, 18 Jul 2023 10:20:52 :: 461 Evaluations completed
+Tue, 18 Jul 2023 10:20:52 :: 539 left
+Tue, 18 Jul 2023 10:20:52 :: **************************************************
+Tue, 18 Jul 2023 10:23:21 :: **************************************************
+Tue, 18 Jul 2023 10:23:21 :: Remaining Regions: [52, 51, 50, 49, 48, 45, 44, 43, 42, 40, 38, 37, 36]
+Tue, 18 Jul 2023 10:23:21 :: Classified Regions: [14, 13, 10, 9, 18, 16, 34, 28, 25, 47, 46, 41, 39, 35]
+Tue, 18 Jul 2023 10:23:21 :: Unidentified Regions: []
+Tue, 18 Jul 2023 10:23:21 :: Infeasible Regions: []
+Tue, 18 Jul 2023 10:23:21 :: 701 Evaluations completed
+Tue, 18 Jul 2023 10:23:21 :: 299 left
+Tue, 18 Jul 2023 10:23:21 :: **************************************************
+Tue, 18 Jul 2023 10:23:21 :: **************************************************
+Tue, 18 Jul 2023 10:23:21 :: Entering Last Phase with 299 left
+Tue, 18 Jul 2023 10:23:21 :: Remaining Regions: [52, 51, 50, 49, 48, 45, 44, 43, 42, 40, 38, 37, 36]
+Tue, 18 Jul 2023 10:23:21 :: Classified Regions: [14, 13, 10, 9, 18, 16, 34, 28, 25, 47, 46, 41, 39, 35]
+Tue, 18 Jul 2023 10:23:21 :: Unidentified Regions: []
+Tue, 18 Jul 2023 10:23:21 :: Infeasible Regions: []
+Tue, 18 Jul 2023 10:23:21 :: **************************************************
+Tue, 18 Jul 2023 10:24:15 :: **************************************************
+Tue, 18 Jul 2023 10:24:15 :: Remaining Regions: [52, 51, 50, 49, 48, 45, 44, 43, 42, 40, 38, 37, 36]
+Tue, 18 Jul 2023 10:24:15 :: Classified Regions: [14, 13, 10, 9, 18, 16, 34, 28, 25, 47, 46, 41, 39, 35]
+Tue, 18 Jul 2023 10:24:15 :: Unidentified Regions: []
+Tue, 18 Jul 2023 10:24:15 :: Infeasible Regions: []
+Tue, 18 Jul 2023 10:24:15 :: 1000 Evaluations completed
+Tue, 18 Jul 2023 10:24:15 :: 0 left
+Tue, 18 Jul 2023 10:24:15 :: **************************************************
+Tue, 18 Jul 2023 10:24:15 :: **************************************************
+Tue, 18 Jul 2023 10:24:15 :: *********Replication 0 Finished*****************
+Tue, 18 Jul 2023 10:24:15 :: Remaining Regions: [52, 51, 50, 49, 48, 45, 44, 43, 42, 40, 38, 37, 36]
+Tue, 18 Jul 2023 10:24:15 :: Classified Regions: [14, 13, 10, 9, 18, 16, 34, 28, 25, 47, 46, 41, 39, 35]
+Tue, 18 Jul 2023 10:24:15 :: Unidentified Regions: []
+Tue, 18 Jul 2023 10:24:15 :: Infeasible Regions: []
+Tue, 18 Jul 2023 10:24:15 :: 1000 Evaluations completed
+Tue, 18 Jul 2023 10:24:15 :: 0 left
+Tue, 18 Jul 2023 10:24:15 :: **************************************************
+Tue, 18 Jul 2023 10:24:22 :: Ended Testing_t3 Replication 0 with seed 123
+Tue, 18 Jul 2023 14:09:29 :: Information about Replication 0
+Tue, 18 Jul 2023 14:09:29 :: Running Testing_t3 Replication 0 with seed 123
+Tue, 18 Jul 2023 14:09:29 :: **************************************************
+Tue, 18 Jul 2023 14:09:29 :: Options File:
+Tue, 18 Jul 2023 14:09:29 :: BENCHMARK_NAME : Testing_t3
+Tue, 18 Jul 2023 14:09:29 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Tue, 18 Jul 2023 14:09:29 :: tf_dim : 2
+Tue, 18 Jul 2023 14:09:29 :: max_budget : 1000
+Tue, 18 Jul 2023 14:09:29 :: init_budget : 10
+Tue, 18 Jul 2023 14:09:29 :: bo_budget : 10
+Tue, 18 Jul 2023 14:09:29 :: cs_budget : 10
+Tue, 18 Jul 2023 14:09:29 :: init_sampling_type : uniform_sampling
+Tue, 18 Jul 2023 14:09:29 :: cs_sampling_type : uniform_sampling
+Tue, 18 Jul 2023 14:09:29 :: q_estim_sampling : uniform_sampling
+Tue, 18 Jul 2023 14:09:29 :: mc_integral_sampling_type : lhs_sampling
+Tue, 18 Jul 2023 14:09:29 :: results_sampling_type : lhs_sampling
+Tue, 18 Jul 2023 14:09:29 :: alpha : 0.05
+Tue, 18 Jul 2023 14:09:29 :: R : 20
+Tue, 18 Jul 2023 14:09:29 :: M : 500
+Tue, 18 Jul 2023 14:09:29 :: delta : 0.001
+Tue, 18 Jul 2023 14:09:29 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Tue, 18 Jul 2023 14:09:29 :: min_volume : 4e-06
+Tue, 18 Jul 2023 14:09:29 :: branching_factor : 2
+Tue, 18 Jul 2023 14:09:29 :: uniform_partitioning : True
+Tue, 18 Jul 2023 14:09:29 :: start_seed : 123
+Tue, 18 Jul 2023 14:09:29 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7f6835b87970>
+Tue, 18 Jul 2023 14:09:29 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7f6835afa970>
+Tue, 18 Jul 2023 14:09:29 :: **************************************************
+Tue, 18 Jul 2023 14:09:29 :: Budget Used = 0
+Tue, 18 Jul 2023 14:09:29 :: Budget Available (Max Budget) = 1000
+Tue, 18 Jul 2023 14:09:29 :: **************************************************
+Tue, 18 Jul 2023 14:09:29 :: **************************************************
+Tue, 18 Jul 2023 14:09:29 :: ***************Replication Start******************
+Tue, 18 Jul 2023 14:09:34 :: **************************************************
+Tue, 18 Jul 2023 14:09:34 :: Remaining Regions: [0]
+Tue, 18 Jul 2023 14:09:34 :: Classified Regions: []
+Tue, 18 Jul 2023 14:09:34 :: Unidentified Regions: []
+Tue, 18 Jul 2023 14:09:34 :: Infeasible Regions: []
+Tue, 18 Jul 2023 14:09:34 :: 20 Evaluations completed
+Tue, 18 Jul 2023 14:09:34 :: 980 left
+Tue, 18 Jul 2023 14:09:34 :: **************************************************
+Tue, 18 Jul 2023 14:09:44 :: **************************************************
+Tue, 18 Jul 2023 14:09:44 :: Remaining Regions: [2, 1]
+Tue, 18 Jul 2023 14:09:44 :: Classified Regions: []
+Tue, 18 Jul 2023 14:09:44 :: Unidentified Regions: []
+Tue, 18 Jul 2023 14:09:44 :: Infeasible Regions: []
+Tue, 18 Jul 2023 14:09:44 :: 41 Evaluations completed
+Tue, 18 Jul 2023 14:09:44 :: 959 left
+Tue, 18 Jul 2023 14:09:44 :: **************************************************
+Tue, 18 Jul 2023 14:10:03 :: **************************************************
+Tue, 18 Jul 2023 14:10:03 :: Remaining Regions: [5, 4, 3, 6]
+Tue, 18 Jul 2023 14:10:03 :: Classified Regions: []
+Tue, 18 Jul 2023 14:10:03 :: Unidentified Regions: []
+Tue, 18 Jul 2023 14:10:03 :: Infeasible Regions: []
+Tue, 18 Jul 2023 14:10:03 :: 100 Evaluations completed
+Tue, 18 Jul 2023 14:10:03 :: 900 left
+Tue, 18 Jul 2023 14:10:03 :: **************************************************
+Tue, 18 Jul 2023 14:10:47 :: **************************************************
+Tue, 18 Jul 2023 14:10:47 :: Remaining Regions: [12, 11, 8, 7]
+Tue, 18 Jul 2023 14:10:47 :: Classified Regions: [14, 13, 10, 9]
+Tue, 18 Jul 2023 14:10:47 :: Unidentified Regions: []
+Tue, 18 Jul 2023 14:10:47 :: Infeasible Regions: []
+Tue, 18 Jul 2023 14:10:47 :: 195 Evaluations completed
+Tue, 18 Jul 2023 14:10:47 :: 805 left
+Tue, 18 Jul 2023 14:10:47 :: **************************************************
+Tue, 18 Jul 2023 14:11:28 :: **************************************************
+Tue, 18 Jul 2023 14:11:28 :: Remaining Regions: [22, 21, 20, 19, 17, 15]
+Tue, 18 Jul 2023 14:11:28 :: Classified Regions: [14, 13, 10, 9, 18, 16]
+Tue, 18 Jul 2023 14:11:28 :: Unidentified Regions: []
+Tue, 18 Jul 2023 14:11:28 :: Infeasible Regions: []
+Tue, 18 Jul 2023 14:11:28 :: 303 Evaluations completed
+Tue, 18 Jul 2023 14:11:28 :: 697 left
+Tue, 18 Jul 2023 14:11:28 :: **************************************************
+Tue, 18 Jul 2023 14:12:33 :: **************************************************
+Tue, 18 Jul 2023 14:12:33 :: Remaining Regions: [33, 32, 31, 30, 29, 27, 26, 24, 23]
+Tue, 18 Jul 2023 14:12:33 :: Classified Regions: [14, 13, 10, 9, 18, 16, 34, 28, 25]
+Tue, 18 Jul 2023 14:12:33 :: Unidentified Regions: []
+Tue, 18 Jul 2023 14:12:33 :: Infeasible Regions: []
+Tue, 18 Jul 2023 14:12:33 :: 461 Evaluations completed
+Tue, 18 Jul 2023 14:12:33 :: 539 left
+Tue, 18 Jul 2023 14:12:33 :: **************************************************
+Tue, 18 Jul 2023 14:14:16 :: **************************************************
+Tue, 18 Jul 2023 14:14:16 :: Remaining Regions: [52, 51, 50, 49, 48, 45, 44, 43, 42, 40, 38, 37, 36]
+Tue, 18 Jul 2023 14:14:16 :: Classified Regions: [14, 13, 10, 9, 18, 16, 34, 28, 25, 47, 46, 41, 39, 35]
+Tue, 18 Jul 2023 14:14:16 :: Unidentified Regions: []
+Tue, 18 Jul 2023 14:14:16 :: Infeasible Regions: []
+Tue, 18 Jul 2023 14:14:16 :: 701 Evaluations completed
+Tue, 18 Jul 2023 14:14:16 :: 299 left
+Tue, 18 Jul 2023 14:14:16 :: **************************************************
+Tue, 18 Jul 2023 14:14:16 :: **************************************************
+Tue, 18 Jul 2023 14:14:16 :: Entering Last Phase with 299 left
+Tue, 18 Jul 2023 14:14:16 :: Remaining Regions: [52, 51, 50, 49, 48, 45, 44, 43, 42, 40, 38, 37, 36]
+Tue, 18 Jul 2023 14:14:16 :: Classified Regions: [14, 13, 10, 9, 18, 16, 34, 28, 25, 47, 46, 41, 39, 35]
+Tue, 18 Jul 2023 14:14:16 :: Unidentified Regions: []
+Tue, 18 Jul 2023 14:14:16 :: Infeasible Regions: []
+Tue, 18 Jul 2023 14:14:16 :: **************************************************
+Tue, 18 Jul 2023 14:14:57 :: **************************************************
+Tue, 18 Jul 2023 14:14:57 :: Remaining Regions: [52, 51, 50, 49, 48, 45, 44, 43, 42, 40, 38, 37, 36, 39]
+Tue, 18 Jul 2023 14:14:57 :: Classified Regions: [14, 13, 10, 9, 18, 16, 34, 28, 25, 47, 46, 41, 35]
+Tue, 18 Jul 2023 14:14:57 :: Unidentified Regions: []
+Tue, 18 Jul 2023 14:14:57 :: Infeasible Regions: []
+Tue, 18 Jul 2023 14:14:57 :: 1000 Evaluations completed
+Tue, 18 Jul 2023 14:14:57 :: 0 left
+Tue, 18 Jul 2023 14:14:57 :: **************************************************
+Tue, 18 Jul 2023 14:14:57 :: **************************************************
+Tue, 18 Jul 2023 14:14:57 :: *********Replication 0 Finished*****************
+Tue, 18 Jul 2023 14:14:57 :: Remaining Regions: [52, 51, 50, 49, 48, 45, 44, 43, 42, 40, 38, 37, 36, 39]
+Tue, 18 Jul 2023 14:14:57 :: Classified Regions: [14, 13, 10, 9, 18, 16, 34, 28, 25, 47, 46, 41, 35]
+Tue, 18 Jul 2023 14:14:57 :: Unidentified Regions: []
+Tue, 18 Jul 2023 14:14:57 :: Infeasible Regions: []
+Tue, 18 Jul 2023 14:14:57 :: 1000 Evaluations completed
+Tue, 18 Jul 2023 14:14:57 :: 0 left
+Tue, 18 Jul 2023 14:14:57 :: **************************************************
+Tue, 18 Jul 2023 14:15:01 :: Ended Testing_t3 Replication 0 with seed 123

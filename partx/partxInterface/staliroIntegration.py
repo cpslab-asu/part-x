@@ -10,14 +10,17 @@ Bounds = Sequence[Interval]
 PartXResult = List[Any]
 
 @dataclass(frozen=True)
-class PartX(Optimizer[PartXResult]):
+class PartX(Optimizer[PartXResult, None]):
     """The PartX optimizer provides statistical guarantees about the existence of falsifying behaviour in a system."""
 
     BENCHMARK_NAME: str
+    oracle_function: Callable
     num_macro_reps: int
     init_budget: int
     bo_budget: int
     cs_budget: int
+    n_tries_randomsampling: int
+    n_tries_BO: int
     alpha: float
     R: int
     M: int
@@ -59,10 +62,12 @@ class PartX(Optimizer[PartXResult]):
         
         def test_function(sample: np.ndarray) -> float:
             return func.eval_sample(Sample(sample))
+    
         
         return run_partx(
             BENCHMARK_NAME = self.BENCHMARK_NAME,
             test_function = test_function,
+            oracle_function= self.oracle_function,
             num_macro_reps = self.num_macro_reps,
             init_reg_sup = region_support,
             tf_dim = region_support.shape[0],
@@ -70,6 +75,8 @@ class PartX(Optimizer[PartXResult]):
             init_budget = self.init_budget,
             bo_budget = self.bo_budget,
             cs_budget = self.cs_budget,
+            n_tries_randomsampling= self.n_tries_randomsampling,
+            n_tries_BO=self.n_tries_BO,
             alpha = self.alpha,
             R = self.R,
             M = self.M,

@@ -1,12 +1,8 @@
 import numpy as np
 from numpy.typing import NDArray
-from staliro.core.interval import Interval
-from staliro.core.model import Model, ModelData, Failure, StaticInput, Signals
-from staliro.options import Options, SignalOptions
-from staliro.specifications import RTAMTDense
-from staliro.staliro import staliro, simulate_model
+from staliro.core import Interval
+from staliro.core.model import BasicResult, Model, ModelInputs, ModelResult, Trace
 
-#############################################################
 
 try:
     import matlab
@@ -17,7 +13,7 @@ else:
     _has_matlab = True
 
 AutotransDataT = NDArray[np.float_]
-AutotransResultT = ModelData[AutotransDataT, None]
+AutotransResultT = ModelResult[AutotransDataT, None]
 
 
 class AutotransModel(Model[AutotransDataT, None]):
@@ -37,11 +33,11 @@ class AutotransModel(Model[AutotransDataT, None]):
         self.engine = engine
         self.model_opts = engine.simset(model_opts, "SaveFormat", "Array")
 
-    def simulate(self, static: StaticInput, signals: Signals, intrvl: Interval) -> AutotransResultT:
+    def simulate(self, signals: ModelInputs, intrvl: Interval) -> AutotransResultT:
         sim_t = matlab.double([0, intrvl.upper])
         n_times = (intrvl.length // self.sampling_step) + 2
         signal_times = np.linspace(intrvl.lower, intrvl.upper, int(n_times))
-        signal_values = np.array([[signal.at_time(t) for t in signal_times] for signal in signals])
+        signal_values = np.array([[signal.at_time(t) for t in signal_times] for signal in signals.signals])
 
         model_input = matlab.double(np.row_stack((signal_times, signal_values)).T.tolist())
         
@@ -49,7 +45,8 @@ class AutotransModel(Model[AutotransDataT, None]):
             self.MODEL_NAME, sim_t, self.model_opts, model_input, nargout=3
         )
 
-        timestamps_array = np.array(timestamps).flatten()
-        data_array = np.array(data)
+        timestamps_list = np.array(timestamps).flatten().tolist()
+        data_list = list(data)
+        trace = Trace(timestamps_list, data_list)
 
-        return ModelData(data_array.T, timestamps_array)
+        return BasicResult(trace)

@@ -7,34 +7,29 @@ from scipy.stats import norm
 from .bointerface import BO_Interface
 from ..gprInterface import GPR
 from ..sampling import uniform_sampling
-from ..utils import compute_robustness
-
-
 
 class InternalBO(BO_Interface):
     def __init__(self):
         pass
 
     def sample(
-        self,
-        test_function: Callable,
-        num_samples: int,
-        x_train: NDArray,
-        y_train: NDArray,
-        region_support: NDArray,
-        gpr_model: Callable,
-        rng,
-    ) -> Tuple[NDArray]:
+         self,
+         x_train: NDArray,
+         y_train: NDArray,
+         region_support: NDArray,
+         gpr_model: Callable,
+         oracle_info,
+         rng,
+      ) -> Tuple[NDArray]:
 
         """Internal BO Model
 
         Args:
-            test_function: Function of System Under Test.
-            num_samples: Number of samples to generate from BO.
             x_train: Samples from Training set.
             y_train: Evaluated values of samples from Trainig set.
             region_support: Min and Max of all dimensions
             gpr_model: Gaussian Process Regressor Model developed using Factory
+            oracle_info: Oracle defining the constraints.
             rng: RNG object from numpy
 
         Raises:
@@ -43,30 +38,18 @@ class InternalBO(BO_Interface):
             TypeError: If there is a mismatch between x_train and y_train
 
         Returns:
-            x_complete
-            y_complete
             x_new
-            y_new
-        """
+         """
+        
+        model = GPR(gpr_model)
+        model.fit(x_train, y_train)
 
-        x_pred = np.empty((0, region_support.shape[0]))
-        y_pred = np.empty(0)
+        pred_sample_x = self._opt_acquisition(y_train, model, region_support, oracle_info, rng)
 
-        for sample in range(num_samples):
-            model = GPR(gpr_model)
-            model.fit(x_train, y_train)
 
-            pred_sample_x = self._opt_acquisition(y_train, model, region_support, rng)
-            
-            pred_sample_y = compute_robustness(np.array([pred_sample_x]), test_function)
-            x_train = np.vstack((x_train, np.array([pred_sample_x])))
-            y_train = np.hstack((y_train, pred_sample_y))
+        return pred_sample_x
 
-            x_pred = np.vstack((x_pred, np.array([pred_sample_x])))
-            y_pred = np.hstack((y_pred, pred_sample_y))
-        return x_train, y_train, x_pred, y_pred
-
-    def _opt_acquisition(self, y_train: NDArray, gpr_model: Callable, region_support: NDArray, rng) -> NDArray:
+    def _opt_acquisition(self, y_train: NDArray, gpr_model: Callable, region_support: NDArray, oracle_info, rng) -> NDArray:
         """Get the sample points
 
         Args:
@@ -94,7 +77,7 @@ class InternalBO(BO_Interface):
         # bnds = Bounds(lower_bound_theta, upper_bound_theta)
         fun = lambda x_: -1 * self._acquisition(y_train, x_, gpr_model)
 
-        random_samples = uniform_sampling(2000, region_support, tf_dim, rng)
+        random_samples = uniform_sampling(2000, region_support, tf_dim, oracle_info, rng)
         min_bo_val = -1 * self._acquisition(
             y_train, random_samples, gpr_model, "multiple"
         )

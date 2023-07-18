@@ -1138,3 +1138,246 @@ Tue, 20 Dec 2022 19:02:17 :: 100 Evaluations completed
 Tue, 20 Dec 2022 19:02:17 :: 0 left
 Tue, 20 Dec 2022 19:02:17 :: **************************************************
 Tue, 20 Dec 2022 19:02:17 :: Ended Testing_t4 Replication 0 with seed 123
+Thu, 06 Jul 2023 10:54:40 :: Information about Replication 0
+Thu, 06 Jul 2023 10:54:40 :: Running Testing_t4 Replication 0 with seed 123
+Thu, 06 Jul 2023 10:54:40 :: **************************************************
+Thu, 06 Jul 2023 10:54:40 :: Options File:
+Thu, 06 Jul 2023 10:54:40 :: BENCHMARK_NAME : Testing_t4
+Thu, 06 Jul 2023 10:54:40 :: init_reg_sup : [[-0.5  0.5]
+ [-0.5  0.5]]
+Thu, 06 Jul 2023 10:54:40 :: tf_dim : 2
+Thu, 06 Jul 2023 10:54:40 :: max_budget : 100
+Thu, 06 Jul 2023 10:54:40 :: init_budget : 10
+Thu, 06 Jul 2023 10:54:40 :: bo_budget : 10
+Thu, 06 Jul 2023 10:54:40 :: cs_budget : 10
+Thu, 06 Jul 2023 10:54:40 :: init_sampling_type : uniform_sampling
+Thu, 06 Jul 2023 10:54:40 :: cs_sampling_type : uniform_sampling
+Thu, 06 Jul 2023 10:54:40 :: q_estim_sampling : uniform_sampling
+Thu, 06 Jul 2023 10:54:40 :: mc_integral_sampling_type : lhs_sampling
+Thu, 06 Jul 2023 10:54:40 :: results_sampling_type : lhs_sampling
+Thu, 06 Jul 2023 10:54:40 :: alpha : 0.05
+Thu, 06 Jul 2023 10:54:40 :: R : 20
+Thu, 06 Jul 2023 10:54:40 :: M : 500
+Thu, 06 Jul 2023 10:54:40 :: delta : 0.05
+Thu, 06 Jul 2023 10:54:40 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Thu, 06 Jul 2023 10:54:40 :: min_volume : 0.0025000000000000005
+Thu, 06 Jul 2023 10:54:40 :: branching_factor : 2
+Thu, 06 Jul 2023 10:54:40 :: uniform_partitioning : True
+Thu, 06 Jul 2023 10:54:40 :: start_seed : 123
+Thu, 06 Jul 2023 10:54:40 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7f2e9e3a64f0>
+Thu, 06 Jul 2023 10:54:40 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7f2e9e31c2b0>
+Thu, 06 Jul 2023 10:54:40 :: **************************************************
+Thu, 06 Jul 2023 10:54:40 :: Budget Used = 0
+Thu, 06 Jul 2023 10:54:40 :: Budget Available (Max Budget) = 100
+Thu, 06 Jul 2023 10:54:40 :: **************************************************
+Thu, 06 Jul 2023 10:54:40 :: **************************************************
+Thu, 06 Jul 2023 10:54:40 :: ***************Replication Start******************
+Thu, 06 Jul 2023 10:54:45 :: **************************************************
+Thu, 06 Jul 2023 10:54:45 :: Remaining Regions: [0]
+Thu, 06 Jul 2023 10:54:45 :: Classified Regions: []
+Thu, 06 Jul 2023 10:54:45 :: Unidentified Regions: []
+Thu, 06 Jul 2023 10:54:45 :: 20 Evaluations completed
+Thu, 06 Jul 2023 10:54:45 :: 80 left
+Thu, 06 Jul 2023 10:54:45 :: **************************************************
+Thu, 06 Jul 2023 10:54:55 :: **************************************************
+Thu, 06 Jul 2023 10:54:55 :: Remaining Regions: [1]
+Thu, 06 Jul 2023 10:54:55 :: Classified Regions: [2]
+Thu, 06 Jul 2023 10:54:55 :: Unidentified Regions: []
+Thu, 06 Jul 2023 10:54:55 :: 52 Evaluations completed
+Thu, 06 Jul 2023 10:54:55 :: 48 left
+Thu, 06 Jul 2023 10:54:55 :: **************************************************
+Thu, 06 Jul 2023 10:55:08 :: **************************************************
+Thu, 06 Jul 2023 10:55:08 :: Remaining Regions: [3]
+Thu, 06 Jul 2023 10:55:08 :: Classified Regions: [2, 4]
+Thu, 06 Jul 2023 10:55:08 :: Unidentified Regions: []
+Thu, 06 Jul 2023 10:55:08 :: 89 Evaluations completed
+Thu, 06 Jul 2023 10:55:08 :: 11 left
+Thu, 06 Jul 2023 10:55:08 :: **************************************************
+Thu, 06 Jul 2023 10:55:08 :: **************************************************
+Thu, 06 Jul 2023 10:55:08 :: Entering Last Phase with 11 left
+Thu, 06 Jul 2023 10:55:08 :: Remaining Regions: [3]
+Thu, 06 Jul 2023 10:55:08 :: Classified Regions: [2, 4]
+Thu, 06 Jul 2023 10:55:08 :: Unidentified Regions: []
+Thu, 06 Jul 2023 10:55:08 :: **************************************************
+Thu, 06 Jul 2023 10:55:12 :: **************************************************
+Thu, 06 Jul 2023 10:55:12 :: Remaining Regions: [3]
+Thu, 06 Jul 2023 10:55:12 :: Classified Regions: [2, 4]
+Thu, 06 Jul 2023 10:55:12 :: Unidentified Regions: []
+Thu, 06 Jul 2023 10:55:12 :: 100 Evaluations completed
+Thu, 06 Jul 2023 10:55:12 :: 0 left
+Thu, 06 Jul 2023 10:55:12 :: **************************************************
+Thu, 06 Jul 2023 10:55:12 :: **************************************************
+Thu, 06 Jul 2023 10:55:12 :: *********Replication 0 Finished*****************
+Thu, 06 Jul 2023 10:55:12 :: Remaining Regions: [3]
+Thu, 06 Jul 2023 10:55:12 :: Classified Regions: [2, 4]
+Thu, 06 Jul 2023 10:55:12 :: Unidentified Regions: []
+Thu, 06 Jul 2023 10:55:12 :: 100 Evaluations completed
+Thu, 06 Jul 2023 10:55:12 :: 0 left
+Thu, 06 Jul 2023 10:55:12 :: **************************************************
+Thu, 06 Jul 2023 10:55:12 :: Ended Testing_t4 Replication 0 with seed 123
+Tue, 18 Jul 2023 10:24:22 :: Information about Replication 0
+Tue, 18 Jul 2023 10:24:22 :: Running Testing_t4 Replication 0 with seed 123
+Tue, 18 Jul 2023 10:24:22 :: **************************************************
+Tue, 18 Jul 2023 10:24:22 :: Options File:
+Tue, 18 Jul 2023 10:24:22 :: BENCHMARK_NAME : Testing_t4
+Tue, 18 Jul 2023 10:24:22 :: init_reg_sup : [[-0.5  0.5]
+ [-0.5  0.5]]
+Tue, 18 Jul 2023 10:24:22 :: tf_dim : 2
+Tue, 18 Jul 2023 10:24:22 :: max_budget : 100
+Tue, 18 Jul 2023 10:24:22 :: init_budget : 10
+Tue, 18 Jul 2023 10:24:22 :: bo_budget : 10
+Tue, 18 Jul 2023 10:24:22 :: cs_budget : 10
+Tue, 18 Jul 2023 10:24:22 :: init_sampling_type : uniform_sampling
+Tue, 18 Jul 2023 10:24:22 :: cs_sampling_type : uniform_sampling
+Tue, 18 Jul 2023 10:24:22 :: q_estim_sampling : uniform_sampling
+Tue, 18 Jul 2023 10:24:22 :: mc_integral_sampling_type : lhs_sampling
+Tue, 18 Jul 2023 10:24:22 :: results_sampling_type : lhs_sampling
+Tue, 18 Jul 2023 10:24:22 :: alpha : 0.05
+Tue, 18 Jul 2023 10:24:22 :: R : 20
+Tue, 18 Jul 2023 10:24:22 :: M : 500
+Tue, 18 Jul 2023 10:24:22 :: delta : 0.05
+Tue, 18 Jul 2023 10:24:22 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Tue, 18 Jul 2023 10:24:22 :: min_volume : 0.0025000000000000005
+Tue, 18 Jul 2023 10:24:22 :: branching_factor : 2
+Tue, 18 Jul 2023 10:24:22 :: uniform_partitioning : True
+Tue, 18 Jul 2023 10:24:22 :: start_seed : 123
+Tue, 18 Jul 2023 10:24:22 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7f264c6ed720>
+Tue, 18 Jul 2023 10:24:22 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7f264c5012a0>
+Tue, 18 Jul 2023 10:24:22 :: **************************************************
+Tue, 18 Jul 2023 10:24:22 :: Budget Used = 0
+Tue, 18 Jul 2023 10:24:22 :: Budget Available (Max Budget) = 100
+Tue, 18 Jul 2023 10:24:22 :: **************************************************
+Tue, 18 Jul 2023 10:24:22 :: **************************************************
+Tue, 18 Jul 2023 10:24:22 :: ***************Replication Start******************
+Tue, 18 Jul 2023 10:24:29 :: **************************************************
+Tue, 18 Jul 2023 10:24:29 :: Remaining Regions: [0]
+Tue, 18 Jul 2023 10:24:29 :: Classified Regions: []
+Tue, 18 Jul 2023 10:24:29 :: Unidentified Regions: []
+Tue, 18 Jul 2023 10:24:29 :: Infeasible Regions: []
+Tue, 18 Jul 2023 10:24:29 :: 20 Evaluations completed
+Tue, 18 Jul 2023 10:24:29 :: 80 left
+Tue, 18 Jul 2023 10:24:29 :: **************************************************
+Tue, 18 Jul 2023 10:24:45 :: **************************************************
+Tue, 18 Jul 2023 10:24:45 :: Remaining Regions: [1]
+Tue, 18 Jul 2023 10:24:45 :: Classified Regions: [2]
+Tue, 18 Jul 2023 10:24:45 :: Unidentified Regions: []
+Tue, 18 Jul 2023 10:24:45 :: Infeasible Regions: []
+Tue, 18 Jul 2023 10:24:45 :: 53 Evaluations completed
+Tue, 18 Jul 2023 10:24:45 :: 47 left
+Tue, 18 Jul 2023 10:24:45 :: **************************************************
+Tue, 18 Jul 2023 10:25:02 :: **************************************************
+Tue, 18 Jul 2023 10:25:02 :: Remaining Regions: [3]
+Tue, 18 Jul 2023 10:25:02 :: Classified Regions: [2, 4]
+Tue, 18 Jul 2023 10:25:02 :: Unidentified Regions: []
+Tue, 18 Jul 2023 10:25:02 :: Infeasible Regions: []
+Tue, 18 Jul 2023 10:25:02 :: 87 Evaluations completed
+Tue, 18 Jul 2023 10:25:02 :: 13 left
+Tue, 18 Jul 2023 10:25:02 :: **************************************************
+Tue, 18 Jul 2023 10:25:02 :: **************************************************
+Tue, 18 Jul 2023 10:25:02 :: Entering Last Phase with 13 left
+Tue, 18 Jul 2023 10:25:02 :: Remaining Regions: [3]
+Tue, 18 Jul 2023 10:25:02 :: Classified Regions: [2, 4]
+Tue, 18 Jul 2023 10:25:02 :: Unidentified Regions: []
+Tue, 18 Jul 2023 10:25:02 :: Infeasible Regions: []
+Tue, 18 Jul 2023 10:25:02 :: **************************************************
+Tue, 18 Jul 2023 10:25:07 :: **************************************************
+Tue, 18 Jul 2023 10:25:07 :: Remaining Regions: [3]
+Tue, 18 Jul 2023 10:25:07 :: Classified Regions: [2, 4]
+Tue, 18 Jul 2023 10:25:07 :: Unidentified Regions: []
+Tue, 18 Jul 2023 10:25:07 :: Infeasible Regions: []
+Tue, 18 Jul 2023 10:25:07 :: 100 Evaluations completed
+Tue, 18 Jul 2023 10:25:07 :: 0 left
+Tue, 18 Jul 2023 10:25:07 :: **************************************************
+Tue, 18 Jul 2023 10:25:07 :: **************************************************
+Tue, 18 Jul 2023 10:25:07 :: *********Replication 0 Finished*****************
+Tue, 18 Jul 2023 10:25:07 :: Remaining Regions: [3]
+Tue, 18 Jul 2023 10:25:07 :: Classified Regions: [2, 4]
+Tue, 18 Jul 2023 10:25:07 :: Unidentified Regions: []
+Tue, 18 Jul 2023 10:25:07 :: Infeasible Regions: []
+Tue, 18 Jul 2023 10:25:07 :: 100 Evaluations completed
+Tue, 18 Jul 2023 10:25:07 :: 0 left
+Tue, 18 Jul 2023 10:25:07 :: **************************************************
+Tue, 18 Jul 2023 10:25:08 :: Ended Testing_t4 Replication 0 with seed 123
+Tue, 18 Jul 2023 14:15:01 :: Information about Replication 0
+Tue, 18 Jul 2023 14:15:01 :: Running Testing_t4 Replication 0 with seed 123
+Tue, 18 Jul 2023 14:15:01 :: **************************************************
+Tue, 18 Jul 2023 14:15:01 :: Options File:
+Tue, 18 Jul 2023 14:15:01 :: BENCHMARK_NAME : Testing_t4
+Tue, 18 Jul 2023 14:15:01 :: init_reg_sup : [[-0.5  0.5]
+ [-0.5  0.5]]
+Tue, 18 Jul 2023 14:15:01 :: tf_dim : 2
+Tue, 18 Jul 2023 14:15:01 :: max_budget : 100
+Tue, 18 Jul 2023 14:15:01 :: init_budget : 10
+Tue, 18 Jul 2023 14:15:01 :: bo_budget : 10
+Tue, 18 Jul 2023 14:15:01 :: cs_budget : 10
+Tue, 18 Jul 2023 14:15:01 :: init_sampling_type : uniform_sampling
+Tue, 18 Jul 2023 14:15:01 :: cs_sampling_type : uniform_sampling
+Tue, 18 Jul 2023 14:15:01 :: q_estim_sampling : uniform_sampling
+Tue, 18 Jul 2023 14:15:01 :: mc_integral_sampling_type : lhs_sampling
+Tue, 18 Jul 2023 14:15:01 :: results_sampling_type : lhs_sampling
+Tue, 18 Jul 2023 14:15:01 :: alpha : 0.05
+Tue, 18 Jul 2023 14:15:01 :: R : 20
+Tue, 18 Jul 2023 14:15:01 :: M : 500
+Tue, 18 Jul 2023 14:15:01 :: delta : 0.05
+Tue, 18 Jul 2023 14:15:01 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Tue, 18 Jul 2023 14:15:01 :: min_volume : 0.0025000000000000005
+Tue, 18 Jul 2023 14:15:01 :: branching_factor : 2
+Tue, 18 Jul 2023 14:15:01 :: uniform_partitioning : True
+Tue, 18 Jul 2023 14:15:01 :: start_seed : 123
+Tue, 18 Jul 2023 14:15:01 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7f6835b875e0>
+Tue, 18 Jul 2023 14:15:01 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7f6828293eb0>
+Tue, 18 Jul 2023 14:15:01 :: **************************************************
+Tue, 18 Jul 2023 14:15:01 :: Budget Used = 0
+Tue, 18 Jul 2023 14:15:01 :: Budget Available (Max Budget) = 100
+Tue, 18 Jul 2023 14:15:01 :: **************************************************
+Tue, 18 Jul 2023 14:15:01 :: **************************************************
+Tue, 18 Jul 2023 14:15:01 :: ***************Replication Start******************
+Tue, 18 Jul 2023 14:15:06 :: **************************************************
+Tue, 18 Jul 2023 14:15:06 :: Remaining Regions: [0]
+Tue, 18 Jul 2023 14:15:06 :: Classified Regions: []
+Tue, 18 Jul 2023 14:15:06 :: Unidentified Regions: []
+Tue, 18 Jul 2023 14:15:06 :: Infeasible Regions: []
+Tue, 18 Jul 2023 14:15:06 :: 20 Evaluations completed
+Tue, 18 Jul 2023 14:15:06 :: 80 left
+Tue, 18 Jul 2023 14:15:06 :: **************************************************
+Tue, 18 Jul 2023 14:15:17 :: **************************************************
+Tue, 18 Jul 2023 14:15:17 :: Remaining Regions: [1]
+Tue, 18 Jul 2023 14:15:17 :: Classified Regions: [2]
+Tue, 18 Jul 2023 14:15:17 :: Unidentified Regions: []
+Tue, 18 Jul 2023 14:15:17 :: Infeasible Regions: []
+Tue, 18 Jul 2023 14:15:17 :: 53 Evaluations completed
+Tue, 18 Jul 2023 14:15:17 :: 47 left
+Tue, 18 Jul 2023 14:15:17 :: **************************************************
+Tue, 18 Jul 2023 14:15:29 :: **************************************************
+Tue, 18 Jul 2023 14:15:29 :: Remaining Regions: [3]
+Tue, 18 Jul 2023 14:15:29 :: Classified Regions: [2, 4]
+Tue, 18 Jul 2023 14:15:29 :: Unidentified Regions: []
+Tue, 18 Jul 2023 14:15:29 :: Infeasible Regions: []
+Tue, 18 Jul 2023 14:15:29 :: 87 Evaluations completed
+Tue, 18 Jul 2023 14:15:29 :: 13 left
+Tue, 18 Jul 2023 14:15:29 :: **************************************************
+Tue, 18 Jul 2023 14:15:29 :: **************************************************
+Tue, 18 Jul 2023 14:15:29 :: Entering Last Phase with 13 left
+Tue, 18 Jul 2023 14:15:29 :: Remaining Regions: [3]
+Tue, 18 Jul 2023 14:15:29 :: Classified Regions: [2, 4]
+Tue, 18 Jul 2023 14:15:29 :: Unidentified Regions: []
+Tue, 18 Jul 2023 14:15:29 :: Infeasible Regions: []
+Tue, 18 Jul 2023 14:15:29 :: **************************************************
+Tue, 18 Jul 2023 14:15:33 :: **************************************************
+Tue, 18 Jul 2023 14:15:33 :: Remaining Regions: [3]
+Tue, 18 Jul 2023 14:15:33 :: Classified Regions: [2, 4]
+Tue, 18 Jul 2023 14:15:33 :: Unidentified Regions: []
+Tue, 18 Jul 2023 14:15:33 :: Infeasible Regions: []
+Tue, 18 Jul 2023 14:15:33 :: 100 Evaluations completed
+Tue, 18 Jul 2023 14:15:33 :: 0 left
+Tue, 18 Jul 2023 14:15:33 :: **************************************************
+Tue, 18 Jul 2023 14:15:33 :: **************************************************
+Tue, 18 Jul 2023 14:15:33 :: *********Replication 0 Finished*****************
+Tue, 18 Jul 2023 14:15:33 :: Remaining Regions: [3]
+Tue, 18 Jul 2023 14:15:33 :: Classified Regions: [2, 4]
+Tue, 18 Jul 2023 14:15:33 :: Unidentified Regions: []
+Tue, 18 Jul 2023 14:15:33 :: Infeasible Regions: []
+Tue, 18 Jul 2023 14:15:33 :: 100 Evaluations completed
+Tue, 18 Jul 2023 14:15:33 :: 0 left
+Tue, 18 Jul 2023 14:15:33 :: **************************************************
+Tue, 18 Jul 2023 14:15:33 :: Ended Testing_t4 Replication 0 with seed 123

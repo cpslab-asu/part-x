@@ -55,7 +55,8 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
         
         
         point_history = np.array(point_history, dtype=object)
-        
+        print(point_history)
+        print(point_history.shape)
         list_of_neg_rob = np.where(point_history[:,-1] < 0)
         list_of_pos_rob = np.where((point_history[:,-1] > 0))
 

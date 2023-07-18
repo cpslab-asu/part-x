@@ -14,11 +14,11 @@ from ..results import fv_using_gp
 
 
 def run_single_replication(inputs):
-    replication_number, options, test_function, benchmark_result_directory = inputs
+    replication_number, options, test_function, oracle_info, benchmark_result_directory = inputs
 
     seed = options.start_seed + replication_number
     BENCHMARK_NAME = options.BENCHMARK_NAME
-
+    
     benchmark_result_log_files = benchmark_result_directory.joinpath(BENCHMARK_NAME + "_log_files")
 
     benchmark_result_log_files.mkdir(exist_ok=True)
@@ -27,7 +27,7 @@ def run_single_replication(inputs):
     benchmark_result_pickle_files.mkdir(exist_ok=True)
 
     tf_wrapper = Fn(test_function)
-
+    
     log = logging.getLogger()
     log.setLevel(logging.INFO) 
     fh = logging.FileHandler(filename=benchmark_result_log_files.joinpath(BENCHMARK_NAME + "_" + str(replication_number) + ".log"))
@@ -70,10 +70,11 @@ def run_single_replication(inputs):
     remaining_regions_l = []
     classified_region_l = []
     unidentified_regions_l = []
+    infeasible_regions_l = []
 
     node_id_keeper = 0
     root = PartXNode(node_id_keeper, node_id_keeper, options.init_reg_sup, samples_in, samples_out, direction_count, region_class="r")
-    root.samples_management_unclassified(tf_wrapper, options, rng)
+    root.samples_management_unclassified(tf_wrapper, options, oracle_info, rng)
     ftree = Tree()
     ftree.create_node(node_id_keeper, node_id_keeper, data = root)
 
@@ -83,11 +84,14 @@ def run_single_replication(inputs):
         classified_region_l.append(node_id_keeper)
     elif root.region_class == 'u':
         unidentified_regions_l.append(node_id_keeper)
+    elif root.region_class == "i":
+        infeasible_regions_l.append(node_id_keeper)
     
     log.info("**************************************************")
     log.info(f"Remaining Regions: {remaining_regions_l}")
     log.info(f"Classified Regions: {classified_region_l}")
     log.info(f"Unidentified Regions: {unidentified_regions_l}")
+    log.info(f"Infeasible Regions: {infeasible_regions_l}")
     log.info(f"{tf_wrapper.count} Evaluations completed")
     log.info(f"{options.max_budget - tf_wrapper.count} left")
     log.info("**************************************************")
@@ -125,7 +129,7 @@ def run_single_replication(inputs):
                 self_id = curr_node.self_id
                 parent_id = curr_node.parent_id
                 
-                curr_node.samples_management_unclassified(tf_wrapper, options, rng)
+                curr_node.samples_management_unclassified(tf_wrapper, options, oracle_info, rng)
                 ftree.create_node(self_id, self_id, parent = parent_id, data = curr_node)
                 if curr_node.region_class == 'r' or curr_node.region_class == 'r+' or curr_node.region_class == 'r-':
                     temp_remaining_regions_l.append(self_id)
@@ -133,6 +137,8 @@ def run_single_replication(inputs):
                     classified_region_l.append(self_id)
                 elif curr_node.region_class == 'u':
                     unidentified_regions_l.append(self_id)
+                elif curr_node.region_class == 'i':
+                    infeasible_regions_l.append(self_id)
                     
                 
                 
@@ -145,7 +151,7 @@ def run_single_replication(inputs):
                 for classi_node in classified_region_l:
                     node = ftree.get_node(classi_node)
                     node_data = node.data
-                    cs_indicator = calculate_mc_integral(node_data.samples_in, node_data.samples_out, node_data.region_support, options.tf_dim, options.R, options.M, options.gpr_model, rng, sampling_type=options.mc_integral_sampling_type)
+                    cs_indicator = calculate_mc_integral(node_data.samples_in, node_data.samples_out, node_data.region_support, options.tf_dim, options.R, options.M, options.gpr_model, oracle_info, rng, sampling_type=options.mc_integral_sampling_type)
                     volumes.append(cs_indicator)
                 
                 if np.sum(volumes) != 0.0:
@@ -164,7 +170,7 @@ def run_single_replication(inputs):
                         node_identifier = node.identifier
                         node_data = node.data
 
-                        node_data.samples_management_classified(assigned_budgets[iterate], tf_wrapper, options, rng)
+                        node_data.samples_management_classified(assigned_budgets[iterate], tf_wrapper, options, oracle_info, rng)
                         ftree.update_node(node_identifier, tag = node_identifier, data = node_data)
                         if node_data.region_class == 'r' or node_data.region_class == 'r+' or node_data.region_class == 'r-':
                             remaining_regions_l.append(node_identifier)
@@ -172,6 +178,8 @@ def run_single_replication(inputs):
                             temp_classified_region_l.append(node_identifier)
                         elif node_data.region_class == 'u':
                             unidentified_regions_l.append(node_identifier)
+                        elif node_data.region_class == "i":
+                            infeasible_regions_l.append(node_identifier)
                     else:
                         node = ftree.get_node(classi_node)
                         node_identifier = node.identifier
@@ -184,6 +192,8 @@ def run_single_replication(inputs):
                             temp_classified_region_l.append(node_identifier)
                         elif node_data.region_class == 'u':
                             unidentified_regions_l.append(node_identifier)
+                        elif node_data.region_class == "i":
+                            infeasible_regions_l.append(node_identifier)
             classified_region_l = temp_classified_region_l
         elif (options.max_budget - tf_wrapper.count > 0):
             budget_left = options.max_budget - tf_wrapper.count
@@ -195,6 +205,7 @@ def run_single_replication(inputs):
             log.info(f"Remaining Regions: {remaining_regions_l}")
             log.info(f"Classified Regions: {classified_region_l}")
             log.info(f"Unidentified Regions: {unidentified_regions_l}")
+            log.info(f"Infeasible Regions: {infeasible_regions_l}")
             log.info("**************************************************")
             if all_regions:
                 volumes = []
@@ -218,7 +229,7 @@ def run_single_replication(inputs):
                         node_identifier = node.identifier
                         node_data = node.data
 
-                        node_data.samples_management_classified(assigned_budgets[iterate], tf_wrapper, options, rng, fin_cs = True)
+                        node_data.samples_management_classified(assigned_budgets[iterate], tf_wrapper, options, oracle_info, rng, fin_cs = True)
                         ftree.update_node(node_identifier, tag = node_identifier, data = node_data)
                         if node_data.region_class == 'r' or node_data.region_class == 'r+' or node_data.region_class == 'r-':
                             temp_remaining_regions_l.append(node_identifier)
@@ -226,6 +237,8 @@ def run_single_replication(inputs):
                             temp_classified_region_l.append(node_identifier)
                         elif node_data.region_class == 'u':
                             unidentified_regions_l.append(node_identifier)
+                        elif node_data.region_class == "i":
+                            infeasible_regions_l.append(node_identifier)
                     else:
                         node = ftree.get_node(all_nodes)
                         node_identifier = node.identifier
@@ -238,6 +251,8 @@ def run_single_replication(inputs):
                             temp_classified_region_l.append(node_identifier)
                         elif node_data.region_class == 'u':
                             unidentified_regions_l.append(node_identifier)
+                        elif node_data.region_class == "i":
+                            infeasible_regions_l.append(node_identifier)
 
             classified_region_l =  temp_classified_region_l
             remaining_regions_l = temp_remaining_regions_l
@@ -245,6 +260,7 @@ def run_single_replication(inputs):
         log.info(f"Remaining Regions: {remaining_regions_l}")
         log.info(f"Classified Regions: {classified_region_l}")
         log.info(f"Unidentified Regions: {unidentified_regions_l}")
+        log.info(f"Infeasible Regions: {infeasible_regions_l}")
         log.info(f"{tf_wrapper.count} Evaluations completed")
         log.info(f"{options.max_budget - tf_wrapper.count} left")
         log.info("**************************************************")
@@ -254,6 +270,7 @@ def run_single_replication(inputs):
     log.info(f"Remaining Regions: {remaining_regions_l}")
     log.info(f"Classified Regions: {classified_region_l}")
     log.info(f"Unidentified Regions: {unidentified_regions_l}")
+    log.info(f"Infeasible Regions: {infeasible_regions_l}")
     log.info(f"{tf_wrapper.count} Evaluations completed")
     log.info(f"{options.max_budget - tf_wrapper.count} left")
     log.info("**************************************************")
@@ -264,14 +281,14 @@ def run_single_replication(inputs):
                    "simulation_time": np.sum(tf_wrapper.simultation_time),
                    "simulation_time_history": tf_wrapper.simultation_time, 
                    "total_non_simulation_time": total_time_elapsed - np.sum(tf_wrapper.simultation_time)}
-
+    
     with open(benchmark_result_pickle_files.joinpath(BENCHMARK_NAME+ "_" + str(replication_number) + "_time.pkl"), "wb") as f:
         pickle.dump(time_result, f)
 
     with open(benchmark_result_pickle_files.joinpath(BENCHMARK_NAME+ "_" + str(replication_number) + ".pkl"), "wb") as f:
         pickle.dump(ftree,f)
     
-    falsification_volume_arrays = fv_using_gp(ftree, options, options.fv_quantiles_for_gp, rng)
+    falsification_volume_arrays = fv_using_gp(ftree, options, oracle_info, options.fv_quantiles_for_gp, rng)
 
     with open(benchmark_result_pickle_files.joinpath(BENCHMARK_NAME + "_" + str(replication_number) + "_fal_val_gp.pkl"), "wb") as f:
         pickle.dump(falsification_volume_arrays,f)

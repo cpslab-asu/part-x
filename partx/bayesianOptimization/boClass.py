@@ -1,5 +1,9 @@
 from typing import Callable
+
+from ..sampling import uniform_sampling
 from numpy.typing import NDArray
+import numpy as np
+from ..utils import compute_robustness
 
 class BOSampling:
     def __init__(self, bo_model: Callable) -> None:
@@ -18,6 +22,7 @@ class BOSampling:
         y_train: NDArray,
         region_support: NDArray,
         gpr_model: Callable,
+        oracle_info,
         rng,
     ) -> tuple: 
         """Wrapper around user defined BO Model.
@@ -51,14 +56,45 @@ class BOSampling:
         if x_train.shape[0] != y_train.shape[0]:
             raise TypeError(f"x_train, y_train set mismatch. x_train has shape {x_train.shape} and y_train has shape {y_train.shape}")
 
-        
-        x_complete, y_complete, x_new, y_new = self.bo_model.sample(
-            test_function, num_samples, x_train, y_train, region_support, gpr_model, rng
-        )
 
+        x_new = []
+        y_new = []
+        n_tries = oracle_info.n_tries_BO
+        while len(x_new) < num_samples and n_tries >= 0:
+            # print(n_tries)
+            point = self.bo_model.sample(
+                x_train, y_train, region_support, gpr_model, oracle_info, rng
+            )
+            # print(point)
+            if oracle_info.oracle_function(point):
+                x_new.append(point)
+                pred_sample_y = compute_robustness(np.array([point]), test_function)
+                x_train = np.vstack((x_train, np.array([point])))
+                y_train = np.hstack((y_train, pred_sample_y))
+                n_tries = oracle_info.n_tries_BO
+            else:
+                n_tries -= 1
+                
+            if n_tries == 0:
+                # print("HAHAHAH - Cheating my way out now")
+                additional_samples = uniform_sampling(1,region_support, region_support.shape[0],oracle_info, rng)[0]
+                x_new.append(additional_samples)
+                pred_sample_y = compute_robustness(np.array([additional_samples]), test_function)
+                x_train = np.vstack((x_train, np.array([additional_samples])))
+                y_train = np.hstack((y_train, pred_sample_y))
+                n_tries = oracle_info.n_tries_BO
+        
+        
+        
+        if n_tries == 0 and len(x_new)!=num_samples:
+            raise RuntimeError(f"Could not perform BO sampling, {oracle_info.n_tries_BO} trials exhausted. Please adjust the constraints or increase the budget for oracle_info.n_tries_BO") 
+        x_new = np.array(x_new)
+        y_new = np.array(y_new)
+        # print(x_new)
+        # print(x_new.shape)
         assert len(x_new.shape) == 2, f"Returned samples set: Expected (n, dim) array, returned {x_train.shape} instead."
         assert len(y_new.shape) == 1, f"Returned evaluations set input: Expected (n, ) array, returned {y_new.shape} instead."
-        assert len(x_complete.shape) == 2, f"Returned merged samples set input: Expected (n, dim) array, returned {x_complete.shape} instead."
-        assert len(y_complete.shape) == 1, f"Returned merged evaluations set input: Expected (n, ) array, returned {y_complete.shape} instead."
+        assert len(x_train.shape) == 2, f"Returned merged samples set input: Expected (n, dim) array, returned {x_train.shape} instead."
+        assert len(y_train.shape) == 1, f"Returned merged evaluations set input: Expected (n, ) array, returned {y_train.shape} instead."
 
-        return x_complete, y_complete, x_new, y_new
+        return x_train, y_train, x_new, y_new

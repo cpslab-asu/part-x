@@ -8,6 +8,10 @@ from partx.coreAlgorithm import PartXOptions, run_single_replication
 from partx.gprInterface import InternalGPR
 from partx.bayesianOptimization import InternalBO
 from partx.results import fv_without_gp
+from partx.coreAlgorithm import OracleCreator
+
+def oracle_func(X):
+    return True
 
 class TestSingleReplication(unittest.TestCase):
     def test1_single_replication(self):
@@ -28,7 +32,7 @@ class TestSingleReplication(unittest.TestCase):
         start_seed = 123
         gpr_model = InternalGPR()
         bo_model = InternalBO()
-        
+        oracle_info = OracleCreator(oracle_func, 1,1)
         options = PartXOptions(BENCHMARK_NAME, init_reg_sup, tf_dim,
                 max_budget, init_budget, bo_budget, cs_budget, 
                 alpha, R, M, delta, fv_quantiles_for_gp,
@@ -44,7 +48,7 @@ class TestSingleReplication(unittest.TestCase):
                            18 - 32 * X[0] + 12 * X[0] ** 2 + 48 * X[1] - 36 * X[0] * X[1] + 27 * X[1] ** 2)) - 50
 
         
-        inputs = [0, options, internal_function, pathlib.Path("tests/coreAlgorithm/test")]
+        inputs = [0, options, internal_function, oracle_info, pathlib.Path("tests/coreAlgorithm/test")]
         t = time.time()
         run_single_replication(inputs)
         
@@ -69,7 +73,7 @@ class TestSingleReplication(unittest.TestCase):
         start_seed = 123
         gpr_model = InternalGPR()
         bo_model = InternalBO()
-        
+        oracle_info = OracleCreator(oracle_func, 1,1)
         options = PartXOptions(BENCHMARK_NAME, init_reg_sup, tf_dim,
                 max_budget, init_budget, bo_budget, cs_budget, 
                 alpha, R, M, delta, fv_quantiles_for_gp,
@@ -85,7 +89,7 @@ class TestSingleReplication(unittest.TestCase):
                            18 - 32 * X[0] + 12 * X[0] ** 2 + 48 * X[1] - 36 * X[0] * X[1] + 27 * X[1] ** 2)) - 50
 
         
-        inputs = [0, options, internal_function, pathlib.Path("tests/coreAlgorithm/test")]
+        inputs = [0, options, internal_function, oracle_info, pathlib.Path("tests/coreAlgorithm/test")]
         t = time.time()
         run_single_replication(inputs)
         # print(f"Total Time Taken = {time.time() - t}")
@@ -109,7 +113,7 @@ class TestSingleReplication(unittest.TestCase):
         start_seed = 123
         gpr_model = InternalGPR()
         bo_model = InternalBO()
-        
+        oracle_info = OracleCreator(oracle_func, 1,1)
         options = PartXOptions(BENCHMARK_NAME, init_reg_sup, tf_dim,
                 max_budget, init_budget, bo_budget, cs_budget, 
                 alpha, R, M, delta, fv_quantiles_for_gp,
@@ -125,10 +129,11 @@ class TestSingleReplication(unittest.TestCase):
                            18 - 32 * X[0] + 12 * X[0] ** 2 + 48 * X[1] - 36 * X[0] * X[1] + 27 * X[1] ** 2)) - 50
 
         
-        inputs = [0, options, internal_function, pathlib.Path("tests/coreAlgorithm/test")]
+        inputs = [0, options, internal_function, oracle_info, pathlib.Path("tests/coreAlgorithm/test")]
         t = time.time()
         run_single_replication(inputs)
         with open("tests/coreAlgorithm/test/Testing_t3_result_generating_files/Testing_t3_0.pkl", "rb") as f:
+            
             ftree = pickle.load(f)
 
         rng = np.random.default_rng(12345)
@@ -152,7 +157,7 @@ class TestSingleReplication(unittest.TestCase):
         start_seed = 123
         gpr_model = InternalGPR()
         bo_model = InternalBO()
-        
+        oracle_info = OracleCreator(oracle_func, 1,1)
         options = PartXOptions(BENCHMARK_NAME, init_reg_sup, tf_dim,
                 max_budget, init_budget, bo_budget, cs_budget, 
                 alpha, R, M, delta, fv_quantiles_for_gp,
@@ -168,7 +173,7 @@ class TestSingleReplication(unittest.TestCase):
                            18 - 32 * X[0] + 12 * X[0] ** 2 + 48 * X[1] - 36 * X[0] * X[1] + 27 * X[1] ** 2)) - 50
 
         
-        inputs = [0, options, internal_function, pathlib.Path("tests/coreAlgorithm/test")]
+        inputs = [0, options, internal_function, oracle_info, pathlib.Path("tests/coreAlgorithm/test")]
         t = time.time()
         run_single_replication(inputs)
         with open("tests/coreAlgorithm/test/Testing_t4_result_generating_files/Testing_t4_0.pkl", "rb") as f:

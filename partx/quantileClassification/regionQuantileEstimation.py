@@ -1,7 +1,6 @@
 import numpy as np
 # from sklearn.gaussian_process import GaussianProcessRegressor
 from scipy import stats
-from ..sampling import lhs_sampling
 from ..gprInterface import GPR
 from ..sampling import uniform_sampling, lhs_sampling
 
@@ -29,7 +28,7 @@ def calculate_quantile(y_pred, sigma_st, alpha):
 
 
 #########################################MC-Estimates and CONFIDENCE INTERVAL###############################
-def mc_step(x_train, y_train, region_support, tf_dim, alpha, R, M, gpr_model, rng, sampling_type): 
+def mc_step(x_train, y_train, region_support, tf_dim, alpha, R, M, gpr_model, oracle_info, rng, sampling_type): 
     """Function to run the MCStep algorithm in the paper. The idea is to take the exisitng samples
     and create a GP. Use this GP to predict the mean and the std_dev and calculate quantiles for
     region classification.
@@ -60,9 +59,9 @@ def mc_step(x_train, y_train, region_support, tf_dim, alpha, R, M, gpr_model, rn
         model.fit(x_train, y_train)
         
         if sampling_type == "lhs_sampling":
-            samples = lhs_sampling(M, region_support, tf_dim, rng)
+            samples = lhs_sampling(M, region_support, tf_dim, oracle_info, rng)
         elif sampling_type == "uniform_sampling":
-            samples = uniform_sampling(M, region_support, tf_dim, rng)
+            samples = uniform_sampling(M, region_support, tf_dim, oracle_info, rng)
         else:
             raise ValueError(f"{sampling_type} not defined. Currently only Latin Hypercube Sampling and Uniform Sampling is supported.")
         
@@ -102,7 +101,7 @@ def estimate_mc(lower_quantile: list, upper_quantile: list):
 
 
 
-def estimate_quantiles(x_train: np.array, y_train: np.array, region_support:np.array, tf_dim:int, alpha:list, R:int, M:int, gpr_model, rng, sampling_type = "lhs_sampling")->list:
+def estimate_quantiles(x_train: np.array, y_train: np.array, region_support:np.array, tf_dim:int, alpha:list, R:int, M:int, gpr_model, oracle_info, rng, sampling_type = "lhs_sampling")->list:
     """Main driver function for estimating the lower and upper bounds from samples
 
     Args:
@@ -118,16 +117,20 @@ def estimate_quantiles(x_train: np.array, y_train: np.array, region_support:np.a
     Returns:
         list: lower and upper bounds
     """
-    min_quantile, max_quantile = mc_step(x_train, y_train, region_support, tf_dim, alpha, R, M, gpr_model, rng, sampling_type)
-    mcEstimate_minimum_mean, mcEstimate_minimum_variance, mcEstimate_maximum_mean, mcEstimate_maximum_variance = estimate_mc(min_quantile, max_quantile)
-    # print(mcEstimate_minimum_mean)
-    # print(mcEstimate_minimum_variance)
-    # print(mcEstimate_maximum_mean)
-    # print(mcEstimate_maximum_variance)
-    # lower_bound = []
-    # upper_bound = []
-    
-    min_delta_quantile = (mcEstimate_minimum_mean + ((stats.norm.ppf(1 - (alpha / 2))) * mcEstimate_minimum_variance))
-    max_delta_quantile = (mcEstimate_maximum_mean - ((stats.norm.ppf(1 - (alpha / 2))) * mcEstimate_maximum_variance))
+    if x_train.shape[0] > 0 and x_train.shape[0] == y_train.shape[0]:
+        min_quantile, max_quantile = mc_step(x_train, y_train, region_support, tf_dim, alpha, R, M, gpr_model, oracle_info, rng, sampling_type)
+        mcEstimate_minimum_mean, mcEstimate_minimum_variance, mcEstimate_maximum_mean, mcEstimate_maximum_variance = estimate_mc(min_quantile, max_quantile)
+        # print(mcEstimate_minimum_mean)
+        # print(mcEstimate_minimum_variance)
+        # print(mcEstimate_maximum_mean)
+        # print(mcEstimate_maximum_variance)
+        # lower_bound = []
+        # upper_bound = []
+        
+        min_delta_quantile = (mcEstimate_minimum_mean + ((stats.norm.ppf(1 - (alpha / 2))) * mcEstimate_minimum_variance))
+        max_delta_quantile = (mcEstimate_maximum_mean - ((stats.norm.ppf(1 - (alpha / 2))) * mcEstimate_maximum_variance))
+    else:
+        min_delta_quantile = np.array([None])
+        max_delta_quantile = np.array([None])
     # print(lower_bound, upper_bound)
     return min_delta_quantile[0], max_delta_quantile[0]
