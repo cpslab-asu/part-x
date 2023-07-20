@@ -17,29 +17,8 @@ poetry install
 
 ## Usage
 
-This project provides implementations for four example test functions. Detailed documentation can be found [https://part-x-documentation.readthedocs.io/en/latest/index.html](https://part-x-documentation.readthedocs.io/en/latest/index.html).
+This project provides implementations for four example test functions. Detailed documentation along with example can be found at [https://cpslab-asu.github.io/part-x/](https://cpslab-asu.github.io/part-x/).
 
-1. Rosenbrock function:
-
-```
-poetry run python demos/Non-LinearBenchmarks/Rosenbrock_1.py
-```
-
-2. Himmelblau function:
-
-```
-poetry run python demos/Non-LinearBenchmarks/Himmelblaus_1.py
-```
-
-3. Goldstein-Price function:
-```
-poetry run python demos/Non-LinearBenchmarks/Goldstein_1.py
-```
-
-4. F16 GCAS (from ARCH benchmarks):
-```
-poetry run python demos/arch_benchmarks_f16.py
-```
 
 ## Citation
 Please cite the following paper if you use the work in your research.
