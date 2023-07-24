@@ -61,12 +61,14 @@ class BOSampling:
         y_new = []
         n_tries = oracle_info.n_tries_BO
         while len(x_new) < num_samples and n_tries >= 0:
+            # print(len(x_new))
             # print(n_tries)
             point = self.bo_model.sample(
                 x_train, y_train, region_support, gpr_model, oracle_info, rng
             )
             # print(point)
-            if oracle_info.oracle_function(point):
+            # print(point)
+            if oracle_info(point).sat:
                 x_new.append(point)
                 pred_sample_y = compute_robustness(np.array([point]), test_function)
                 x_train = np.vstack((x_train, np.array([point])))
@@ -76,13 +78,14 @@ class BOSampling:
                 n_tries -= 1
                 
             if n_tries == 0:
-                # print("HAHAHAH - Cheating my way out now")
+                
                 additional_samples = uniform_sampling(1,region_support, region_support.shape[0],oracle_info, rng)[0]
                 x_new.append(additional_samples)
                 pred_sample_y = compute_robustness(np.array([additional_samples]), test_function)
                 x_train = np.vstack((x_train, np.array([additional_samples])))
                 y_train = np.hstack((y_train, pred_sample_y))
                 n_tries = oracle_info.n_tries_BO
+                # print(additional_samples)
         
         
         

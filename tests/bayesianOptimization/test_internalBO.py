@@ -9,13 +9,10 @@ from partx.utils import Fn, compute_robustness
 from partx.sampling import uniform_sampling
 from partx.gprInterface import internalGPR
 from partx.bayesianOptimization.internalBO import InternalBO
-from partx.coreAlgorithm import OracleCreator
+from partx.utils import OracleCreator
 from matplotlib import pyplot as plt
 
-def oracle_func(X):
-    return True
-
-
+oracle_func = None
 
 class Test_internalBO(unittest.TestCase):
     def test1_internalBO(self):

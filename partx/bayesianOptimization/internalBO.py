@@ -7,10 +7,14 @@ from scipy.stats import norm
 from .bointerface import BO_Interface
 from ..gprInterface import GPR
 from ..sampling import uniform_sampling
+from ..utils import OracleCreator
+
+local_oracle = None
+
 
 class InternalBO(BO_Interface):
     def __init__(self):
-        pass
+        self.local_oracle = OracleCreator(local_oracle,1,1)
 
     def sample(
          self,
@@ -42,14 +46,15 @@ class InternalBO(BO_Interface):
          """
         
         model = GPR(gpr_model)
+        constraint_model = GPR(gpr_model)
         model.fit(x_train, y_train)
 
-        pred_sample_x = self._opt_acquisition(y_train, model, region_support, oracle_info, rng)
+        pred_sample_x = self._opt_acquisition(y_train, model, constraint_model, region_support, oracle_info, rng)
 
 
         return pred_sample_x
 
-    def _opt_acquisition(self, y_train: NDArray, gpr_model: Callable, region_support: NDArray, oracle_info, rng) -> NDArray:
+    def _opt_acquisition(self, y_train: NDArray, gpr_model: Callable, constraint_model, region_support: NDArray, oracle_info, rng) -> NDArray:
         """Get the sample points
 
         Args:
@@ -72,17 +77,27 @@ class InternalBO(BO_Interface):
         lower_bound_theta = np.ndarray.flatten(region_support[:, 0])
         upper_bound_theta = np.ndarray.flatten(region_support[:, 1])
 
+        random_samples = uniform_sampling(20000, region_support, tf_dim, self.local_oracle, rng)
+        
         curr_best = np.min(y_train)
+        # constraints_out = np.array([oracle_info(x).val for x in random_samples])
+        # [print(oracle_info(x).val, oracle_info(x).sat) for x in random_samples]
+        # if oracle_info.oracle_function is not None:
+        #     constraint_model.fit(random_samples, constraints_out)
 
         # bnds = Bounds(lower_bound_theta, upper_bound_theta)
-        fun = lambda x_: -1 * self._acquisition(y_train, x_, gpr_model)
+        fun = lambda x_: -1 * (self._acquisition(y_train, x_, gpr_model, constraint_model, oracle_info) - 1000*max(0,oracle_info(x_).val))
 
-        random_samples = uniform_sampling(2000, region_support, tf_dim, oracle_info, rng)
-        min_bo_val = -1 * self._acquisition(
-            y_train, random_samples, gpr_model, "multiple"
-        )
+        
+        constraints_out = np.array([max(0, oracle_info(x).val) for x in random_samples])
+        min_bo_val = -1 * (self._acquisition(
+            y_train, random_samples, gpr_model, constraint_model, oracle_info, "multiple"
+        ) - 1000*constraints_out)
 
         min_bo = np.array(random_samples[np.argmin(min_bo_val), :])
+        # import matplotlib.pyplot as plt
+        # plt.plot(random_samples, min_bo_val, ".")
+        # plt.show()
         min_bo_val = np.min(min_bo_val)
 
         for _ in range(9):
@@ -102,6 +117,7 @@ class InternalBO(BO_Interface):
             fun, bounds=list(zip(lower_bound_theta, upper_bound_theta)), x0=min_bo
         )
         min_bo = new_params.x
+        # penalty = oracle_info(np.array(min_bo)).val
 
         return np.array(min_bo)
 
@@ -118,7 +134,7 @@ class InternalBO(BO_Interface):
 
         return gpr_model.predict(x_train)
 
-    def _acquisition(self, y_train: NDArray, sample: NDArray, gpr_model: Callable, sample_type:str ="single") -> NDArray:
+    def _acquisition(self, y_train: NDArray, sample: NDArray, gpr_model: Callable, constraint_model, oracle_info, sample_type:str ="single") -> NDArray:
         """Acquisition Model: Expected Improvement
 
         Args:
@@ -132,13 +148,38 @@ class InternalBO(BO_Interface):
         """
         curr_best = np.min(y_train)
 
-        if sample_type == "multiple":
-            mu, std = self._surrogate(gpr_model, sample)
-            ei_list = []
-            for mu_iter, std_iter in zip(mu, std):
-                pred_var = std_iter
+        if oracle_info.oracle_function is not None:
+            if sample_type == "multiple":
+                mu, std = self._surrogate(gpr_model, sample)
+                mu_con, std_con = constraint_model.predict(sample)
+                ei_list = []
+                for mu_iter, std_iter, samp, mu_con_iter, std_con_iter in zip(mu, std, sample, mu_con, std_con):
+                    # if oracle_info(samp).sat:
+                    pred_var = std_iter
+
+                    if pred_var > 0:
+                        con_term = norm.cdf(0, mu_con_iter, std_con_iter)
+                        var_1 = curr_best - mu_iter
+                        var_2 = var_1 / pred_var
+
+                        ei = (var_1 * norm.cdf(var_2)) + (
+                            pred_var * norm.pdf(var_2)
+                        ) * 1
+                    else:
+                        ei = 0.0
+                    # else:
+                    #     ei = -1
+                    # ei = ei + 1000 * min(0,oracle_info(samp).val)
+                    ei_list.append(ei)
+                
+            elif sample_type == "single":
+                # if oracle_info(sample).sat:
+                mu, std = self._surrogate(gpr_model, sample.reshape(1, -1))
+                mu_con, std_con = constraint_model.predict(np.array([sample]))
+                pred_var = std[0]
                 if pred_var > 0:
-                    var_1 = curr_best - mu_iter
+                    con_term = norm.cdf(0,mu_con[0], std_con[0])
+                    var_1 = curr_best - mu[0]
                     var_2 = var_1 / pred_var
 
                     ei = (var_1 * norm.cdf(var_2)) + (
@@ -146,25 +187,52 @@ class InternalBO(BO_Interface):
                     )
                 else:
                     ei = 0.0
+                # print(sample)
+                # ei = ei - 1 * max(0,oracle_info(sample).val)
+                # else:
+                #     ei = -1
+                # return ei
+        else:
+            if sample_type == "multiple":
+                mu, std = self._surrogate(gpr_model, sample)
+                # mu_con, std_con = constraint_model.predict(sample)
+                ei_list = []
+                for mu_iter, std_iter, samp in zip(mu, std, sample):
+                    # if oracle_info(samp).sat:
+                    pred_var = std_iter
 
-                ei_list.append(ei)
-            # print(np.array(ei_list).shape)
-            # print("*****")
-            # return np.array(ei_list)
-        elif sample_type == "single":
-            # print("kfkf")
-            mu, std = self._surrogate(gpr_model, sample.reshape(1, -1))
-            pred_var = std[0]
-            if pred_var > 0:
-                var_1 = curr_best - mu[0]
-                var_2 = var_1 / pred_var
+                    if pred_var > 0:
+                        # con_term = norm.cdf(0, mu_con_iter, std_con_iter)
+                        var_1 = curr_best - mu_iter
+                        var_2 = var_1 / pred_var
 
-                ei = (var_1 * norm.cdf(var_2)) + (
-                    pred_var * norm.pdf(var_2)
-                )
-            else:
-                ei = 0.0
-            # return ei
+                        ei = (var_1 * norm.cdf(var_2)) + (
+                            pred_var * norm.pdf(var_2)
+                        ) 
+                    else:
+                        ei = 0.0
+                    # else:
+                    #     ei = -999
+                    ei_list.append(ei)
+                
+            elif sample_type == "single":
+                    # if oracle_info(sample).sat:
+                mu, std = self._surrogate(gpr_model, sample.reshape(1, -1))
+                # mu_con, std_con = constraint_model.predict(np.array([sample]))
+                pred_var = std[0]
+                if pred_var > 0:
+                    # con_term = norm.cdf(0,mu_con[0], std_con[0])
+                    var_1 = curr_best - mu[0]
+                    var_2 = var_1 / pred_var
+
+                    ei = (var_1 * norm.cdf(var_2)) + (
+                        pred_var * norm.pdf(var_2)
+                    )
+                else:
+                    ei = 0.0
+                # else:
+                #     ei = -999
+                # return ei
 
         if sample_type == "multiple":
             return_ei = np.array(ei_list)

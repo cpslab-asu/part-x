@@ -11,10 +11,9 @@ from partx.gprInterface import (
     InternalGPR,
 )
 
-from partx.coreAlgorithm import OracleCreator
+from partx.utils import OracleCreator
 
-def oracle_func(X):
-    return True
+oracle_func = None
 
 
 class Test_GPR(unittest.TestCase):

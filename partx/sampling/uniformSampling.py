@@ -79,7 +79,7 @@ def uniform_sampling(
     n_tries = oracle_info.n_tries_randomsampling
     while len(samples) < num_samples and n_tries > 0:
         point = np.array([rng.uniform(bounds[0], bounds[1]) for bounds in region_support])
-        if oracle_info.oracle_function(point):
+        if oracle_info(point).sat:
             samples.append(point)
             n_tries = oracle_info.n_tries_randomsampling
         else:

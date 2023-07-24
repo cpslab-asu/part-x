@@ -5,10 +5,9 @@ from partx.gprInterface import InternalGPR
 from partx.bayesianOptimization import InternalBO
 from partx.utils import Fn, compute_robustness
 from partx.sampling import uniform_sampling
-from partx.coreAlgorithm import OracleCreator
+from partx.utils import OracleCreator
 
-def oracle_func(X):
-    return True
+oracle_func = None
 
 class TestPartXNode(unittest.TestCase):
     def test1_unclassified_regions(self):

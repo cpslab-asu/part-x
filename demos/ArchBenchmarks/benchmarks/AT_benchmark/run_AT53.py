@@ -9,8 +9,7 @@ from partx.gprInterface.internalGPR import InternalGPR
 from staliro.staliro import staliro
 from staliro.options import Options
 
-def oracle_func(sample):
-    return True
+oracle_func = None
 
 # Define Signals and Specification
 class Benchmark_AT53(Benchmark):

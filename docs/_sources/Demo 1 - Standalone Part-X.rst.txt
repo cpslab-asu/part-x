@@ -23,8 +23,7 @@ Example - Running Part-X on Goldstein Price Function:
 
       # Define the Oracle Function which defines the constraints.
       # Since there is no constraint, return True
-      def oracle_fn(X):
-            return True
+      oracle_func = None
 
       # Define Benchmark Name
       BENCHMARK_NAME = "Goldstein_1"

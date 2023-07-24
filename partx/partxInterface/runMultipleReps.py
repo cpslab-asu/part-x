@@ -7,8 +7,9 @@ from typing import Callable
 from numpy.typing import NDArray
 from pathos.multiprocessing import ProcessingPool as Pool
 
-from ..coreAlgorithm import PartXOptions, OracleCreator, run_single_replication
+from ..coreAlgorithm import PartXOptions, run_single_replication
 from ..results import generate_statistics
+from ..utils import OracleCreator
 
 def run_partx(BENCHMARK_NAME:str, test_function:Callable, oracle_function, num_macro_reps:int, init_reg_sup:NDArray, tf_dim:int,
                 max_budget:int, init_budget:int, bo_budget:int, cs_budget:int, 

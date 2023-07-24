@@ -3,12 +3,11 @@ import numpy as np
 import unittest
 from partx.quantileClassification.regionQuantileEstimation import mc_step, estimate_mc, estimate_quantiles
 from partx.sampling import uniform_sampling
-from partx.utils import Fn, compute_robustness
+from partx.utils import Fn, compute_robustness, OracleCreator
 from partx.gprInterface import InternalGPR
-from partx.coreAlgorithm import OracleCreator
+# from partx.coreAlgorithm import OracleCreator
 
-def oracle_func(X):
-    return True
+oracle_func = None
 
 class TestQuantileEstimation(unittest.TestCase):
     def test1_mc_step(self):

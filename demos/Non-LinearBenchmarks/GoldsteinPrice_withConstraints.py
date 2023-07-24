@@ -13,21 +13,20 @@ def test_function(X):
 
 # Define the Oracle Function which defines the constraints.
 # Since there is no constraint, return True
-def oracle_fn(X):
-    
-    return X[0]**2 + (X[1]+1)**2 > 0.5
+def oracle_fn(X): 
+    return -1*(X[0]**2 + (X[1]+1)**2 - 0.5)
 
 # Define Benchmark Name
-BENCHMARK_NAME = "Goldstein_1_withConstraints"
+BENCHMARK_NAME = "Goldstein_1_withConstraints_1"
 
-# Define the Initial Search space. Here, we set it to [-1,1] on both the dimensions
-init_reg_sup = np.array([[-1., 1.], [-1., 1.]])
+# Define the Initial Search space.
+init_reg_sup = np.array([[-1., 1.], [-1., 0.]])
 
 # Function Dimesnioanlity set to 2 since we are searching in the 2-dimensional space
 tf_dim = 2
 
 # Max Budget is set to 500
-max_budget = 500
+max_budget = 3000
 
 # Initial Sampling in the subregion is set to 20
 init_budget = 20
@@ -39,8 +38,8 @@ bo_budget = 20
 cs_budget = 100
 
 # Define n_tries. Since there are no constraints involved, set them to 1
-n_tries_random_sampling = 1
-n_tries_BO = 1
+n_tries_random_sampling = 1000
+n_tries_BO = 5
 
 # Alpha, for Region Calssification percentile is set to 0.05 
 alpha = 0.05
@@ -83,7 +82,7 @@ num_macro_reps = 5
 results_folder_name = "NLF"
 
 # Run all the replication serially. If > 1, will run the replications parallaly.
-num_cores = 1
+num_cores = 5
 
 # Run Part-X
 results = run_partx(BENCHMARK_NAME, test_function, oracle_fn, num_macro_reps, init_reg_sup, tf_dim,

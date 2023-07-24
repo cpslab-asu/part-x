@@ -2361,3 +2361,544 @@ Tue, 18 Jul 2023 14:15:41 :: 30 Evaluations completed
 Tue, 18 Jul 2023 14:15:41 :: 0 left
 Tue, 18 Jul 2023 14:15:41 :: **************************************************
 Tue, 18 Jul 2023 14:15:42 :: Ended Testing_123 Replication 3 with seed 126
+Tue, 18 Jul 2023 15:49:50 :: Information about Replication 3
+Tue, 18 Jul 2023 15:49:50 :: Running Testing_123 Replication 3 with seed 126
+Tue, 18 Jul 2023 15:49:50 :: **************************************************
+Tue, 18 Jul 2023 15:49:50 :: Options File:
+Tue, 18 Jul 2023 15:49:50 :: BENCHMARK_NAME : Testing_123
+Tue, 18 Jul 2023 15:49:50 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Tue, 18 Jul 2023 15:49:50 :: tf_dim : 2
+Tue, 18 Jul 2023 15:49:50 :: max_budget : 30
+Tue, 18 Jul 2023 15:49:50 :: init_budget : 10
+Tue, 18 Jul 2023 15:49:50 :: bo_budget : 10
+Tue, 18 Jul 2023 15:49:50 :: cs_budget : 10
+Tue, 18 Jul 2023 15:49:50 :: init_sampling_type : lhs_sampling
+Tue, 18 Jul 2023 15:49:50 :: cs_sampling_type : lhs_sampling
+Tue, 18 Jul 2023 15:49:50 :: q_estim_sampling : lhs_sampling
+Tue, 18 Jul 2023 15:49:50 :: mc_integral_sampling_type : lhs_sampling
+Tue, 18 Jul 2023 15:49:50 :: results_sampling_type : lhs_sampling
+Tue, 18 Jul 2023 15:49:50 :: alpha : 0.05
+Tue, 18 Jul 2023 15:49:50 :: R : 10
+Tue, 18 Jul 2023 15:49:50 :: M : 100
+Tue, 18 Jul 2023 15:49:50 :: delta : 0.001
+Tue, 18 Jul 2023 15:49:50 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Tue, 18 Jul 2023 15:49:50 :: min_volume : 4e-06
+Tue, 18 Jul 2023 15:49:50 :: branching_factor : 2
+Tue, 18 Jul 2023 15:49:50 :: uniform_partitioning : True
+Tue, 18 Jul 2023 15:49:50 :: start_seed : 123
+Tue, 18 Jul 2023 15:49:50 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7fd9369801c0>
+Tue, 18 Jul 2023 15:49:50 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7fd9369803a0>
+Tue, 18 Jul 2023 15:49:50 :: **************************************************
+Tue, 18 Jul 2023 15:49:50 :: Budget Used = 0
+Tue, 18 Jul 2023 15:49:50 :: Budget Available (Max Budget) = 30
+Tue, 18 Jul 2023 15:49:50 :: **************************************************
+Tue, 18 Jul 2023 15:49:50 :: **************************************************
+Tue, 18 Jul 2023 15:49:50 :: ***************Replication Start******************
+Tue, 18 Jul 2023 15:49:57 :: **************************************************
+Tue, 18 Jul 2023 15:49:57 :: Remaining Regions: [0]
+Tue, 18 Jul 2023 15:49:57 :: Classified Regions: []
+Tue, 18 Jul 2023 15:49:57 :: Unidentified Regions: []
+Tue, 18 Jul 2023 15:49:57 :: Infeasible Regions: []
+Tue, 18 Jul 2023 15:49:57 :: 20 Evaluations completed
+Tue, 18 Jul 2023 15:49:57 :: 10 left
+Tue, 18 Jul 2023 15:49:57 :: **************************************************
+Tue, 18 Jul 2023 15:49:57 :: **************************************************
+Tue, 18 Jul 2023 15:49:57 :: Entering Last Phase with 10 left
+Tue, 18 Jul 2023 15:49:57 :: Remaining Regions: [0]
+Tue, 18 Jul 2023 15:49:57 :: Classified Regions: []
+Tue, 18 Jul 2023 15:49:57 :: Unidentified Regions: []
+Tue, 18 Jul 2023 15:49:57 :: Infeasible Regions: []
+Tue, 18 Jul 2023 15:49:57 :: **************************************************
+Tue, 18 Jul 2023 15:49:58 :: **************************************************
+Tue, 18 Jul 2023 15:49:58 :: Remaining Regions: [0]
+Tue, 18 Jul 2023 15:49:58 :: Classified Regions: []
+Tue, 18 Jul 2023 15:49:58 :: Unidentified Regions: []
+Tue, 18 Jul 2023 15:49:58 :: Infeasible Regions: []
+Tue, 18 Jul 2023 15:49:58 :: 30 Evaluations completed
+Tue, 18 Jul 2023 15:49:58 :: 0 left
+Tue, 18 Jul 2023 15:49:58 :: **************************************************
+Tue, 18 Jul 2023 15:49:58 :: **************************************************
+Tue, 18 Jul 2023 15:49:58 :: *********Replication 3 Finished*****************
+Tue, 18 Jul 2023 15:49:58 :: Remaining Regions: [0]
+Tue, 18 Jul 2023 15:49:58 :: Classified Regions: []
+Tue, 18 Jul 2023 15:49:58 :: Unidentified Regions: []
+Tue, 18 Jul 2023 15:49:58 :: Infeasible Regions: []
+Tue, 18 Jul 2023 15:49:58 :: 30 Evaluations completed
+Tue, 18 Jul 2023 15:49:58 :: 0 left
+Tue, 18 Jul 2023 15:49:58 :: **************************************************
+Tue, 18 Jul 2023 15:49:58 :: Ended Testing_123 Replication 3 with seed 126
+Sun, 23 Jul 2023 10:44:29 :: Information about Replication 3
+Sun, 23 Jul 2023 10:44:29 :: Running Testing_123 Replication 3 with seed 126
+Sun, 23 Jul 2023 10:44:29 :: **************************************************
+Sun, 23 Jul 2023 10:44:29 :: Options File:
+Sun, 23 Jul 2023 10:44:29 :: BENCHMARK_NAME : Testing_123
+Sun, 23 Jul 2023 10:44:29 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Sun, 23 Jul 2023 10:44:29 :: tf_dim : 2
+Sun, 23 Jul 2023 10:44:29 :: max_budget : 30
+Sun, 23 Jul 2023 10:44:29 :: init_budget : 10
+Sun, 23 Jul 2023 10:44:29 :: bo_budget : 10
+Sun, 23 Jul 2023 10:44:29 :: cs_budget : 10
+Sun, 23 Jul 2023 10:44:29 :: init_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:44:29 :: cs_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:44:29 :: q_estim_sampling : lhs_sampling
+Sun, 23 Jul 2023 10:44:29 :: mc_integral_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:44:29 :: results_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:44:29 :: alpha : 0.05
+Sun, 23 Jul 2023 10:44:29 :: R : 10
+Sun, 23 Jul 2023 10:44:29 :: M : 100
+Sun, 23 Jul 2023 10:44:29 :: delta : 0.001
+Sun, 23 Jul 2023 10:44:29 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Sun, 23 Jul 2023 10:44:29 :: min_volume : 4e-06
+Sun, 23 Jul 2023 10:44:29 :: branching_factor : 2
+Sun, 23 Jul 2023 10:44:29 :: uniform_partitioning : True
+Sun, 23 Jul 2023 10:44:29 :: start_seed : 123
+Sun, 23 Jul 2023 10:44:29 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7faf6258a0d0>
+Sun, 23 Jul 2023 10:44:29 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7faf54d135b0>
+Sun, 23 Jul 2023 10:44:29 :: **************************************************
+Sun, 23 Jul 2023 10:44:29 :: Budget Used = 0
+Sun, 23 Jul 2023 10:44:29 :: Budget Available (Max Budget) = 30
+Sun, 23 Jul 2023 10:44:29 :: **************************************************
+Sun, 23 Jul 2023 10:44:29 :: **************************************************
+Sun, 23 Jul 2023 10:44:29 :: ***************Replication Start******************
+Sun, 23 Jul 2023 10:45:29 :: Information about Replication 3
+Sun, 23 Jul 2023 10:45:29 :: Running Testing_123 Replication 3 with seed 126
+Sun, 23 Jul 2023 10:45:29 :: **************************************************
+Sun, 23 Jul 2023 10:45:29 :: Options File:
+Sun, 23 Jul 2023 10:45:29 :: BENCHMARK_NAME : Testing_123
+Sun, 23 Jul 2023 10:45:29 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Sun, 23 Jul 2023 10:45:29 :: tf_dim : 2
+Sun, 23 Jul 2023 10:45:29 :: max_budget : 30
+Sun, 23 Jul 2023 10:45:29 :: init_budget : 10
+Sun, 23 Jul 2023 10:45:29 :: bo_budget : 10
+Sun, 23 Jul 2023 10:45:29 :: cs_budget : 10
+Sun, 23 Jul 2023 10:45:29 :: init_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:45:29 :: cs_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:45:29 :: q_estim_sampling : lhs_sampling
+Sun, 23 Jul 2023 10:45:29 :: mc_integral_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:45:29 :: results_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:45:29 :: alpha : 0.05
+Sun, 23 Jul 2023 10:45:29 :: R : 10
+Sun, 23 Jul 2023 10:45:29 :: M : 100
+Sun, 23 Jul 2023 10:45:29 :: delta : 0.001
+Sun, 23 Jul 2023 10:45:29 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Sun, 23 Jul 2023 10:45:29 :: min_volume : 4e-06
+Sun, 23 Jul 2023 10:45:29 :: branching_factor : 2
+Sun, 23 Jul 2023 10:45:29 :: uniform_partitioning : True
+Sun, 23 Jul 2023 10:45:29 :: start_seed : 123
+Sun, 23 Jul 2023 10:45:29 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7fbaf16d7790>
+Sun, 23 Jul 2023 10:45:29 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7fbae5e4e310>
+Sun, 23 Jul 2023 10:45:29 :: **************************************************
+Sun, 23 Jul 2023 10:45:29 :: Budget Used = 0
+Sun, 23 Jul 2023 10:45:29 :: Budget Available (Max Budget) = 30
+Sun, 23 Jul 2023 10:45:29 :: **************************************************
+Sun, 23 Jul 2023 10:45:29 :: **************************************************
+Sun, 23 Jul 2023 10:45:29 :: ***************Replication Start******************
+Sun, 23 Jul 2023 10:46:27 :: Information about Replication 3
+Sun, 23 Jul 2023 10:46:27 :: Running Testing_123 Replication 3 with seed 126
+Sun, 23 Jul 2023 10:46:27 :: **************************************************
+Sun, 23 Jul 2023 10:46:27 :: Options File:
+Sun, 23 Jul 2023 10:46:27 :: BENCHMARK_NAME : Testing_123
+Sun, 23 Jul 2023 10:46:27 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Sun, 23 Jul 2023 10:46:27 :: tf_dim : 2
+Sun, 23 Jul 2023 10:46:27 :: max_budget : 30
+Sun, 23 Jul 2023 10:46:27 :: init_budget : 10
+Sun, 23 Jul 2023 10:46:27 :: bo_budget : 10
+Sun, 23 Jul 2023 10:46:27 :: cs_budget : 10
+Sun, 23 Jul 2023 10:46:27 :: init_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:46:27 :: cs_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:46:27 :: q_estim_sampling : lhs_sampling
+Sun, 23 Jul 2023 10:46:27 :: mc_integral_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:46:27 :: results_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:46:27 :: alpha : 0.05
+Sun, 23 Jul 2023 10:46:27 :: R : 10
+Sun, 23 Jul 2023 10:46:27 :: M : 100
+Sun, 23 Jul 2023 10:46:27 :: delta : 0.001
+Sun, 23 Jul 2023 10:46:27 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Sun, 23 Jul 2023 10:46:27 :: min_volume : 4e-06
+Sun, 23 Jul 2023 10:46:27 :: branching_factor : 2
+Sun, 23 Jul 2023 10:46:27 :: uniform_partitioning : True
+Sun, 23 Jul 2023 10:46:27 :: start_seed : 123
+Sun, 23 Jul 2023 10:46:27 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7f8fd60f44c0>
+Sun, 23 Jul 2023 10:46:27 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7f8fd60f4670>
+Sun, 23 Jul 2023 10:46:27 :: **************************************************
+Sun, 23 Jul 2023 10:46:27 :: Budget Used = 0
+Sun, 23 Jul 2023 10:46:27 :: Budget Available (Max Budget) = 30
+Sun, 23 Jul 2023 10:46:27 :: **************************************************
+Sun, 23 Jul 2023 10:46:27 :: **************************************************
+Sun, 23 Jul 2023 10:46:27 :: ***************Replication Start******************
+Sun, 23 Jul 2023 10:49:07 :: Information about Replication 3
+Sun, 23 Jul 2023 10:49:07 :: Running Testing_123 Replication 3 with seed 126
+Sun, 23 Jul 2023 10:49:07 :: **************************************************
+Sun, 23 Jul 2023 10:49:07 :: Options File:
+Sun, 23 Jul 2023 10:49:07 :: BENCHMARK_NAME : Testing_123
+Sun, 23 Jul 2023 10:49:07 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Sun, 23 Jul 2023 10:49:07 :: tf_dim : 2
+Sun, 23 Jul 2023 10:49:07 :: max_budget : 30
+Sun, 23 Jul 2023 10:49:07 :: init_budget : 10
+Sun, 23 Jul 2023 10:49:07 :: bo_budget : 10
+Sun, 23 Jul 2023 10:49:07 :: cs_budget : 10
+Sun, 23 Jul 2023 10:49:07 :: init_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:49:07 :: cs_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:49:07 :: q_estim_sampling : lhs_sampling
+Sun, 23 Jul 2023 10:49:07 :: mc_integral_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:49:07 :: results_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:49:07 :: alpha : 0.05
+Sun, 23 Jul 2023 10:49:07 :: R : 10
+Sun, 23 Jul 2023 10:49:07 :: M : 100
+Sun, 23 Jul 2023 10:49:07 :: delta : 0.001
+Sun, 23 Jul 2023 10:49:07 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Sun, 23 Jul 2023 10:49:07 :: min_volume : 4e-06
+Sun, 23 Jul 2023 10:49:07 :: branching_factor : 2
+Sun, 23 Jul 2023 10:49:07 :: uniform_partitioning : True
+Sun, 23 Jul 2023 10:49:07 :: start_seed : 123
+Sun, 23 Jul 2023 10:49:07 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7fcb08c6afa0>
+Sun, 23 Jul 2023 10:49:07 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7fcafd3f1460>
+Sun, 23 Jul 2023 10:49:07 :: **************************************************
+Sun, 23 Jul 2023 10:49:07 :: Budget Used = 0
+Sun, 23 Jul 2023 10:49:07 :: Budget Available (Max Budget) = 30
+Sun, 23 Jul 2023 10:49:07 :: **************************************************
+Sun, 23 Jul 2023 10:49:07 :: **************************************************
+Sun, 23 Jul 2023 10:49:07 :: ***************Replication Start******************
+Sun, 23 Jul 2023 10:53:17 :: Information about Replication 3
+Sun, 23 Jul 2023 10:53:17 :: Running Testing_123 Replication 3 with seed 126
+Sun, 23 Jul 2023 10:53:17 :: **************************************************
+Sun, 23 Jul 2023 10:53:17 :: Options File:
+Sun, 23 Jul 2023 10:53:17 :: BENCHMARK_NAME : Testing_123
+Sun, 23 Jul 2023 10:53:18 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Sun, 23 Jul 2023 10:53:18 :: tf_dim : 2
+Sun, 23 Jul 2023 10:53:18 :: max_budget : 30
+Sun, 23 Jul 2023 10:53:18 :: init_budget : 10
+Sun, 23 Jul 2023 10:53:18 :: bo_budget : 10
+Sun, 23 Jul 2023 10:53:18 :: cs_budget : 10
+Sun, 23 Jul 2023 10:53:18 :: init_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:53:18 :: cs_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:53:18 :: q_estim_sampling : lhs_sampling
+Sun, 23 Jul 2023 10:53:18 :: mc_integral_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:53:18 :: results_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:53:18 :: alpha : 0.05
+Sun, 23 Jul 2023 10:53:18 :: R : 10
+Sun, 23 Jul 2023 10:53:18 :: M : 100
+Sun, 23 Jul 2023 10:53:18 :: delta : 0.001
+Sun, 23 Jul 2023 10:53:18 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Sun, 23 Jul 2023 10:53:18 :: min_volume : 4e-06
+Sun, 23 Jul 2023 10:53:18 :: branching_factor : 2
+Sun, 23 Jul 2023 10:53:18 :: uniform_partitioning : True
+Sun, 23 Jul 2023 10:53:18 :: start_seed : 123
+Sun, 23 Jul 2023 10:53:18 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7f3d1481ce80>
+Sun, 23 Jul 2023 10:53:18 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7f3d08fb83d0>
+Sun, 23 Jul 2023 10:53:18 :: **************************************************
+Sun, 23 Jul 2023 10:53:18 :: Budget Used = 0
+Sun, 23 Jul 2023 10:53:18 :: Budget Available (Max Budget) = 30
+Sun, 23 Jul 2023 10:53:18 :: **************************************************
+Sun, 23 Jul 2023 10:53:18 :: **************************************************
+Sun, 23 Jul 2023 10:53:18 :: ***************Replication Start******************
+Sun, 23 Jul 2023 10:54:19 :: Information about Replication 3
+Sun, 23 Jul 2023 10:54:19 :: Running Testing_123 Replication 3 with seed 126
+Sun, 23 Jul 2023 10:54:19 :: **************************************************
+Sun, 23 Jul 2023 10:54:19 :: Options File:
+Sun, 23 Jul 2023 10:54:19 :: BENCHMARK_NAME : Testing_123
+Sun, 23 Jul 2023 10:54:19 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Sun, 23 Jul 2023 10:54:19 :: tf_dim : 2
+Sun, 23 Jul 2023 10:54:19 :: max_budget : 30
+Sun, 23 Jul 2023 10:54:19 :: init_budget : 10
+Sun, 23 Jul 2023 10:54:19 :: bo_budget : 10
+Sun, 23 Jul 2023 10:54:19 :: cs_budget : 10
+Sun, 23 Jul 2023 10:54:19 :: init_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:54:19 :: cs_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:54:19 :: q_estim_sampling : lhs_sampling
+Sun, 23 Jul 2023 10:54:19 :: mc_integral_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:54:19 :: results_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:54:19 :: alpha : 0.05
+Sun, 23 Jul 2023 10:54:19 :: R : 10
+Sun, 23 Jul 2023 10:54:19 :: M : 100
+Sun, 23 Jul 2023 10:54:19 :: delta : 0.001
+Sun, 23 Jul 2023 10:54:19 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Sun, 23 Jul 2023 10:54:19 :: min_volume : 4e-06
+Sun, 23 Jul 2023 10:54:19 :: branching_factor : 2
+Sun, 23 Jul 2023 10:54:19 :: uniform_partitioning : True
+Sun, 23 Jul 2023 10:54:19 :: start_seed : 123
+Sun, 23 Jul 2023 10:54:19 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7f09993547f0>
+Sun, 23 Jul 2023 10:54:19 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7f098dad9370>
+Sun, 23 Jul 2023 10:54:19 :: **************************************************
+Sun, 23 Jul 2023 10:54:19 :: Budget Used = 0
+Sun, 23 Jul 2023 10:54:19 :: Budget Available (Max Budget) = 30
+Sun, 23 Jul 2023 10:54:19 :: **************************************************
+Sun, 23 Jul 2023 10:54:19 :: **************************************************
+Sun, 23 Jul 2023 10:54:19 :: ***************Replication Start******************
+Sun, 23 Jul 2023 10:55:04 :: Information about Replication 3
+Sun, 23 Jul 2023 10:55:04 :: Running Testing_123 Replication 3 with seed 126
+Sun, 23 Jul 2023 10:55:04 :: **************************************************
+Sun, 23 Jul 2023 10:55:04 :: Options File:
+Sun, 23 Jul 2023 10:55:04 :: BENCHMARK_NAME : Testing_123
+Sun, 23 Jul 2023 10:55:04 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Sun, 23 Jul 2023 10:55:04 :: tf_dim : 2
+Sun, 23 Jul 2023 10:55:04 :: max_budget : 30
+Sun, 23 Jul 2023 10:55:04 :: init_budget : 10
+Sun, 23 Jul 2023 10:55:04 :: bo_budget : 10
+Sun, 23 Jul 2023 10:55:04 :: cs_budget : 10
+Sun, 23 Jul 2023 10:55:04 :: init_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:55:04 :: cs_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:55:04 :: q_estim_sampling : lhs_sampling
+Sun, 23 Jul 2023 10:55:04 :: mc_integral_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:55:04 :: results_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 10:55:04 :: alpha : 0.05
+Sun, 23 Jul 2023 10:55:04 :: R : 10
+Sun, 23 Jul 2023 10:55:04 :: M : 100
+Sun, 23 Jul 2023 10:55:04 :: delta : 0.001
+Sun, 23 Jul 2023 10:55:04 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Sun, 23 Jul 2023 10:55:04 :: min_volume : 4e-06
+Sun, 23 Jul 2023 10:55:04 :: branching_factor : 2
+Sun, 23 Jul 2023 10:55:04 :: uniform_partitioning : True
+Sun, 23 Jul 2023 10:55:04 :: start_seed : 123
+Sun, 23 Jul 2023 10:55:04 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7faa606c97f0>
+Sun, 23 Jul 2023 10:55:04 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7faa54e4a2b0>
+Sun, 23 Jul 2023 10:55:04 :: **************************************************
+Sun, 23 Jul 2023 10:55:04 :: Budget Used = 0
+Sun, 23 Jul 2023 10:55:04 :: Budget Available (Max Budget) = 30
+Sun, 23 Jul 2023 10:55:04 :: **************************************************
+Sun, 23 Jul 2023 10:55:04 :: **************************************************
+Sun, 23 Jul 2023 10:55:04 :: ***************Replication Start******************
+Sun, 23 Jul 2023 11:04:51 :: Information about Replication 3
+Sun, 23 Jul 2023 11:04:51 :: Running Testing_123 Replication 3 with seed 126
+Sun, 23 Jul 2023 11:04:51 :: **************************************************
+Sun, 23 Jul 2023 11:04:51 :: Options File:
+Sun, 23 Jul 2023 11:04:51 :: BENCHMARK_NAME : Testing_123
+Sun, 23 Jul 2023 11:04:51 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Sun, 23 Jul 2023 11:04:51 :: tf_dim : 2
+Sun, 23 Jul 2023 11:04:51 :: max_budget : 30
+Sun, 23 Jul 2023 11:04:51 :: init_budget : 10
+Sun, 23 Jul 2023 11:04:51 :: bo_budget : 10
+Sun, 23 Jul 2023 11:04:51 :: cs_budget : 10
+Sun, 23 Jul 2023 11:04:51 :: init_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 11:04:51 :: cs_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 11:04:51 :: q_estim_sampling : lhs_sampling
+Sun, 23 Jul 2023 11:04:51 :: mc_integral_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 11:04:51 :: results_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 11:04:51 :: alpha : 0.05
+Sun, 23 Jul 2023 11:04:51 :: R : 10
+Sun, 23 Jul 2023 11:04:51 :: M : 100
+Sun, 23 Jul 2023 11:04:51 :: delta : 0.001
+Sun, 23 Jul 2023 11:04:51 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Sun, 23 Jul 2023 11:04:51 :: min_volume : 4e-06
+Sun, 23 Jul 2023 11:04:51 :: branching_factor : 2
+Sun, 23 Jul 2023 11:04:51 :: uniform_partitioning : True
+Sun, 23 Jul 2023 11:04:51 :: start_seed : 123
+Sun, 23 Jul 2023 11:04:51 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7f85ee48b610>
+Sun, 23 Jul 2023 11:04:51 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7f85ee48b790>
+Sun, 23 Jul 2023 11:04:51 :: **************************************************
+Sun, 23 Jul 2023 11:04:51 :: Budget Used = 0
+Sun, 23 Jul 2023 11:04:51 :: Budget Available (Max Budget) = 30
+Sun, 23 Jul 2023 11:04:51 :: **************************************************
+Sun, 23 Jul 2023 11:04:51 :: **************************************************
+Sun, 23 Jul 2023 11:04:51 :: ***************Replication Start******************
+Sun, 23 Jul 2023 11:05:25 :: Information about Replication 3
+Sun, 23 Jul 2023 11:05:25 :: Running Testing_123 Replication 3 with seed 126
+Sun, 23 Jul 2023 11:05:25 :: **************************************************
+Sun, 23 Jul 2023 11:05:25 :: Options File:
+Sun, 23 Jul 2023 11:05:25 :: BENCHMARK_NAME : Testing_123
+Sun, 23 Jul 2023 11:05:25 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Sun, 23 Jul 2023 11:05:25 :: tf_dim : 2
+Sun, 23 Jul 2023 11:05:25 :: max_budget : 30
+Sun, 23 Jul 2023 11:05:25 :: init_budget : 10
+Sun, 23 Jul 2023 11:05:25 :: bo_budget : 10
+Sun, 23 Jul 2023 11:05:25 :: cs_budget : 10
+Sun, 23 Jul 2023 11:05:25 :: init_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 11:05:25 :: cs_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 11:05:25 :: q_estim_sampling : lhs_sampling
+Sun, 23 Jul 2023 11:05:25 :: mc_integral_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 11:05:25 :: results_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 11:05:25 :: alpha : 0.05
+Sun, 23 Jul 2023 11:05:25 :: R : 10
+Sun, 23 Jul 2023 11:05:25 :: M : 100
+Sun, 23 Jul 2023 11:05:25 :: delta : 0.001
+Sun, 23 Jul 2023 11:05:25 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Sun, 23 Jul 2023 11:05:25 :: min_volume : 4e-06
+Sun, 23 Jul 2023 11:05:25 :: branching_factor : 2
+Sun, 23 Jul 2023 11:05:25 :: uniform_partitioning : True
+Sun, 23 Jul 2023 11:05:25 :: start_seed : 123
+Sun, 23 Jul 2023 11:05:25 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7f6bfd2e0580>
+Sun, 23 Jul 2023 11:05:25 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7f6bfd2e0700>
+Sun, 23 Jul 2023 11:05:25 :: **************************************************
+Sun, 23 Jul 2023 11:05:25 :: Budget Used = 0
+Sun, 23 Jul 2023 11:05:25 :: Budget Available (Max Budget) = 30
+Sun, 23 Jul 2023 11:05:25 :: **************************************************
+Sun, 23 Jul 2023 11:05:25 :: **************************************************
+Sun, 23 Jul 2023 11:05:25 :: ***************Replication Start******************
+Sun, 23 Jul 2023 11:08:46 :: Information about Replication 3
+Sun, 23 Jul 2023 11:08:46 :: Running Testing_123 Replication 3 with seed 126
+Sun, 23 Jul 2023 11:08:46 :: **************************************************
+Sun, 23 Jul 2023 11:08:46 :: Options File:
+Sun, 23 Jul 2023 11:08:46 :: BENCHMARK_NAME : Testing_123
+Sun, 23 Jul 2023 11:08:46 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Sun, 23 Jul 2023 11:08:46 :: tf_dim : 2
+Sun, 23 Jul 2023 11:08:46 :: max_budget : 30
+Sun, 23 Jul 2023 11:08:46 :: init_budget : 10
+Sun, 23 Jul 2023 11:08:46 :: bo_budget : 10
+Sun, 23 Jul 2023 11:08:46 :: cs_budget : 10
+Sun, 23 Jul 2023 11:08:46 :: init_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 11:08:46 :: cs_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 11:08:46 :: q_estim_sampling : lhs_sampling
+Sun, 23 Jul 2023 11:08:46 :: mc_integral_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 11:08:46 :: results_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 11:08:46 :: alpha : 0.05
+Sun, 23 Jul 2023 11:08:46 :: R : 10
+Sun, 23 Jul 2023 11:08:46 :: M : 100
+Sun, 23 Jul 2023 11:08:46 :: delta : 0.001
+Sun, 23 Jul 2023 11:08:46 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Sun, 23 Jul 2023 11:08:46 :: min_volume : 4e-06
+Sun, 23 Jul 2023 11:08:46 :: branching_factor : 2
+Sun, 23 Jul 2023 11:08:46 :: uniform_partitioning : True
+Sun, 23 Jul 2023 11:08:46 :: start_seed : 123
+Sun, 23 Jul 2023 11:08:46 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7efcdbce2550>
+Sun, 23 Jul 2023 11:08:46 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7efcdbce2790>
+Sun, 23 Jul 2023 11:08:46 :: **************************************************
+Sun, 23 Jul 2023 11:08:46 :: Budget Used = 0
+Sun, 23 Jul 2023 11:08:46 :: Budget Available (Max Budget) = 30
+Sun, 23 Jul 2023 11:08:46 :: **************************************************
+Sun, 23 Jul 2023 11:08:46 :: **************************************************
+Sun, 23 Jul 2023 11:08:46 :: ***************Replication Start******************
+Sun, 23 Jul 2023 11:20:25 :: Information about Replication 3
+Sun, 23 Jul 2023 11:20:25 :: Running Testing_123 Replication 3 with seed 126
+Sun, 23 Jul 2023 11:20:25 :: **************************************************
+Sun, 23 Jul 2023 11:20:25 :: Options File:
+Sun, 23 Jul 2023 11:20:25 :: BENCHMARK_NAME : Testing_123
+Sun, 23 Jul 2023 11:20:25 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Sun, 23 Jul 2023 11:20:25 :: tf_dim : 2
+Sun, 23 Jul 2023 11:20:25 :: max_budget : 30
+Sun, 23 Jul 2023 11:20:25 :: init_budget : 10
+Sun, 23 Jul 2023 11:20:25 :: bo_budget : 10
+Sun, 23 Jul 2023 11:20:25 :: cs_budget : 10
+Sun, 23 Jul 2023 11:20:25 :: init_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 11:20:25 :: cs_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 11:20:25 :: q_estim_sampling : lhs_sampling
+Sun, 23 Jul 2023 11:20:25 :: mc_integral_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 11:20:25 :: results_sampling_type : lhs_sampling
+Sun, 23 Jul 2023 11:20:25 :: alpha : 0.05
+Sun, 23 Jul 2023 11:20:25 :: R : 10
+Sun, 23 Jul 2023 11:20:25 :: M : 100
+Sun, 23 Jul 2023 11:20:25 :: delta : 0.001
+Sun, 23 Jul 2023 11:20:25 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Sun, 23 Jul 2023 11:20:25 :: min_volume : 4e-06
+Sun, 23 Jul 2023 11:20:25 :: branching_factor : 2
+Sun, 23 Jul 2023 11:20:25 :: uniform_partitioning : True
+Sun, 23 Jul 2023 11:20:25 :: start_seed : 123
+Sun, 23 Jul 2023 11:20:25 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7f29fec32220>
+Sun, 23 Jul 2023 11:20:25 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7f29fec32c70>
+Sun, 23 Jul 2023 11:20:25 :: **************************************************
+Sun, 23 Jul 2023 11:20:25 :: Budget Used = 0
+Sun, 23 Jul 2023 11:20:25 :: Budget Available (Max Budget) = 30
+Sun, 23 Jul 2023 11:20:25 :: **************************************************
+Sun, 23 Jul 2023 11:20:25 :: **************************************************
+Sun, 23 Jul 2023 11:20:25 :: ***************Replication Start******************
+Sun, 23 Jul 2023 11:20:33 :: **************************************************
+Sun, 23 Jul 2023 11:20:33 :: Remaining Regions: [0]
+Sun, 23 Jul 2023 11:20:33 :: Classified Regions: []
+Sun, 23 Jul 2023 11:20:33 :: Unidentified Regions: []
+Sun, 23 Jul 2023 11:20:33 :: Infeasible Regions: []
+Sun, 23 Jul 2023 11:20:33 :: 20 Evaluations completed
+Sun, 23 Jul 2023 11:20:33 :: 10 left
+Sun, 23 Jul 2023 11:20:33 :: **************************************************
+Sun, 23 Jul 2023 11:20:33 :: **************************************************
+Sun, 23 Jul 2023 11:20:33 :: Entering Last Phase with 10 left
+Sun, 23 Jul 2023 11:20:33 :: Remaining Regions: [0]
+Sun, 23 Jul 2023 11:20:33 :: Classified Regions: []
+Sun, 23 Jul 2023 11:20:33 :: Unidentified Regions: []
+Sun, 23 Jul 2023 11:20:33 :: Infeasible Regions: []
+Sun, 23 Jul 2023 11:20:33 :: **************************************************
+Sun, 23 Jul 2023 11:20:34 :: **************************************************
+Sun, 23 Jul 2023 11:20:34 :: Remaining Regions: [0]
+Sun, 23 Jul 2023 11:20:34 :: Classified Regions: []
+Sun, 23 Jul 2023 11:20:34 :: Unidentified Regions: []
+Sun, 23 Jul 2023 11:20:34 :: Infeasible Regions: []
+Sun, 23 Jul 2023 11:20:34 :: 30 Evaluations completed
+Sun, 23 Jul 2023 11:20:34 :: 0 left
+Sun, 23 Jul 2023 11:20:34 :: **************************************************
+Sun, 23 Jul 2023 11:20:34 :: **************************************************
+Sun, 23 Jul 2023 11:20:34 :: *********Replication 3 Finished*****************
+Sun, 23 Jul 2023 11:20:34 :: Remaining Regions: [0]
+Sun, 23 Jul 2023 11:20:34 :: Classified Regions: []
+Sun, 23 Jul 2023 11:20:34 :: Unidentified Regions: []
+Sun, 23 Jul 2023 11:20:34 :: Infeasible Regions: []
+Sun, 23 Jul 2023 11:20:34 :: 30 Evaluations completed
+Sun, 23 Jul 2023 11:20:34 :: 0 left
+Sun, 23 Jul 2023 11:20:34 :: **************************************************
+Sun, 23 Jul 2023 11:20:34 :: Ended Testing_123 Replication 3 with seed 126
+Mon, 24 Jul 2023 13:51:49 :: Information about Replication 3
+Mon, 24 Jul 2023 13:51:49 :: Running Testing_123 Replication 3 with seed 126
+Mon, 24 Jul 2023 13:51:49 :: **************************************************
+Mon, 24 Jul 2023 13:51:49 :: Options File:
+Mon, 24 Jul 2023 13:51:49 :: BENCHMARK_NAME : Testing_123
+Mon, 24 Jul 2023 13:51:49 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Mon, 24 Jul 2023 13:51:49 :: tf_dim : 2
+Mon, 24 Jul 2023 13:51:49 :: max_budget : 30
+Mon, 24 Jul 2023 13:51:49 :: init_budget : 10
+Mon, 24 Jul 2023 13:51:49 :: bo_budget : 10
+Mon, 24 Jul 2023 13:51:49 :: cs_budget : 10
+Mon, 24 Jul 2023 13:51:49 :: init_sampling_type : lhs_sampling
+Mon, 24 Jul 2023 13:51:49 :: cs_sampling_type : lhs_sampling
+Mon, 24 Jul 2023 13:51:49 :: q_estim_sampling : lhs_sampling
+Mon, 24 Jul 2023 13:51:49 :: mc_integral_sampling_type : lhs_sampling
+Mon, 24 Jul 2023 13:51:49 :: results_sampling_type : lhs_sampling
+Mon, 24 Jul 2023 13:51:49 :: alpha : 0.05
+Mon, 24 Jul 2023 13:51:49 :: R : 10
+Mon, 24 Jul 2023 13:51:49 :: M : 100
+Mon, 24 Jul 2023 13:51:49 :: delta : 0.001
+Mon, 24 Jul 2023 13:51:49 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Mon, 24 Jul 2023 13:51:49 :: min_volume : 4e-06
+Mon, 24 Jul 2023 13:51:49 :: branching_factor : 2
+Mon, 24 Jul 2023 13:51:49 :: uniform_partitioning : True
+Mon, 24 Jul 2023 13:51:49 :: start_seed : 123
+Mon, 24 Jul 2023 13:51:49 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x7f5baa6ebf40>
+Mon, 24 Jul 2023 13:51:49 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x7f5baa67b100>
+Mon, 24 Jul 2023 13:51:49 :: **************************************************
+Mon, 24 Jul 2023 13:51:49 :: Budget Used = 0
+Mon, 24 Jul 2023 13:51:49 :: Budget Available (Max Budget) = 30
+Mon, 24 Jul 2023 13:51:49 :: **************************************************
+Mon, 24 Jul 2023 13:51:49 :: **************************************************
+Mon, 24 Jul 2023 13:51:49 :: ***************Replication Start******************
+Mon, 24 Jul 2023 13:52:27 :: **************************************************
+Mon, 24 Jul 2023 13:52:27 :: Remaining Regions: [0]
+Mon, 24 Jul 2023 13:52:27 :: Classified Regions: []
+Mon, 24 Jul 2023 13:52:27 :: Unidentified Regions: []
+Mon, 24 Jul 2023 13:52:27 :: Infeasible Regions: []
+Mon, 24 Jul 2023 13:52:27 :: 20 Evaluations completed
+Mon, 24 Jul 2023 13:52:27 :: 10 left
+Mon, 24 Jul 2023 13:52:27 :: **************************************************
+Mon, 24 Jul 2023 13:52:27 :: **************************************************
+Mon, 24 Jul 2023 13:52:27 :: Entering Last Phase with 10 left
+Mon, 24 Jul 2023 13:52:27 :: Remaining Regions: [0]
+Mon, 24 Jul 2023 13:52:27 :: Classified Regions: []
+Mon, 24 Jul 2023 13:52:27 :: Unidentified Regions: []
+Mon, 24 Jul 2023 13:52:27 :: Infeasible Regions: []
+Mon, 24 Jul 2023 13:52:27 :: **************************************************
+Mon, 24 Jul 2023 13:52:28 :: **************************************************
+Mon, 24 Jul 2023 13:52:28 :: Remaining Regions: [0]
+Mon, 24 Jul 2023 13:52:28 :: Classified Regions: []
+Mon, 24 Jul 2023 13:52:28 :: Unidentified Regions: []
+Mon, 24 Jul 2023 13:52:28 :: Infeasible Regions: []
+Mon, 24 Jul 2023 13:52:28 :: 30 Evaluations completed
+Mon, 24 Jul 2023 13:52:28 :: 0 left
+Mon, 24 Jul 2023 13:52:28 :: **************************************************
+Mon, 24 Jul 2023 13:52:28 :: **************************************************
+Mon, 24 Jul 2023 13:52:28 :: *********Replication 3 Finished*****************
+Mon, 24 Jul 2023 13:52:28 :: Remaining Regions: [0]
+Mon, 24 Jul 2023 13:52:28 :: Classified Regions: []
+Mon, 24 Jul 2023 13:52:28 :: Unidentified Regions: []
+Mon, 24 Jul 2023 13:52:28 :: Infeasible Regions: []
+Mon, 24 Jul 2023 13:52:28 :: 30 Evaluations completed
+Mon, 24 Jul 2023 13:52:28 :: 0 left
+Mon, 24 Jul 2023 13:52:28 :: **************************************************
+Mon, 24 Jul 2023 13:52:28 :: Ended Testing_123 Replication 3 with seed 126

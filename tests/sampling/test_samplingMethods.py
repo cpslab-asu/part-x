@@ -4,10 +4,9 @@ import pickle
 import unittest
 
 from partx.sampling import lhs_sampling, uniform_sampling
-from partx.coreAlgorithm import OracleCreator
+from partx.utils import OracleCreator
 
-def oracle_func(X):
-    return True
+oracle_func = None
 
 class TestSampling(unittest.TestCase):
     def test1_uniform_sampling(self):

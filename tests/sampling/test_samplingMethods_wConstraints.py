@@ -4,16 +4,16 @@ import pickle
 import unittest
 
 from partx.sampling import lhs_sampling, uniform_sampling, OOBError
-from partx.coreAlgorithm import OracleCreator
+from partx.utils import OracleCreator
 
 def oracle_func(X):
-    return X[0]**2 + X[1]**2 <= 0.25
+    return X[0]**2 + X[1]**2 - 0.25
 
 def oracle_func_3d(X):
-    return X[0]**2 + X[1]**2 + X[2]**2 <= 0.25
+    return X[0]**2 + X[1]**2 + X[2]**2 - 0.25
 
 def oracle_func_4d(X):
-    return X[0]**2 + X[1]**2 + X[2]**2 + X[3] <= 0.25
+    return X[0]**2 + X[1]**2 + X[2]**2 + X[3] - 0.25
 
 class TestSamplingWithConstraints(unittest.TestCase):
     def test1_uniform_sampling(self):
@@ -58,8 +58,8 @@ class TestSamplingWithConstraints(unittest.TestCase):
         with open("./tests/sampling/goldResources/unif_samp_wcons_t1.pickle", "rb") as f:
             # pickle.dump(samples_in_unif, f)
             gr = pickle.load(f)
-        
-        np.testing.assert_array_equal(samples_in_unif, gr)
+
+        np.testing.assert_array_equal(samples_in_unif, gr)        
 
     def test5_uniform_sampling(self):
         oracle_info = OracleCreator(oracle_func_4d, 100,1)

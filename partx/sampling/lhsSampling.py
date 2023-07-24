@@ -90,7 +90,8 @@ def lhs_sampling(
         scaled_samples = qmc.scale(lhs_samples, lb, ub)
 
         for point in scaled_samples:
-            if oracle_info.oracle_function(point):
+            # print(oracle_info(point).val)
+            if oracle_info(point).sat:
                 samples.append(point)
                 # n_tries = oracle_info.n_tries_randomsampling
         if num_samples - len(samples) > 0:

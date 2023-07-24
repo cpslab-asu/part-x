@@ -17,8 +17,7 @@ class TestClassification(unittest.TestCase):
                        30 + (2 * X[0] - 3 * X[1]) ** 2 * (
                            18 - 32 * X[0] + 12 * X[0] ** 2 + 48 * X[1] - 36 * X[0] * X[1] + 27 * X[1] ** 2)) - 50
         
-        def oracle_func(X):
-            return True
+        oracle_func = None
 
         BENCHMARK_NAME = "Testing_123"
         init_reg_sup = np.array([[-1., 1.], [-1., 1.]])

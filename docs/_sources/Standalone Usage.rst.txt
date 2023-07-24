@@ -23,14 +23,15 @@ The black-box function is the function for whom we need to find the falsifying b
 .. _reference_oracle_function:
 Oracle Function
 ------------------
-The oracle function is the function which defines feasible and infeasible points that can be sampled by the Part-X algorithm. The oracle function takes in a pot and returns a boolean value to indicate if the point is feasible or infeasible.
+The oracle function is the function which defines feasible and infeasible points that can be sampled by the Part-X algorithm. The oracle function takes in a point and returns value. The constraint is of the form :math:`f(x) <= 0`. 
 
 Here is an example of simple constraint
 
 .. code-block:: python
-
+   
+   # if constraint is X[0]**2 + (X[1]+1)**2 > 0.5, then
    def oracle_function(X):
-      return X[0]**2 + (X[1]+1)**2 > 0.5
+      return -1*(X[0]**2 + (X[1]+1)**2-0.5)
 
 
 If there are no constraints, you can define the oracle function as follows:

@@ -6,10 +6,9 @@ from partx.sampling import uniform_sampling
 from partx.utils import Fn, compute_robustness
 from partx.numerical import calculate_mc_integral
 from partx.gprInterface import InternalGPR
-from partx.coreAlgorithm import OracleCreator
+from partx.utils import OracleCreator
 
-def oracle_func(X):
-    return True
+oracle_func = None
 
 class TestCalculateMCIntegral(unittest.TestCase):
 

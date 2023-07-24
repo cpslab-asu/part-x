@@ -3,12 +3,11 @@ import unittest
 import pickle
 
 from partx.sampling import uniform_sampling, lhs_sampling
-from partx.utils import branch_region, compute_robustness, Fn, divide_points
+from partx.utils import branch_region, compute_robustness, Fn, divide_points, OracleCreator
 from partx.utils.pointInSubRegion import testPointInSubRegion
-from partx.coreAlgorithm import OracleCreator
+# from partx.coreAlgorithm import OracleCreator
 
-def oracle_func(X):
-    return True
+oracle_func = None
 
 class TestDividePoints(unittest.TestCase):
     def test1_divide_points(self):

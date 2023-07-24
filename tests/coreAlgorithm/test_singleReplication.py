@@ -8,10 +8,9 @@ from partx.coreAlgorithm import PartXOptions, run_single_replication
 from partx.gprInterface import InternalGPR
 from partx.bayesianOptimization import InternalBO
 from partx.results import fv_without_gp
-from partx.coreAlgorithm import OracleCreator
+from partx.utils import OracleCreator
 
-def oracle_func(X):
-    return True
+oracle_func = None
 
 class TestSingleReplication(unittest.TestCase):
     def test1_single_replication(self):

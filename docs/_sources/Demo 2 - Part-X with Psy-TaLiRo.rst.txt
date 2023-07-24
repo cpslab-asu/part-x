@@ -99,8 +99,7 @@ We then run part-X as follows:
    
    model = AutotransModel()
 
-   def oracle_func(sample):
-      return True
+   oracle_func = None
       
    optimizer = PartX(
             BENCHMARK_NAME=f"{benchmark}_budget_{MAX_BUDGET}_{NUMBER_OF_MACRO_REPLICATIONS}_reps",
