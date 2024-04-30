@@ -25,8 +25,8 @@ init_reg_sup = np.array([[-1., 1.], [-1., 0.]])
 # Function Dimesnioanlity set to 2 since we are searching in the 2-dimensional space
 tf_dim = 2
 
-# Max Budget is set to 500
-max_budget = 3000
+# Max Budget is set to 1000
+max_budget = 1000
 
 # Initial Sampling in the subregion is set to 20
 init_budget = 20
@@ -76,13 +76,13 @@ results_sampling_type = "lhs_sampling"
 results_at_confidence = 0.95
 
 # Run Part-X for 5 macro-replications
-num_macro_reps = 5
+num_macro_reps = 1
 
 # All benchmarks will be stored in this folder
 results_folder_name = "NLF"
 
 # Run all the replication serially. If > 1, will run the replications parallaly.
-num_cores = 5
+num_cores = 1
 
 # Run Part-X
 results = run_partx(BENCHMARK_NAME, test_function, oracle_fn, num_macro_reps, init_reg_sup, tf_dim,

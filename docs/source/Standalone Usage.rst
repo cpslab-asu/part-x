@@ -38,8 +38,7 @@ If there are no constraints, you can define the oracle function as follows:
 
 .. code-block:: python
 
-   def oracle_function(X):
-      return True
+   oracle_function = None
 
 .. _reference_gpr_definition_standalone:
 Defining GPR Model

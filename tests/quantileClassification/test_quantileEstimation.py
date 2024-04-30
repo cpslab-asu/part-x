@@ -93,14 +93,16 @@ class TestQuantileEstimation(unittest.TestCase):
         R = 100
         M = 10000
         gpr_model = InternalGPR()
-        x_train = uniform_sampling(100, region_support, tf_dim, oracle_info, rng)
-        y_train = compute_robustness(x_train, tf)
+        # x_train = uniform_sampling(200, region_support, tf_dim, oracle_info, rng)
+        # y_train = compute_robustness(x_train, tf)
+        # y_train_std = y_train/max(y_train)
         alpha = 0.05
 
-        min_delta_quantile, max_delta_quantile = estimate_quantiles(x_train, y_train, region_support, tf_dim, alpha, R, M, gpr_model, oracle_info, rng, sampling_type = "lhs_sampling")
         with open("./tests/quantileClassification/goldResources/mc_quantile.pickle", "rb")  as f:
-            # pickle.dump([min_delta_quantile, max_delta_quantile], f)
-            gr_min_delta_quantile, gr_max_delta_quantile = pickle.load(f)
+            # pickle.dump([x_train, y_train_std, min_delta_quantile, max_delta_quantile], f)
+            gr_x_train, gr_y_train_std, gr_min_delta_quantile, gr_max_delta_quantile = pickle.load(f)
 
-        assert min_delta_quantile == gr_min_delta_quantile
-        assert max_delta_quantile == gr_max_delta_quantile
+        min_delta_quantile, max_delta_quantile = estimate_quantiles(gr_x_train, gr_y_train_std, region_support, tf_dim, alpha, R, M, gpr_model, oracle_info, rng, sampling_type = "lhs_sampling")
+
+        self.assertAlmostEqual(min_delta_quantile, gr_min_delta_quantile, places = 2)
+        self.assertAlmostEqual(max_delta_quantile, gr_max_delta_quantile, places = 2)

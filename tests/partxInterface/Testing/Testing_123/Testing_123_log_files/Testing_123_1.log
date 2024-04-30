@@ -2902,3 +2902,105 @@ Mon, 24 Jul 2023 13:52:26 :: 30 Evaluations completed
 Mon, 24 Jul 2023 13:52:26 :: 0 left
 Mon, 24 Jul 2023 13:52:26 :: **************************************************
 Mon, 24 Jul 2023 13:52:27 :: Ended Testing_123 Replication 1 with seed 124
+Tue, 30 Apr 2024 08:24:20 :: Information about Replication 1
+Tue, 30 Apr 2024 08:24:20 :: Running Testing_123 Replication 1 with seed 124
+Tue, 30 Apr 2024 08:24:20 :: **************************************************
+Tue, 30 Apr 2024 08:24:20 :: Options File:
+Tue, 30 Apr 2024 08:24:20 :: BENCHMARK_NAME : Testing_123
+Tue, 30 Apr 2024 08:24:20 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Tue, 30 Apr 2024 08:24:20 :: tf_dim : 2
+Tue, 30 Apr 2024 08:24:20 :: max_budget : 30
+Tue, 30 Apr 2024 08:24:20 :: init_budget : 10
+Tue, 30 Apr 2024 08:24:20 :: bo_budget : 10
+Tue, 30 Apr 2024 08:24:20 :: cs_budget : 10
+Tue, 30 Apr 2024 08:24:20 :: init_sampling_type : lhs_sampling
+Tue, 30 Apr 2024 08:24:20 :: cs_sampling_type : lhs_sampling
+Tue, 30 Apr 2024 08:24:20 :: q_estim_sampling : lhs_sampling
+Tue, 30 Apr 2024 08:24:20 :: mc_integral_sampling_type : lhs_sampling
+Tue, 30 Apr 2024 08:24:20 :: results_sampling_type : lhs_sampling
+Tue, 30 Apr 2024 08:24:20 :: alpha : 0.05
+Tue, 30 Apr 2024 08:24:20 :: R : 10
+Tue, 30 Apr 2024 08:24:20 :: M : 100
+Tue, 30 Apr 2024 08:24:20 :: delta : 0.001
+Tue, 30 Apr 2024 08:24:20 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Tue, 30 Apr 2024 08:24:20 :: min_volume : 4e-06
+Tue, 30 Apr 2024 08:24:20 :: branching_factor : 2
+Tue, 30 Apr 2024 08:24:20 :: uniform_partitioning : True
+Tue, 30 Apr 2024 08:24:20 :: start_seed : 123
+Tue, 30 Apr 2024 08:24:20 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x000001A84C6C6FE0>
+Tue, 30 Apr 2024 08:24:20 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x000001A84C6C7640>
+Tue, 30 Apr 2024 08:24:20 :: **************************************************
+Tue, 30 Apr 2024 08:24:20 :: Budget Used = 0
+Tue, 30 Apr 2024 08:24:20 :: Budget Available (Max Budget) = 30
+Tue, 30 Apr 2024 08:24:20 :: **************************************************
+Tue, 30 Apr 2024 08:24:20 :: **************************************************
+Tue, 30 Apr 2024 08:24:20 :: ***************Replication Start******************
+Tue, 30 Apr 2024 08:24:51 :: Information about Replication 1
+Tue, 30 Apr 2024 08:24:51 :: Running Testing_123 Replication 1 with seed 124
+Tue, 30 Apr 2024 08:24:51 :: **************************************************
+Tue, 30 Apr 2024 08:24:51 :: Options File:
+Tue, 30 Apr 2024 08:24:51 :: BENCHMARK_NAME : Testing_123
+Tue, 30 Apr 2024 08:24:51 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Tue, 30 Apr 2024 08:24:51 :: tf_dim : 2
+Tue, 30 Apr 2024 08:24:51 :: max_budget : 30
+Tue, 30 Apr 2024 08:24:51 :: init_budget : 10
+Tue, 30 Apr 2024 08:24:51 :: bo_budget : 10
+Tue, 30 Apr 2024 08:24:51 :: cs_budget : 10
+Tue, 30 Apr 2024 08:24:51 :: init_sampling_type : lhs_sampling
+Tue, 30 Apr 2024 08:24:51 :: cs_sampling_type : lhs_sampling
+Tue, 30 Apr 2024 08:24:51 :: q_estim_sampling : lhs_sampling
+Tue, 30 Apr 2024 08:24:51 :: mc_integral_sampling_type : lhs_sampling
+Tue, 30 Apr 2024 08:24:51 :: results_sampling_type : lhs_sampling
+Tue, 30 Apr 2024 08:24:51 :: alpha : 0.05
+Tue, 30 Apr 2024 08:24:51 :: R : 10
+Tue, 30 Apr 2024 08:24:51 :: M : 100
+Tue, 30 Apr 2024 08:24:51 :: delta : 0.001
+Tue, 30 Apr 2024 08:24:51 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Tue, 30 Apr 2024 08:24:51 :: min_volume : 4e-06
+Tue, 30 Apr 2024 08:24:51 :: branching_factor : 2
+Tue, 30 Apr 2024 08:24:51 :: uniform_partitioning : True
+Tue, 30 Apr 2024 08:24:51 :: start_seed : 123
+Tue, 30 Apr 2024 08:24:51 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x00000239D9156FE0>
+Tue, 30 Apr 2024 08:24:51 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x00000239D9157640>
+Tue, 30 Apr 2024 08:24:51 :: **************************************************
+Tue, 30 Apr 2024 08:24:51 :: Budget Used = 0
+Tue, 30 Apr 2024 08:24:51 :: Budget Available (Max Budget) = 30
+Tue, 30 Apr 2024 08:24:51 :: **************************************************
+Tue, 30 Apr 2024 08:24:51 :: **************************************************
+Tue, 30 Apr 2024 08:24:51 :: ***************Replication Start******************
+Tue, 30 Apr 2024 08:48:17 :: Information about Replication 1
+Tue, 30 Apr 2024 08:48:17 :: Running Testing_123 Replication 1 with seed 124
+Tue, 30 Apr 2024 08:48:17 :: **************************************************
+Tue, 30 Apr 2024 08:48:17 :: Options File:
+Tue, 30 Apr 2024 08:48:17 :: BENCHMARK_NAME : Testing_123
+Tue, 30 Apr 2024 08:48:17 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Tue, 30 Apr 2024 08:48:17 :: tf_dim : 2
+Tue, 30 Apr 2024 08:48:17 :: max_budget : 30
+Tue, 30 Apr 2024 08:48:17 :: init_budget : 10
+Tue, 30 Apr 2024 08:48:17 :: bo_budget : 10
+Tue, 30 Apr 2024 08:48:17 :: cs_budget : 10
+Tue, 30 Apr 2024 08:48:17 :: init_sampling_type : lhs_sampling
+Tue, 30 Apr 2024 08:48:17 :: cs_sampling_type : lhs_sampling
+Tue, 30 Apr 2024 08:48:17 :: q_estim_sampling : lhs_sampling
+Tue, 30 Apr 2024 08:48:17 :: mc_integral_sampling_type : lhs_sampling
+Tue, 30 Apr 2024 08:48:17 :: results_sampling_type : lhs_sampling
+Tue, 30 Apr 2024 08:48:17 :: alpha : 0.05
+Tue, 30 Apr 2024 08:48:17 :: R : 10
+Tue, 30 Apr 2024 08:48:17 :: M : 100
+Tue, 30 Apr 2024 08:48:17 :: delta : 0.001
+Tue, 30 Apr 2024 08:48:17 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Tue, 30 Apr 2024 08:48:17 :: min_volume : 4e-06
+Tue, 30 Apr 2024 08:48:17 :: branching_factor : 2
+Tue, 30 Apr 2024 08:48:17 :: uniform_partitioning : True
+Tue, 30 Apr 2024 08:48:17 :: start_seed : 123
+Tue, 30 Apr 2024 08:48:17 :: gpr_model : <partx.gprInterface.internalGPR.InternalGPR object at 0x00000190E9CCF7C0>
+Tue, 30 Apr 2024 08:48:17 :: bo_model : <partx.bayesianOptimization.internalBO.InternalBO object at 0x00000190E9CCFE20>
+Tue, 30 Apr 2024 08:48:17 :: **************************************************
+Tue, 30 Apr 2024 08:48:17 :: Budget Used = 0
+Tue, 30 Apr 2024 08:48:17 :: Budget Available (Max Budget) = 30
+Tue, 30 Apr 2024 08:48:17 :: **************************************************
+Tue, 30 Apr 2024 08:48:17 :: **************************************************
+Tue, 30 Apr 2024 08:48:17 :: ***************Replication Start******************

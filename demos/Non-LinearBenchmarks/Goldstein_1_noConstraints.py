@@ -12,10 +12,8 @@ def test_function(X):
                             18 - 32 * X[0] + 12 * X[0] ** 2 + 48 * X[1] - 36 * X[0] * X[1] + 27 * X[1] ** 2)) - 50
 
 # Define the Oracle Function which defines the constraints.
-# Since there is no constraint, return True
-def oracle_fn(X):
-    
-    return True
+# Since there is no constraint, oracle_fn to None
+oracle_fn = None
 
 # Define Benchmark Name
 BENCHMARK_NAME = "Goldstein_1_noConstraints"
