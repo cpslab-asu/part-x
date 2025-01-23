@@ -2,7 +2,7 @@ import numpy as np
 import treelib
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
-# from ..utils import calculate_volume
+
 def save_trees_plots(ftree, options):
     
     
