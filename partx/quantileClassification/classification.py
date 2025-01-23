@@ -41,3 +41,4 @@ def classification(region_support: np.array, region_class:chr, min_volume:float,
             region_class = 'r'
 
     return region_class
+
