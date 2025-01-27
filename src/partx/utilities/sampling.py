@@ -1,16 +1,16 @@
 import numpy as np
-import numpy.typing as npt
+from numpy.typing import NDArray
 from scipy.stats import qmc
 
 class OOBError(ValueError): pass
 
 def lhs_sampling(
     num_samples: int,
-    region_support: npt.NDArray,
+    region_support: NDArray,
     tf_dim: int,
     oracle_info,
     rng,
-    ) -> np.array:
+    ) -> NDArray:
     """Latin Hypercube Sampling: Sample *num_samples* points within the *region_support* while respecting the constraints defined by the *oracle_func*.
 
     Args:
@@ -63,8 +63,8 @@ def lhs_sampling(
 
 
 def uniform_sampling(
-    num_samples: int, region_support: npt.NDArray, tf_dim: int, oracle_info, rng
-) -> np.array:
+    num_samples: int, region_support: NDArray, tf_dim: int, oracle_info, rng
+) -> NDArray:
     """Sample *num_samples* points within the *region_support* which has a dimension as mentioned below,
     satisfying the constraints defined by the *oracle_func*.
 

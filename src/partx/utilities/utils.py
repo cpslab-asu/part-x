@@ -1,12 +1,38 @@
+from typing import List, Tuple
 import numpy as np
-import numpy.typing as npt
+from numpy.typing import NDArray
 import time
 import pickle
 from dataclasses import dataclass
 import matplotlib.pyplot as plt
 
+from numpy.random import Generator
 
-def branch_region(region_support: np.array, direction_of_branching:int, uniform: bool,branching_factor:int, rng) -> np.array:
+@dataclass
+class PointHistory:
+    sample_number: int
+    input: Tuple[NDArray]
+    output: float
+
+class Fn:
+    def __init__(self, func):
+        self.func = func
+        self.count = 0
+        self.point_history = []
+        self.point_history2 = []
+        self.simultation_time = []
+
+    def __call__(self, *args, **kwargs):        
+        self.count = self.count + 1
+        sim_time_start = time.perf_counter()
+        rob_val = self.func(*args)
+        time_elapsed = time.perf_counter() - sim_time_start
+        self.simultation_time.append(time_elapsed)
+        self.point_history2.append(PointHistory(self.count, args, rob_val))
+        self.point_history.append([self.count, *args, rob_val])
+        return rob_val
+
+def branch_region(region_support: NDArray, direction_of_branching:int, uniform: bool,branching_factor:int, rng: Generator) -> List[NDArray]:
     """Generate new region supports based on direction of branching and the branching factor. For now, the
     partitioning of space is uniformly done.
 
@@ -43,7 +69,7 @@ def branch_region(region_support: np.array, direction_of_branching:int, uniform:
 
 
 
-def calculate_volume(region_support: npt.NDArray) -> list:
+def calculate_volume(region_support: NDArray) -> list:
     """Calculate volume of a hypercube. 
 
     Args:
@@ -58,7 +84,7 @@ def calculate_volume(region_support: npt.NDArray) -> list:
     return np.prod(region_support[:,1]-region_support[:,0], axis = 0)
 
 
-def compute_robustness(samples_in: npt.NDArray, test_function: Type[Fn]) -> npt.NDArray:
+def compute_robustness(samples_in: NDArray, test_function: Fn) -> NDArray:
     """Compute the fitness (robustness) of the given sample.
 
     Args:
@@ -67,32 +93,15 @@ def compute_robustness(samples_in: npt.NDArray, test_function: Type[Fn]) -> npt.
     Returns:
         Fitness (robustness) of the given sample(s)
     """
-
-    if samples_in.shape[0] == 1:
+    if samples_in.shape[0] == 0:
+        raise ValueError("input samples cannot be empty")
+    elif samples_in.shape[0] == 1:
         samples_out = np.array([test_function(samples_in[0])])
     else:
         samples_out = np.apply_along_axis(
             lambda sample: test_function(sample), 1, samples_in
         )
     return samples_out
-
-
-class Fn:
-    def __init__(self, func):
-        self.func = func
-        self.count = 0
-        self.point_history = []
-        self.simultation_time = []
-
-    def __call__(self, *args, **kwargs):
-        self.count = self.count + 1
-        sim_time_start = time.perf_counter()
-        rob_val = self.func(*args, **kwargs)
-        time_elapsed = time.perf_counter() - sim_time_start
-        self.simultation_time.append(time_elapsed)
-        self.point_history.append([self.count, *args, rob_val])
-        return rob_val
-
 
 def load_tree(tree_name):
     """Load the tree
@@ -138,7 +147,7 @@ class OracleCreator:
         return OracleResult(val, sat)
         
 
-def divide_points(samples_in: np.array, samples_out:np.array, region_support: list) -> list:
+def divide_points(samples_in: NDArray, samples_out:NDArray, region_support: list) -> Tuple[List, List]:
     """
 
     Args:

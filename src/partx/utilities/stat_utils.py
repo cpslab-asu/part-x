@@ -1,12 +1,13 @@
 from scipy import stats
 from .utils import calculate_volume
 import numpy as np
+from numpy.typing import NDArray
 
 from scipy import stats
 from ..gpr import GPR
 from .sampling import uniform_sampling, lhs_sampling
 
-def conf_interval(x, conf_at):
+def conf_interval(x: NDArray, conf_at: float):
     """Calculate Confidence interval
 
     Args:
@@ -16,6 +17,8 @@ def conf_interval(x, conf_at):
     Returns:
         [type]: [description]
     """
+    if x.shape[0] <= 1:
+        raise ValueError("Elements in the input samples vector <= 1")
     mean, std = x.mean(), x.std(ddof=1)
     conf_intveral = stats.norm.interval(conf_at, loc=mean, scale=std)
     
@@ -40,9 +43,9 @@ def calculate_mc_integral(x_train, y_train, region_support, tf_dim, R, M, gpr_mo
         
         y_pred, pred_sigma = model.predict(samples)
 
-        
         cdf_all_sum += np.sum(stats.norm.cdf(0., y_pred, pred_sigma))
-
+    # print(cdf_all_sum/(R*M))
+    # print(calculate_volume(region_support))
     return (cdf_all_sum/(R*M)) * calculate_volume(region_support)
     # return calculate_volume(region_support)
 
