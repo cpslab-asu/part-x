@@ -23,13 +23,12 @@ This project provides implementations for four example test functions. Detailed 
 ## Citation
 Please cite the following paper if you use the work in your research.
 ```
-@misc{pedrielli2021partx,
-      title={Part-X: A Family of Stochastic Algorithms for Search-Based Test Generation with Probabilistic Guarantees}, 
-      author={Giulia Pedrielli and Tanmay Khandait and Surdeep Chotaliya and Quinn Thibeault and Hao Huang and Mauricio Castillo-Effen and Georgios Fainekos},
-      year={2021},
-      eprint={2110.10729},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG}
+@article{pedrielli2023part,
+  title={Part-x: A family of stochastic algorithms for search-based test generation with probabilistic guarantees},
+  author={Pedrielli, Giulia and Khandait, Tanmay and Cao, Yumeng and Thibeault, Quinn and Huang, Hao and Castillo-Effen, Mauricio and Fainekos, Georgios},
+  journal={IEEE Transactions on Automation Science and Engineering},
+  year={2023},
+  publisher={IEEE}
 }
 ```
 
