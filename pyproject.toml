@@ -18,11 +18,11 @@ coverage = "^6.4"
 matplotlib = "^3.5.2"
 treelib = "^1.6.1"
 pandas = "^1.4.3"
-pathos = "^0.2.9"
 Sphinx = "^5.3.0"
-psy-taliro = {version = "1.0.0b9", extras = ["rtamt"]}
+psy-taliro = {version = "^1.0.0", extras = ["rtamt"]}
 pytest = "^8.3.4"
 numpy = "^1.22.4"
+pathos = "^0.3.3"
 
 [tool.poetry.group.docs.dependencies]
 Sphinx = "^5.3.0"
