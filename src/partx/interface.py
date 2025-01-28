@@ -9,8 +9,9 @@ from numpy.typing import NDArray
 from pathos.multiprocessing import ProcessingPool as Pool
 from dataclasses import dataclass
 from typing import Any, List, Sequence, Callable
-from staliro.core import Interval, Optimizer, ObjectiveFn, Sample
 from treelib import Tree
+from staliro import Sample
+from staliro.optimizers import ObjFunc, Optimizer
 
 from .gpr import GPRSkeleton
 from .bo import BO_Interface
@@ -106,20 +107,20 @@ def run_partx(BENCHMARK_NAME:str, test_function:Callable[[NDArray], float], orac
         print("Running without parallalization")
         results = []
         for replication_number in range(num_macro_reps):
-            data = [replication_number, options, test_function, oracle_info, benchmark_result_directory]
+            data = (replication_number, options, test_function, oracle_info, benchmark_result_directory)
             inputs.append(data)
             res = run_single_replication(data)
             results.append(res)
     elif num_cores != 1:
-        num_cores_available = min((os.cpu_count() - 1), num_cores)
+        num_cores_available = min((os.cpu_count() - 1), num_cores) # type: ignore
         if num_cores == num_cores_available:
             print("Running with {} cores".format(num_cores_available))
         elif num_cores > num_cores_available:
             print("Cannot run with {} cores. Instead running with {} cores.".format(num_cores, num_cores_available))
         elif num_cores < num_cores_available:
-            print("Max cores uitilised can be {}. Instead running with {} cores.".format((os.cpu_count() - 1), num_cores_available))
+            print("Max cores uitilised can be {}. Instead running with {} cores.".format((os.cpu_count() - 1), num_cores_available)) # type: ignore
         for replication_number in range(num_macro_reps):
-            data = [replication_number, options,  test_function, oracle_info, benchmark_result_directory]
+            data = (replication_number, options,  test_function, oracle_info, benchmark_result_directory)
             inputs.append(data)
         with Pool(num_cores_available) as pool:
             results = list(pool.map(run_single_replication, inputs))
@@ -140,15 +141,15 @@ def run_partx(BENCHMARK_NAME:str, test_function:Callable[[NDArray], float], orac
     return results
 
 
-Bounds = Sequence[Interval]
-PartXResult = List[Tuple[Tree, Dict[str, Union[float, NDArray]], NDArray, List]]
+
+PartXResult = list[Tuple[Tree, Dict[str, Union[float, NDArray]], NDArray, List]]
 
 @dataclass(frozen=True)
 class PartX(Optimizer[float, PartXResult]):
     """The PartX optimizer provides statistical guarantees about the existence of falsifying behaviour in a system."""
 
     BENCHMARK_NAME: str
-    oracle_function: Callable[[NDArray], float]
+    oracle_function: Callable[[NDArray], float]|None
     num_macro_reps: int
     init_budget: int
     bo_budget: int
@@ -174,14 +175,70 @@ class PartX(Optimizer[float, PartXResult]):
     results_folder_name: str
     num_cores: int
 
-    def optimize(self, func: ObjectiveFn, bounds: Bounds, budget:int, seed: int) -> PartXResult:
-        region_support = np.array((tuple(bound.astuple() for bound in bounds),))[0]
+    # def __init__(self,
+    #                 BENCHMARK_NAME: str,
+    #                 oracle_function: Callable[[NDArray], float],
+    #                 num_macro_reps: int,
+    #                 init_budget: int,
+    #                 bo_budget: int,
+    #                 cs_budget: int,
+    #                 n_tries_randomsampling: int,
+    #                 n_tries_BO: int,
+    #                 alpha: float,
+    #                 R: int,
+    #                 M: int,
+    #                 delta: float,
+    #                 fv_quantiles_for_gp: List[float],
+    #                 branching_factor: int,
+    #                 uniform_partitioning: bool,
+    #                 seed: int,
+    #                 gpr_model: GPRSkeleton,
+    #                 bo_model: BO_Interface,
+    #                 init_sampling_type: str,
+    #                 cs_sampling_type: str,
+    #                 q_estim_sampling: str,
+    #                 mc_integral_sampling_type: str,
+    #                 results_sampling_type: str,
+    #                 results_at_confidence: float,
+    #                 results_folder_name: str,
+    #                 num_cores: int
+    #     ):
+        
+    #     self.BENCHMARK_NAME = BENCHMARK_NAME
+    #     self.oracle_function = oracle_function
+    #     self.num_macro_reps = num_macro_reps
+    #     self.init_budget = init_budget
+    #     self.bo_budget = bo_budget
+    #     self.cs_budget = cs_budget
+    #     self.n_tries_randomsampling = n_tries_randomsampling
+    #     self.n_tries_BO = n_tries_BO
+    #     self.alpha = alpha
+    #     self.R = R
+    #     self.M = M
+    #     self.delta = delta
+    #     self.fv_quantiles_for_gp = fv_quantiles_for_gp
+    #     self.branching_factor = branching_factor
+    #     self.uniform_partitioning = uniform_partitioning
+    #     self.seed = seed
+    #     self.gpr_model = gpr_model
+    #     self.bo_model = bo_model
+    #     self.init_sampling_type = init_sampling_type
+    #     self.cs_sampling_type = cs_sampling_type
+    #     self.q_estim_sampling = q_estim_sampling
+    #     self.mc_integral_sampling_type = mc_integral_sampling_type
+    #     self.results_sampling_type = results_sampling_type
+    #     self.results_at_confidence = results_at_confidence
+    #     self.results_folder_name = results_folder_name
+    #     self.num_cores = num_cores
+
+    def optimize(self, func: ObjFunc[float], params: Optimizer.Params) -> PartXResult:
+        region_support = np.array(params.input_bounds)
 
         print("************************************************************************")
         print("************************************************************************")
         print("************************************************************************")
         print(f"Test Function:\n Testing function is a {region_support.shape[0]}d problem with initial region support of {region_support}.")
-        print(f"Starting {self.num_macro_reps} macro replications with maximum budget of {budget}, where")
+        print(f"Starting {self.num_macro_reps} macro replications with maximum budget of {params.budget}, where")
         print(f"initilization budget = {self.init_budget},\nbo budget = {self.bo_budget},\ncontinued sampling budget = {self.cs_budget}")
         print(f"Sampling Types\n-----------")
         print(f"init_sampling_type = {self.init_sampling_type}")
@@ -194,39 +251,42 @@ class PartX(Optimizer[float, PartXResult]):
         print("************************************************************************")
         
         
-        def test_function(sample: NDArray) -> float:
-            return func.eval_sample(Sample(sample))
+        # def test_function(sample: NDArray) -> float:
+        #     return func.eval_sample(Sample(sample))
     
         
-        return run_partx(
-            BENCHMARK_NAME = self.BENCHMARK_NAME,
-            test_function = test_function,
-            oracle_function= self.oracle_function,
-            num_macro_reps = self.num_macro_reps,
-            init_reg_sup = region_support,
-            tf_dim = region_support.shape[0],
-            max_budget = budget,
-            init_budget = self.init_budget,
-            bo_budget = self.bo_budget,
-            cs_budget = self.cs_budget,
-            n_tries_randomsampling= self.n_tries_randomsampling,
-            n_tries_BO=self.n_tries_BO,
-            alpha = self.alpha,
-            R = self.R,
-            M = self.M,
-            delta = self.delta,
-            fv_quantiles_for_gp = self.fv_quantiles_for_gp,
-            branching_factor = self.branching_factor,
-            uniform_partitioning = self.uniform_partitioning,
-            start_seed = self.seed,
-            gpr_model = self.gpr_model,
-            bo_model = self.bo_model,
-            init_sampling_type = self.init_sampling_type,
-            cs_sampling_type = self.cs_sampling_type, 
-            q_estim_sampling = self.q_estim_sampling,
-            mc_integral_sampling_type = self.mc_integral_sampling_type,
-            results_sampling_type = self.results_sampling_type,
-            results_at_confidence = self.results_at_confidence,
-            results_folder_name = self.results_folder_name,
-            num_cores = self.num_cores
+        return PartXResult(
+            run_partx(
+                BENCHMARK_NAME = self.BENCHMARK_NAME,
+                test_function = func.eval_sample,
+                oracle_function= self.oracle_function,
+                num_macro_reps = self.num_macro_reps,
+                init_reg_sup = region_support,
+                tf_dim = region_support.shape[0],
+                max_budget = params.budget,
+                init_budget = self.init_budget,
+                bo_budget = self.bo_budget,
+                cs_budget = self.cs_budget,
+                n_tries_randomsampling= self.n_tries_randomsampling,
+                n_tries_BO=self.n_tries_BO,
+                alpha = self.alpha,
+                R = self.R,
+                M = self.M,
+                delta = self.delta,
+                fv_quantiles_for_gp = self.fv_quantiles_for_gp,
+                branching_factor = self.branching_factor,
+                uniform_partitioning = self.uniform_partitioning,
+                start_seed = self.seed,
+                gpr_model = self.gpr_model,
+                bo_model = self.bo_model,
+                init_sampling_type = self.init_sampling_type,
+                cs_sampling_type = self.cs_sampling_type, 
+                q_estim_sampling = self.q_estim_sampling,
+                mc_integral_sampling_type = self.mc_integral_sampling_type,
+                results_sampling_type = self.results_sampling_type,
+                results_at_confidence = self.results_at_confidence,
+                results_folder_name = self.results_folder_name,
+                num_cores = self.num_cores
+            )
         )
+    

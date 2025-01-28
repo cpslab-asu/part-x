@@ -1,0 +1,76 @@
+Tue, 28 Jan 2025 14:25:14 :: Information about Replication 3
+Tue, 28 Jan 2025 14:25:14 :: Running Goldstein_1_noConstraints Replication 3 with seed 12348
+Tue, 28 Jan 2025 14:25:14 :: **************************************************
+Tue, 28 Jan 2025 14:25:14 :: Options File:
+Tue, 28 Jan 2025 14:25:14 :: BENCHMARK_NAME : Goldstein_1_noConstraints
+Tue, 28 Jan 2025 14:25:14 :: init_reg_sup : [[-1.  1.]
+ [-1.  1.]]
+Tue, 28 Jan 2025 14:25:14 :: tf_dim : 2
+Tue, 28 Jan 2025 14:25:14 :: max_budget : 500
+Tue, 28 Jan 2025 14:25:14 :: init_budget : 20
+Tue, 28 Jan 2025 14:25:14 :: bo_budget : 20
+Tue, 28 Jan 2025 14:25:14 :: cs_budget : 100
+Tue, 28 Jan 2025 14:25:14 :: init_sampling_type : lhs_sampling
+Tue, 28 Jan 2025 14:25:14 :: cs_sampling_type : lhs_sampling
+Tue, 28 Jan 2025 14:25:14 :: q_estim_sampling : lhs_sampling
+Tue, 28 Jan 2025 14:25:14 :: mc_integral_sampling_type : lhs_sampling
+Tue, 28 Jan 2025 14:25:14 :: results_sampling_type : lhs_sampling
+Tue, 28 Jan 2025 14:25:14 :: alpha : 0.05
+Tue, 28 Jan 2025 14:25:14 :: R : 10
+Tue, 28 Jan 2025 14:25:14 :: M : 100
+Tue, 28 Jan 2025 14:25:14 :: delta : 0.001
+Tue, 28 Jan 2025 14:25:14 :: fv_quantiles_for_gp : [0.5, 0.05, 0.01]
+Tue, 28 Jan 2025 14:25:14 :: min_volume : 4e-06
+Tue, 28 Jan 2025 14:25:14 :: branching_factor : 2
+Tue, 28 Jan 2025 14:25:14 :: uniform_partitioning : True
+Tue, 28 Jan 2025 14:25:14 :: start_seed : 12345
+Tue, 28 Jan 2025 14:25:14 :: gpr_model : <partx.gpr.InternalGPR object at 0x74054b34f610>
+Tue, 28 Jan 2025 14:25:14 :: bo_model : <partx.bo.InternalBO object at 0x74054b34f760>
+Tue, 28 Jan 2025 14:25:14 :: **************************************************
+Tue, 28 Jan 2025 14:25:14 :: Budget Used = 0
+Tue, 28 Jan 2025 14:25:14 :: Budget Available (Max Budget) = 500
+Tue, 28 Jan 2025 14:25:14 :: **************************************************
+Tue, 28 Jan 2025 14:25:14 :: **************************************************
+Tue, 28 Jan 2025 14:25:14 :: ***************Replication Start******************
+Tue, 28 Jan 2025 14:26:05 :: **************************************************
+Tue, 28 Jan 2025 14:26:05 :: Remaining Regions: [0]
+Tue, 28 Jan 2025 14:26:05 :: Classified Regions: []
+Tue, 28 Jan 2025 14:26:05 :: Unidentified Regions: []
+Tue, 28 Jan 2025 14:26:05 :: Infeasible Regions: []
+Tue, 28 Jan 2025 14:26:05 :: 40 Evaluations completed
+Tue, 28 Jan 2025 14:26:05 :: 460 left
+Tue, 28 Jan 2025 14:26:05 :: **************************************************
+Tue, 28 Jan 2025 14:27:59 :: **************************************************
+Tue, 28 Jan 2025 14:27:59 :: Remaining Regions: [2, 1]
+Tue, 28 Jan 2025 14:27:59 :: Classified Regions: []
+Tue, 28 Jan 2025 14:27:59 :: Unidentified Regions: []
+Tue, 28 Jan 2025 14:27:59 :: Infeasible Regions: []
+Tue, 28 Jan 2025 14:27:59 :: 81 Evaluations completed
+Tue, 28 Jan 2025 14:27:59 :: 419 left
+Tue, 28 Jan 2025 14:27:59 :: **************************************************
+Tue, 28 Jan 2025 14:33:19 :: **************************************************
+Tue, 28 Jan 2025 14:33:19 :: Remaining Regions: [5, 3, 6]
+Tue, 28 Jan 2025 14:33:19 :: Classified Regions: [4]
+Tue, 28 Jan 2025 14:33:19 :: Unidentified Regions: []
+Tue, 28 Jan 2025 14:33:19 :: Infeasible Regions: []
+Tue, 28 Jan 2025 14:33:19 :: 282 Evaluations completed
+Tue, 28 Jan 2025 14:33:19 :: 218 left
+Tue, 28 Jan 2025 14:33:19 :: **************************************************
+Tue, 28 Jan 2025 14:44:51 :: **************************************************
+Tue, 28 Jan 2025 14:44:51 :: Remaining Regions: [10, 9, 8, 7]
+Tue, 28 Jan 2025 14:44:51 :: Classified Regions: [4, 12, 11]
+Tue, 28 Jan 2025 14:44:51 :: Unidentified Regions: []
+Tue, 28 Jan 2025 14:44:51 :: Infeasible Regions: []
+Tue, 28 Jan 2025 14:44:51 :: 500 Evaluations completed
+Tue, 28 Jan 2025 14:44:51 :: 0 left
+Tue, 28 Jan 2025 14:44:51 :: **************************************************
+Tue, 28 Jan 2025 14:44:51 :: **************************************************
+Tue, 28 Jan 2025 14:44:51 :: *********Replication 3 Finished*****************
+Tue, 28 Jan 2025 14:44:51 :: Remaining Regions: [10, 9, 8, 7]
+Tue, 28 Jan 2025 14:44:51 :: Classified Regions: [4, 12, 11]
+Tue, 28 Jan 2025 14:44:51 :: Unidentified Regions: []
+Tue, 28 Jan 2025 14:44:51 :: Infeasible Regions: []
+Tue, 28 Jan 2025 14:44:51 :: 500 Evaluations completed
+Tue, 28 Jan 2025 14:44:51 :: 0 left
+Tue, 28 Jan 2025 14:44:51 :: **************************************************
+Tue, 28 Jan 2025 14:45:13 :: Ended Goldstein_1_noConstraints Replication 3 with seed 12348
