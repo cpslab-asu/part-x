@@ -1,27 +1,129 @@
-[tool.poetry]
-name = "partx"
-version = "0.2.0"
-description = ""
-authors = ["daittan <tkhandai@asu.edu>"]
-packages = [{include="partx", from="src"}]
-
-[tool.poetry.dependencies]
-python = ">=3.8,<3.11"
-numpy = "^1.22.4"
-scikit-learn = "^1.1.1"
-scipy = "^1.8.1"
-scikit-optimize = "^0.9.0"
-coverage = "^6.4"
-matplotlib = "^3.5.2"
-treelib = "^1.6.1"
-pandas = "^1.4.3"
-pathos = "^0.2.9"
-Sphinx = "^5.3.0"
-psy-taliro = {version = "1.0.0b9", extras = ["rtamt"]}
-pytest = "^8.3.4"
-
-[tool.poetry.dev-dependencies]
-
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "partx"
+version = "0.2.0"
+description = ""
+license = "BSD-3-Clause"
+authors = [
+    { name = "Tanmay Khandait", email = "tkhandai@asu.edu" }
+]
+requires-python = ">=3.9,<3.11"
+dependencies = [
+    "numpy>=1.22.4,<2",
+    "scikit-learn>=1.1.1,<2",
+    "scikit-optimize>=0.9.0,<0.10",
+    "scipy>=1.8.1,<2",
+    "treelib>=1.6.1,<2",
+    "pandas>=1.4.3,<2",
+    "pathos>=0.3,<0.4",
+    "psy-taliro>=1.0,<2",
+]
+
+[project.urls]
+homepage = "https://github.com/cpslab-asu/part-x"
+repository = "https://github.com/cpslab-asu/part-x"
+
+[tool.poetry]
+packages = [
+    { include = "partx", from = "src" },
+]
+
+[tool.poetry.requires-plugins]
+poethepoet = { version = "^0.32.2", extras = ["poetry_plugin"] }
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.14.1"
+ruff = "^0.9.3"
+pandas-stubs = "2.0.3.230814"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.4"
+
+[tool.poetry.group.docs.dependencies]
+Sphinx = "^5.3.0"
+
+[tool.poetry.group.demos.dependencies]
+matplotlib = "^3.5.2"
+
+[tool.poe.tasks.test]
+cmd = "pytest tests"
+
+[tool.poe.tasks.lint]
+cmd = "ruff check ${FILES}"
+args = [
+    { name = "FILES", positional = true, default = "src tests demos"}
+]
+
+[tool.poe.tasks.typecheck]
+cmd = "mypy --pretty ${FILES}"
+args = [
+    { name = "FILES", positional = true, default = "src tests demos"}
+]
+
+[tool.poe.tasks.check]
+sequence = ["typecheck", "lint"]
+
+[tool.mypy]
+python_version = "3.9"
+files = [
+    "src/**/*.py",
+    "tests/**/*.py",
+    "demos/**/*.py",
+]
+strict_equality = true
+strict_optional = true
+warn_no_return = true
+warn_return_any = true 
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+disallow_any_expr = false
+disallow_any_generics = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+# TODO: Create stubs for these packages to avoid having to ignore missing annotations
+module = [
+    "sklearn.*",
+    "scipy.*",
+    "treelib.*",
+    "pathos.*",
+]
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 100
+indent-width = 4
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.ruff.lint]
+select = [
+    "E4", "E7", "E9", "F", "C90",  # Default Flake8 lints
+    "A",                           # Built-in shadowing lints
+    "B",                           # Bugbear lints
+    "I",                           # Isort lints
+    "UP",                          # Upgrade lints
+    "C4",                          # List comprehension lints
+    "PYI",                         # Stub file lints
+    "RET501", "RET502", "RET504",  # Return value lints
+    "N8",                          # Naming plugin
+    "TD",                          # TODO plugin
+    "FBT",                         # Boolean trap lints
+    "SIM",                         # Simplification lints
+    "PTH",                         # Pathlib migration lints
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["partx"]
+split-on-trailing-comma = false
+
+[tool.ruff.lint.per-file-ignores]
