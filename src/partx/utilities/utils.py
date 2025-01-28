@@ -69,7 +69,7 @@ def branch_region(region_support: NDArray, direction_of_branching:int, uniform: 
 
 
 
-def calculate_volume(region_support: NDArray) -> list:
+def calculate_volume(region_support: NDArray) -> float:
     """Calculate volume of a hypercube. 
 
     Args:
@@ -115,7 +115,7 @@ def load_tree(tree_name):
     with open(tree_name, "rb") as f:
         ftree = pickle.load(f)
     # f.close()
-    return 
+    return ftree
 
 
 

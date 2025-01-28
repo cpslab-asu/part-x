@@ -86,7 +86,7 @@ def cal_std_err(x):
     num_macro_rep = len(x)
     unbiased_std_dev = (np.sum((x - np.mean(x))**2))/(num_macro_rep-1)
     std_err = unbiased_std_dev / num_macro_rep
-    return std_err
+    return np.sqrt(std_err)
 
 def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_at, confidence_at, folder_name):
     result_directory = pathlib.Path().joinpath(folder_name).joinpath(BENCHMARK_NAME).joinpath(BENCHMARK_NAME + "_result_generating_files")
@@ -133,7 +133,7 @@ def generate_statistics(BENCHMARK_NAME, number_of_macro_replications, quantiles_
         point_history = np.array(point_history, dtype=object)
         print(point_history)
         print(point_history.shape)
-        list_of_neg_rob = np.where(point_history[:,-1] < 0)
+        list_of_neg_rob = np.where(point_history[:,-1] <= 0)
         list_of_pos_rob = np.where((point_history[:,-1] > 0))
 
         best_robustness.append(np.min(point_history[:,-1]))

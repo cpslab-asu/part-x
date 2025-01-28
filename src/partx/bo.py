@@ -6,8 +6,7 @@ from scipy.optimize import minimize
 from scipy.stats import norm
 
 from .gpr import GPR
-from .utilities.sampling import uniform_sampling
-from .utilities.utils import compute_robustness, OracleCreator
+from .utilities import uniform_sampling, compute_robustness, OracleCreator, Fn
 
 class BO_Interface(ABC):
     @abstractmethod
@@ -41,7 +40,7 @@ class BO_Interface(ABC):
         raise NotImplementedError
     
 class BOSampling:
-    def __init__(self, bo_model: Callable) -> None:
+    def __init__(self, bo_model: BO_Interface) -> None:
         """ Initialize BO Method for use in Part-X
 
         Args:
@@ -51,12 +50,12 @@ class BOSampling:
 
     def sample(
         self,
-        test_function: Callable,
+        test_function: Fn,
         num_samples: int,
         x_train: NDArray,
         y_train: NDArray,
         region_support: NDArray,
-        gpr_model: Callable,
+        gpr_model: GPR,
         oracle_info,
         rng,
     ) -> tuple: 
@@ -150,10 +149,10 @@ class InternalBO(BO_Interface):
          x_train: NDArray,
          y_train: NDArray,
          region_support: NDArray,
-         gpr_model: Callable,
+         gpr_model:  GPR,
          oracle_info,
          rng,
-      ) -> Tuple[NDArray]:
+      ) -> NDArray:
 
         """Internal BO Model
 
@@ -183,7 +182,7 @@ class InternalBO(BO_Interface):
 
         return pred_sample_x
 
-    def _opt_acquisition(self, y_train: NDArray, gpr_model: Callable, constraint_model, region_support: NDArray, oracle_info, rng) -> NDArray:
+    def _opt_acquisition(self, y_train: NDArray, gpr_model: GPR, constraint_model, region_support: NDArray, oracle_info, rng) -> NDArray:
         """Get the sample points
 
         Args:

@@ -5,14 +5,26 @@ import logging
 from copy import deepcopy
 from pathlib import Path
 from treelib import Tree
+from treelib.node import Node
 from typing import Callable, Tuple
 from numpy.typing import NDArray
 from numpy.random import Generator
 
-from .utilities.sampling import lhs_sampling, uniform_sampling, OOBError
-from .utilities.stat_utils import estimate_quantiles, classification, calculate_mc_integral, assign_budgets
-from .utilities.utils import compute_robustness, calculate_volume, OracleCreator, Fn, branch_region, divide_points
-from .gpr import GaussianProcessRegressorStructure
+from .utilities import (
+    lhs_sampling, 
+    uniform_sampling, 
+    estimate_quantiles, 
+    classification, 
+    calculate_mc_integral, 
+    assign_budgets, 
+    compute_robustness, 
+    calculate_volume, 
+    branch_region, 
+    divide_points,
+    OracleCreator, 
+    Fn, 
+    OOBError)
+from .gpr import GPRSkeleton
 from .bo import BO_Interface, BOSampling
 from .results import fv_using_gp
 
@@ -35,7 +47,7 @@ class PartXOptions:
                  branching_factor:int, 
                  uniform_partitioning:bool, 
                  start_seed:int, 
-                 gpr_model:GaussianProcessRegressorStructure, 
+                 gpr_model:GPRSkeleton, 
                  bo_model:BO_Interface, 
                  init_sampling_type:str = "lhs_sampling", 
                  cs_sampling_type:str = "lhs_sampling", 
@@ -123,7 +135,7 @@ class PartXNode:
         self.branch_dir = branch_dir
         
 
-    def samples_management_unclassified(self, test_function: Callable[[NDArray], float], options: PartXOptions, oracle_info: OracleCreator, rng: Generator):
+    def samples_management_unclassified(self, test_function: Fn, options: PartXOptions, oracle_info: OracleCreator, rng: Generator):
         """Method to manage samples in subregion which is unclassified (r, r+, r-)
 
         Args:
@@ -176,7 +188,7 @@ class PartXNode:
             self.region_class = "i"
         return self.new_region_class
     
-    def samples_management_classified(self, num_samples: int, test_function: Callable[[NDArray], float], options: PartXOptions, oracle_info: OracleCreator, rng: Generator, fin_cs: bool = False):
+    def samples_management_classified(self, num_samples: int, test_function: Fn, options: PartXOptions, oracle_info: OracleCreator, rng: Generator, fin_cs: bool = False):
         """Method to manage samples in where continued sampling is to be performed.
 
         Args:
@@ -306,9 +318,9 @@ def run_single_replication(inputs: Tuple[int, PartXOptions, Callable[[NDArray], 
             budget_for_branching = 0
             potential_children = []
             for node_id in remaining_regions_l:
-                node = ftree.get_node(node_id)
+                node:Node = ftree.get_node(node_id)
                 node_identifier = node.identifier
-                node_data = node.data
+                node_data:PartXNode = node.data
                 sub_bounds = branch_region(node_data.region_support, direction[node_data.branch_dir%options.tf_dim], options.uniform_partitioning, options.branching_factor, rng)
                 x_samples_divided, y_samples_divided = divide_points(node_data.samples_in, node_data.samples_out, sub_bounds)
                 
@@ -505,7 +517,4 @@ def run_single_replication(inputs: Tuple[int, PartXOptions, Callable[[NDArray], 
     log.removeHandler(fh)
     fh.close()
 
-    return {
-        'ftree': ftree,
-        'time_results': time_result
-    }
+    return ftree, time_result, falsification_volume_arrays, tf_wrapper.point_history

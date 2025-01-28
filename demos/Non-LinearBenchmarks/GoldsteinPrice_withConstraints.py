@@ -1,7 +1,9 @@
-from partx.partxInterface import run_partx
+from partx.interface import run_partx
 import numpy as np
-from partx.bayesianOptimization import InternalBO
-from partx.gprInterface import InternalGPR
+from partx.bo import InternalBO
+from partx.gpr import InternalGPR
+from partx.results import generate_statistics
+
 
 
 # Define the Goldstein Price Test Function
@@ -26,7 +28,7 @@ init_reg_sup = np.array([[-1., 1.], [-1., 0.]])
 tf_dim = 2
 
 # Max Budget is set to 1000
-max_budget = 1000
+max_budget = 500
 
 # Initial Sampling in the subregion is set to 20
 init_budget = 20
@@ -76,13 +78,13 @@ results_sampling_type = "lhs_sampling"
 results_at_confidence = 0.95
 
 # Run Part-X for 5 macro-replications
-num_macro_reps = 1
+num_macro_reps = 4
 
 # All benchmarks will be stored in this folder
 results_folder_name = "NLF"
 
 # Run all the replication serially. If > 1, will run the replications parallaly.
-num_cores = 1
+num_cores = 4
 
 # Run Part-X
 results = run_partx(BENCHMARK_NAME, test_function, oracle_fn, num_macro_reps, init_reg_sup, tf_dim,
@@ -94,3 +96,7 @@ results = run_partx(BENCHMARK_NAME, test_function, oracle_fn, num_macro_reps, in
                 q_estim_sampling, mc_integral_sampling_type, 
                 results_sampling_type, 
                 results_at_confidence, results_folder_name, num_cores) 
+
+# import pickle 
+
+# result_dictionary = generate_statistics(BENCHMARK_NAME, num_macro_reps, fv_quantiles_for_gp, results_at_confidence,results_folder_name)

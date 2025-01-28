@@ -7,7 +7,7 @@ from warnings import catch_warnings
 import warnings
 
 
-class GaussianProcessRegressorStructure(ABC):
+class GPRSkeleton(ABC):
     @abstractmethod
     def __init__(self):
         raise NotImplementedError
@@ -97,7 +97,7 @@ class GPR:
 
         return mean, std
 
-class InternalGPR(GaussianProcessRegressorStructure):
+class InternalGPR(GPRSkeleton):
     def __init__(self, random_state = 12345):
         self.gpr_model = GaussianProcessRegressor(
             kernel=Matern(nu=2.5), alpha=1e-6, normalize_y=True, n_restarts_optimizer=5, random_state = random_state

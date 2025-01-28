@@ -1,11 +1,11 @@
 from scipy import stats
-from .utils import calculate_volume
+from typing import Tuple
 import numpy as np
 from numpy.typing import NDArray
 
-from scipy import stats
 from ..gpr import GPR
 from .sampling import uniform_sampling, lhs_sampling
+from .utils import calculate_volume
 
 def conf_interval(x: NDArray, conf_at: float):
     """Calculate Confidence interval
@@ -18,14 +18,11 @@ def conf_interval(x: NDArray, conf_at: float):
         [type]: [description]
     """
     if x.shape[0] <= 1:
-        raise ValueError("Elements in the input samples vector <= 1")
+        raise ValueError(f"Elements in the input samples vector <= 1. Elements shape is {x.shape}")
     mean, std = x.mean(), x.std(ddof=1)
     conf_intveral = stats.norm.interval(conf_at, loc=mean, scale=std)
     
     return conf_intveral
-
-
-
 
 def calculate_mc_integral(x_train, y_train, region_support, tf_dim, R, M, gpr_model, oracle_info, rng, sampling_type):
     model = GPR(gpr_model)
@@ -49,9 +46,9 @@ def calculate_mc_integral(x_train, y_train, region_support, tf_dim, R, M, gpr_mo
     return (cdf_all_sum/(R*M)) * calculate_volume(region_support)
     # return calculate_volume(region_support)
 
-def assign_budgets(vol_probablity_distribution, cs_budget):
+def assign_budgets(vol_probablity, cs_budget):
 
-    cumu_sum = np.cumsum(np.insert(vol_probablity_distribution, 0,0))
+    cumu_sum = np.cumsum(np.insert(vol_probablity, 0,0))
     random_numbers = np.random.uniform(0.0, 1.0, cs_budget)
     n_cont_budget_distribution = []
     for iterate in range(len(cumu_sum)-1):
@@ -60,7 +57,7 @@ def assign_budgets(vol_probablity_distribution, cs_budget):
     return n_cont_budget_distribution
 
 
-def classification(region_support: np.array, region_class:chr, min_volume:float, min_delta_q:list, max_delta_q:list)->chr:
+def classification(region_support: NDArray, region_class:str, min_volume:float, min_delta_q:float, max_delta_q:float)->str:
     """Function classifies the region based on the its Quantile estimates
 
     Args:
@@ -102,7 +99,7 @@ def classification(region_support: np.array, region_class:chr, min_volume:float,
     return region_class
 
 
-def calculate_quantile(y_pred, sigma_st, alpha):
+def calculate_quantile(y_pred: NDArray, sigma_st:NDArray, alpha:float):
     """Min-Max Quantile Calculation
 
     Args:
@@ -176,7 +173,7 @@ def mc_step(x_train, y_train, region_support, tf_dim, alpha, R, M, gpr_model, or
     return minQuantile, maxQuantile
 
 
-def estimate_mc(lower_quantile: list, upper_quantile: list):
+def estimate_mc(lower_quantile: NDArray, upper_quantile: NDArray):
     """calculate mean and variance from lower and upper quantiles
 
     Args:
@@ -199,7 +196,7 @@ def estimate_mc(lower_quantile: list, upper_quantile: list):
 
 
 
-def estimate_quantiles(x_train: np.array, y_train: np.array, region_support:np.array, tf_dim:int, alpha:list, R:int, M:int, gpr_model, oracle_info, rng, sampling_type = "lhs_sampling")->list:
+def estimate_quantiles(x_train: NDArray, y_train: NDArray, region_support:NDArray, tf_dim:int, alpha:float, R:int, M:int, gpr_model, oracle_info, rng:np.random.Generator, sampling_type:str = "lhs_sampling")->Tuple[float, float]:
     """Main driver function for estimating the lower and upper bounds from samples
 
     Args:
