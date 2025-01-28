@@ -6,7 +6,8 @@ from scipy.optimize import minimize
 from scipy.stats import norm
 
 from .gpr import GPR, GPRSkeleton
-from .utilities import uniform_sampling, compute_robustness, OracleCreator, Fn
+from .sampling import uniform_sampling
+from .utils import compute_robustness, OracleCreator, Fn
 
 class BO_Interface(ABC):
     @abstractmethod

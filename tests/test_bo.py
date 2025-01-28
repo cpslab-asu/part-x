@@ -6,10 +6,8 @@ import pathlib
 from numpy import random
 
 from partx.gpr import InternalGPR
-from partx.utilities.utils import Fn, compute_robustness
-from partx.utilities.sampling import uniform_sampling
 from partx.bo import InternalBO
-from partx.utilities.utils import OracleCreator
+from partx.utils import OracleCreator
 
 
 @pytest.fixture()

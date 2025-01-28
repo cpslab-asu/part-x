@@ -5,8 +5,8 @@ import pathlib
 import time
 from numpy import random
 
-from partx.utilities.utils import branch_region, OracleCreator, calculate_volume, Fn, divide_points, compute_robustness
-from partx.utilities.sampling import uniform_sampling, lhs_sampling
+from partx.utils import branch_region, OracleCreator, calculate_volume, Fn, divide_points, compute_robustness
+from partx.sampling import uniform_sampling, lhs_sampling
 
 @pytest.fixture()
 def rng() -> random.Generator:

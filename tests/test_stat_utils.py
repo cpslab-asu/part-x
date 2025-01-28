@@ -4,9 +4,9 @@ import pytest
 import pathlib
 from numpy import random
 
-from partx.utilities.utils import OracleCreator, Fn, compute_robustness
-from partx.utilities.sampling import lhs_sampling, uniform_sampling
-from partx.utilities.stat_utils import calculate_mc_integral, conf_interval, assign_budgets, calculate_quantile, estimate_quantiles, mc_step
+from partx.utils import OracleCreator, Fn, compute_robustness
+from partx.sampling import lhs_sampling, uniform_sampling
+from partx.stats import calculate_mc_integral, conf_interval, assign_budgets, calculate_quantile, estimate_quantiles, mc_step
 from partx.gpr import InternalGPR
 from scipy import stats
 

@@ -10,21 +10,21 @@ from typing import Callable, Tuple
 from numpy.typing import NDArray
 from numpy.random import Generator
 
-
-from .utilities import (
-    lhs_sampling, 
-    uniform_sampling, 
-    estimate_quantiles, 
-    classification, 
-    calculate_mc_integral, 
-    assign_budgets, 
+from .sampling import lhs_sampling, uniform_sampling, OOBError
+from .utils import (
     compute_robustness, 
     calculate_volume, 
     branch_region, 
-    divide_points,
+    divide_points, 
     OracleCreator, 
-    Fn, 
-    OOBError)
+    Fn
+)
+from .stats import (
+    estimate_quantiles, 
+    classification,
+    calculate_mc_integral,
+    assign_budgets
+)
 from .gpr import GPRSkeleton
 from .bo import BO_Interface, BOSampling
 from .results import fv_using_gp

@@ -6,8 +6,8 @@ import numpy as np
 import numpy.random as random
 
 # from pa.sampling import lhs_sampling, uniform_sampling
-from partx.utilities.sampling import lhs_sampling, uniform_sampling, OOBError
-from partx.utilities.utils import OracleCreator
+from partx.sampling import lhs_sampling, uniform_sampling, OOBError
+from partx.utils import OracleCreator
 
 def oracle_func_1d(X):
     return X[0]**2 + X[1]**2 - 0.25

@@ -17,7 +17,7 @@ from .gpr import GPRSkeleton
 from .bo import BO_Interface
 from .optimizer import PartXOptions, run_single_replication
 from .results import generate_statistics
-from .utilities import OracleCreator
+from .utils import OracleCreator
 
 def run_partx(BENCHMARK_NAME:str, test_function:Callable[[NDArray], float], oracle_function, num_macro_reps:int, init_reg_sup:NDArray, tf_dim:int,
                 max_budget:int, init_budget:int, bo_budget:int, cs_budget:int, 

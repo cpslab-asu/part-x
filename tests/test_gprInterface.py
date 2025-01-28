@@ -6,8 +6,8 @@ import pytest
 import pathlib
 
 
-from partx.utilities.sampling import uniform_sampling, lhs_sampling
-from partx.utilities.utils import OracleCreator
+from partx.sampling import uniform_sampling, lhs_sampling
+from partx.utils import OracleCreator
 
 from partx.gpr import (
     GPR,

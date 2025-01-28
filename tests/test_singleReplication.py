@@ -8,7 +8,7 @@ import numpy.random as random
 from partx.optimizer import PartXOptions, run_single_replication
 from partx.gpr import InternalGPR
 from partx.bo import InternalBO
-from partx.utilities.utils import OracleCreator
+from partx.utils import OracleCreator
 from partx.results import fv_without_gp
 
 @pytest.fixture()
@@ -135,7 +135,7 @@ def test3_single_replication(oracle_info:OracleCreator, data_path: pathlib.Path)
                         18 - 32 * X[0] + 12 * X[0] ** 2 + 48 * X[1] - 36 * X[0] * X[1] + 27 * X[1] ** 2)) - 50
 
     
-    inputs = [0, options, internal_function, oracle_info, pathlib.Path("tests/optimizer")]
+    inputs = (0, options, internal_function, oracle_info, pathlib.Path("tests/optimizer"))
     t = time.time()
     run_single_replication(inputs)
     with open("./tests/optimizer/Testing_t3_result_generating_files/Testing_t3_0.pkl", "rb") as f:

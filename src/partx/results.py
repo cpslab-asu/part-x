@@ -6,9 +6,9 @@ import pandas as pd
 from scipy import stats
 
 from .gpr import GPR
-from .utilities.sampling import lhs_sampling, uniform_sampling
-from .utilities.utils import calculate_volume, load_tree
-from .utilities.stat_utils import conf_interval
+from .sampling import lhs_sampling, uniform_sampling
+from .utils import calculate_volume, load_tree
+from .stats import conf_interval
 
 def fv_without_gp(ftree, options):
     """Calculate Falsification Volume Using the classified and unclassified regions

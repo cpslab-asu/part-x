@@ -3,7 +3,7 @@ from typing import Tuple
 import numpy as np
 from numpy.typing import NDArray
 
-from ..gpr import GPR
+from .gpr import GPR
 from .sampling import uniform_sampling, lhs_sampling
 from .utils import calculate_volume
 
