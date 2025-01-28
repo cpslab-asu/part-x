@@ -43,7 +43,7 @@ def lhs_sampling(
 
     while len(samples) < num_samples and n_tries > 0:
         
-        lhs_samples = qmc.LatinHypercube(d=tf_dim, seed=rng).random(n=num_samples - len(samples))
+        lhs_samples = qmc.LatinHypercube(d=tf_dim, rng = rng).random(n=num_samples - len(samples))
         scaled_samples = qmc.scale(lhs_samples, lb, ub)
 
         for point in scaled_samples:
@@ -90,7 +90,7 @@ def uniform_sampling(
     if region_support.shape[1] != 2:
         raise ValueError("Region Support matrix must be MxNx2")
     
-    if not np.alltrue(region_support[:, 1] - region_support[:, 0] >= 0):
+    if not np.all(region_support[:, 1] - region_support[:, 0] >= 0):
         raise ValueError("Region Support Z-pairs must be in increasing order")
 
     samples = []

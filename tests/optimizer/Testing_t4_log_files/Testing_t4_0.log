@@ -81,3 +81,86 @@ Tue, 28 Jan 2025 10:17:50 :: 100 Evaluations completed
 Tue, 28 Jan 2025 10:17:50 :: 0 left
 Tue, 28 Jan 2025 10:17:50 :: **************************************************
 Tue, 28 Jan 2025 10:17:50 :: Ended Testing_t4 Replication 0 with seed 123
+Tue, 28 Jan 2025 15:31:26 :: Information about Replication 0
+Tue, 28 Jan 2025 15:31:26 :: Running Testing_t4 Replication 0 with seed 123
+Tue, 28 Jan 2025 15:31:26 :: **************************************************
+Tue, 28 Jan 2025 15:31:26 :: Options File:
+Tue, 28 Jan 2025 15:31:26 :: BENCHMARK_NAME : Testing_t4
+Tue, 28 Jan 2025 15:31:26 :: init_reg_sup : [[-0.5  0.5]
+ [-0.5  0.5]]
+Tue, 28 Jan 2025 15:31:26 :: tf_dim : 2
+Tue, 28 Jan 2025 15:31:26 :: max_budget : 100
+Tue, 28 Jan 2025 15:31:26 :: init_budget : 10
+Tue, 28 Jan 2025 15:31:26 :: bo_budget : 10
+Tue, 28 Jan 2025 15:31:26 :: cs_budget : 10
+Tue, 28 Jan 2025 15:31:26 :: init_sampling_type : uniform_sampling
+Tue, 28 Jan 2025 15:31:26 :: cs_sampling_type : uniform_sampling
+Tue, 28 Jan 2025 15:31:26 :: q_estim_sampling : uniform_sampling
+Tue, 28 Jan 2025 15:31:26 :: mc_integral_sampling_type : lhs_sampling
+Tue, 28 Jan 2025 15:31:26 :: results_sampling_type : lhs_sampling
+Tue, 28 Jan 2025 15:31:26 :: alpha : 0.05
+Tue, 28 Jan 2025 15:31:26 :: R : 20
+Tue, 28 Jan 2025 15:31:26 :: M : 500
+Tue, 28 Jan 2025 15:31:26 :: delta : 0.05
+Tue, 28 Jan 2025 15:31:26 :: fv_quantiles_for_gp : [0.01, 0.05, 0.5]
+Tue, 28 Jan 2025 15:31:26 :: min_volume : 0.0025000000000000005
+Tue, 28 Jan 2025 15:31:26 :: branching_factor : 2
+Tue, 28 Jan 2025 15:31:26 :: uniform_partitioning : True
+Tue, 28 Jan 2025 15:31:26 :: start_seed : 123
+Tue, 28 Jan 2025 15:31:26 :: gpr_model : <partx.gpr.InternalGPR object at 0x76a97d4d2ec0>
+Tue, 28 Jan 2025 15:31:26 :: bo_model : <partx.bo.InternalBO object at 0x76a97af17e50>
+Tue, 28 Jan 2025 15:31:26 :: **************************************************
+Tue, 28 Jan 2025 15:31:26 :: Budget Used = 0
+Tue, 28 Jan 2025 15:31:26 :: Budget Available (Max Budget) = 100
+Tue, 28 Jan 2025 15:31:26 :: **************************************************
+Tue, 28 Jan 2025 15:31:26 :: **************************************************
+Tue, 28 Jan 2025 15:31:26 :: ***************Replication Start******************
+Tue, 28 Jan 2025 15:31:46 :: **************************************************
+Tue, 28 Jan 2025 15:31:46 :: Remaining Regions: [0]
+Tue, 28 Jan 2025 15:31:46 :: Classified Regions: []
+Tue, 28 Jan 2025 15:31:46 :: Unidentified Regions: []
+Tue, 28 Jan 2025 15:31:46 :: Infeasible Regions: []
+Tue, 28 Jan 2025 15:31:46 :: 20 Evaluations completed
+Tue, 28 Jan 2025 15:31:46 :: 80 left
+Tue, 28 Jan 2025 15:31:46 :: **************************************************
+Tue, 28 Jan 2025 15:32:28 :: **************************************************
+Tue, 28 Jan 2025 15:32:28 :: Remaining Regions: [1]
+Tue, 28 Jan 2025 15:32:28 :: Classified Regions: [2]
+Tue, 28 Jan 2025 15:32:28 :: Unidentified Regions: []
+Tue, 28 Jan 2025 15:32:28 :: Infeasible Regions: []
+Tue, 28 Jan 2025 15:32:28 :: 53 Evaluations completed
+Tue, 28 Jan 2025 15:32:28 :: 47 left
+Tue, 28 Jan 2025 15:32:28 :: **************************************************
+Tue, 28 Jan 2025 15:33:10 :: **************************************************
+Tue, 28 Jan 2025 15:33:10 :: Remaining Regions: [3]
+Tue, 28 Jan 2025 15:33:10 :: Classified Regions: [2, 4]
+Tue, 28 Jan 2025 15:33:10 :: Unidentified Regions: []
+Tue, 28 Jan 2025 15:33:10 :: Infeasible Regions: []
+Tue, 28 Jan 2025 15:33:10 :: 87 Evaluations completed
+Tue, 28 Jan 2025 15:33:10 :: 13 left
+Tue, 28 Jan 2025 15:33:10 :: **************************************************
+Tue, 28 Jan 2025 15:33:10 :: **************************************************
+Tue, 28 Jan 2025 15:33:10 :: Entering Last Phase with 13 left
+Tue, 28 Jan 2025 15:33:10 :: Remaining Regions: [3]
+Tue, 28 Jan 2025 15:33:10 :: Classified Regions: [2, 4]
+Tue, 28 Jan 2025 15:33:10 :: Unidentified Regions: []
+Tue, 28 Jan 2025 15:33:10 :: Infeasible Regions: []
+Tue, 28 Jan 2025 15:33:10 :: **************************************************
+Tue, 28 Jan 2025 15:33:15 :: **************************************************
+Tue, 28 Jan 2025 15:33:15 :: Remaining Regions: [3]
+Tue, 28 Jan 2025 15:33:15 :: Classified Regions: [2, 4]
+Tue, 28 Jan 2025 15:33:15 :: Unidentified Regions: []
+Tue, 28 Jan 2025 15:33:15 :: Infeasible Regions: []
+Tue, 28 Jan 2025 15:33:15 :: 100 Evaluations completed
+Tue, 28 Jan 2025 15:33:15 :: 0 left
+Tue, 28 Jan 2025 15:33:15 :: **************************************************
+Tue, 28 Jan 2025 15:33:15 :: **************************************************
+Tue, 28 Jan 2025 15:33:15 :: *********Replication 0 Finished*****************
+Tue, 28 Jan 2025 15:33:15 :: Remaining Regions: [3]
+Tue, 28 Jan 2025 15:33:15 :: Classified Regions: [2, 4]
+Tue, 28 Jan 2025 15:33:15 :: Unidentified Regions: []
+Tue, 28 Jan 2025 15:33:15 :: Infeasible Regions: []
+Tue, 28 Jan 2025 15:33:15 :: 100 Evaluations completed
+Tue, 28 Jan 2025 15:33:15 :: 0 left
+Tue, 28 Jan 2025 15:33:15 :: **************************************************
+Tue, 28 Jan 2025 15:33:16 :: Ended Testing_t4 Replication 0 with seed 123

@@ -281,7 +281,7 @@ def test6_lhs_sampling(rng: random.Generator, oracle_info_4: OracleCreator):
     # oracle_info = OracleCreator(oracle_func_4d, 100,1)
     region_support = np.array([[-1, 1],[-3.8, 1.5], [-2, 1], [-1, 1]])
     tf_dim = 4
-    num_samples = 10
+    num_samples = 500
 
     with pytest.raises(OOBError):
         lhs_sampling(

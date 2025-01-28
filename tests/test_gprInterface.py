@@ -11,7 +11,7 @@ from partx.utilities.utils import OracleCreator
 
 from partx.gpr import (
     GPR,
-    GaussianProcessRegressorStructure,
+    GPRSkeleton,
     InternalGPR,
 )
 
