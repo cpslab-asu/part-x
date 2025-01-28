@@ -10,6 +10,7 @@ from typing import Callable, Tuple
 from numpy.typing import NDArray
 from numpy.random import Generator
 
+
 from .utilities import (
     lhs_sampling, 
     uniform_sampling, 
@@ -318,9 +319,9 @@ def run_single_replication(inputs: Tuple[int, PartXOptions, Callable[[NDArray], 
             budget_for_branching = 0
             potential_children = []
             for node_id in remaining_regions_l:
-                node:Node = ftree.get_node(node_id)
+                node:Node = ftree.get_node(node_id) # type: ignore
                 node_identifier = node.identifier
-                node_data:PartXNode = node.data
+                node_data:PartXNode = node.data # type: ignore
                 sub_bounds = branch_region(node_data.region_support, direction[node_data.branch_dir%options.tf_dim], options.uniform_partitioning, options.branching_factor, rng)
                 x_samples_divided, y_samples_divided = divide_points(node_data.samples_in, node_data.samples_out, sub_bounds)
                 
@@ -331,7 +332,7 @@ def run_single_replication(inputs: Tuple[int, PartXOptions, Callable[[NDArray], 
                     child_reg_samples_in = x_samples_divided[branches]
                     child_reg_samples_out = y_samples_divided[branches]
                     budget_for_branching += max(options.init_budget - child_reg_samples_in.shape[0], 0) + options.bo_budget
-                    child_node = deepcopy(PartXNode(node_id_keeper, node_identifier, child_reg_sup, child_reg_samples_in, child_reg_samples_out, node_data.branch_dir+1, region_class="r"))
+                    child_node = deepcopy(PartXNode(node_id_keeper, node_identifier, child_reg_sup, child_reg_samples_in, child_reg_samples_out, node_data.branch_dir+1, region_class="r"))  # type: ignore
                     potential_children.append(child_node)
         else:
             budget_for_branching = 0
@@ -364,8 +365,8 @@ def run_single_replication(inputs: Tuple[int, PartXOptions, Callable[[NDArray], 
                 volumes = []
                 cs_budget_allocated = min(options.cs_budget, (options.max_budget - tf_wrapper.count))
                 for classi_node in classified_region_l:
-                    node = ftree.get_node(classi_node)
-                    node_data = node.data
+                    node = ftree.get_node(classi_node) # type: ignore
+                    node_data = node.data # type: ignore
                     cs_indicator = calculate_mc_integral(node_data.samples_in, node_data.samples_out, node_data.region_support, options.tf_dim, options.R, options.M, options.gpr_model, oracle_info, rng, sampling_type=options.mc_integral_sampling_type)
                     volumes.append(cs_indicator)
                 
@@ -381,9 +382,9 @@ def run_single_replication(inputs: Tuple[int, PartXOptions, Callable[[NDArray], 
                 for iterate, classi_node in enumerate(classified_region_l):
                     
                     if assigned_budgets[iterate] != 0:
-                        node = ftree.get_node(classi_node)
+                        node = ftree.get_node(classi_node) # type: ignore
                         node_identifier = node.identifier
-                        node_data = node.data
+                        node_data = node.data # type: ignore
 
                         node_data.samples_management_classified(assigned_budgets[iterate], tf_wrapper, options, oracle_info, rng)
                         ftree.update_node(node_identifier, tag = node_identifier, data = node_data)
@@ -396,9 +397,9 @@ def run_single_replication(inputs: Tuple[int, PartXOptions, Callable[[NDArray], 
                         elif node_data.region_class == "i":
                             infeasible_regions_l.append(node_identifier)
                     else:
-                        node = ftree.get_node(classi_node)
+                        node = ftree.get_node(classi_node) # type: ignore
                         node_identifier = node.identifier
-                        node_data = node.data
+                        node_data = node.data # type: ignore
                         ftree.update_node(node_identifier, tag = node_identifier, data = node_data)
 
                         if node_data.region_class == 'r' or node_data.region_class == 'r+' or node_data.region_class == 'r-':
@@ -425,8 +426,8 @@ def run_single_replication(inputs: Tuple[int, PartXOptions, Callable[[NDArray], 
             if all_regions:
                 volumes = []
                 for all_nodes in all_regions:
-                    node = ftree.get_node(all_nodes)
-                    node_data = node.data
+                    node = ftree.get_node(all_nodes) # type: ignore
+                    node_data = node.data # type: ignore
                     cs_indicator = calculate_volume(node_data.region_support)
                     volumes.append(cs_indicator)
                 
@@ -440,9 +441,9 @@ def run_single_replication(inputs: Tuple[int, PartXOptions, Callable[[NDArray], 
                 for iterate, all_nodes in enumerate(all_regions):
                     
                     if assigned_budgets[iterate] != 0:
-                        node = ftree.get_node(all_nodes)
+                        node = ftree.get_node(all_nodes) # type: ignore
                         node_identifier = node.identifier
-                        node_data = node.data
+                        node_data = node.data # type: ignore
 
                         node_data.samples_management_classified(assigned_budgets[iterate], tf_wrapper, options, oracle_info, rng, fin_cs = True)
                         ftree.update_node(node_identifier, tag = node_identifier, data = node_data)
@@ -455,9 +456,9 @@ def run_single_replication(inputs: Tuple[int, PartXOptions, Callable[[NDArray], 
                         elif node_data.region_class == "i":
                             infeasible_regions_l.append(node_identifier)
                     else:
-                        node = ftree.get_node(all_nodes)
+                        node = ftree.get_node(all_nodes) # type: ignore
                         node_identifier = node.identifier
-                        node_data = node.data
+                        node_data = node.data # type: ignore
                         ftree.update_node(node_identifier, tag = node_identifier, data = node_data)
 
                         if node_data.region_class == 'r' or node_data.region_class == 'r+' or node_data.region_class == 'r-':

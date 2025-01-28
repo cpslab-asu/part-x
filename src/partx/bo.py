@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from scipy.optimize import minimize
 from scipy.stats import norm
 
-from .gpr import GPR
+from .gpr import GPR, GPRSkeleton
 from .utilities import uniform_sampling, compute_robustness, OracleCreator, Fn
 
 class BO_Interface(ABC):
@@ -19,7 +19,7 @@ class BO_Interface(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def sample(self):
+    def sample(self, x_train, y_train, region_support, gpr_model, oracle_info, rng):
         """Sampling using User Defined BO.
 
         Args:
@@ -55,8 +55,8 @@ class BOSampling:
         x_train: NDArray,
         y_train: NDArray,
         region_support: NDArray,
-        gpr_model: GPR,
-        oracle_info,
+        gpr_model: GPRSkeleton,
+        oracle_info: OracleCreator,
         rng,
     ) -> tuple: 
         """Wrapper around user defined BO Model.
@@ -149,7 +149,7 @@ class InternalBO(BO_Interface):
          x_train: NDArray,
          y_train: NDArray,
          region_support: NDArray,
-         gpr_model:  GPR,
+         gpr_model:  GPRSkeleton,
          oracle_info,
          rng,
       ) -> NDArray:
@@ -249,7 +249,7 @@ class InternalBO(BO_Interface):
 
         return np.array(min_bo)
 
-    def _surrogate(self, gpr_model: Callable, x_train: NDArray):
+    def _surrogate(self, gpr_model: GPR, x_train: NDArray):
         """_surrogate Model function
 
         Args:
@@ -262,7 +262,7 @@ class InternalBO(BO_Interface):
 
         return gpr_model.predict(x_train)
 
-    def _acquisition(self, y_train: NDArray, sample: NDArray, gpr_model: Callable, constraint_model, oracle_info, sample_type:str ="single") -> NDArray:
+    def _acquisition(self, y_train: NDArray, sample: NDArray, gpr_model: GPR, constraint_model, oracle_info, sample_type:str ="single") -> NDArray|float:
         """Acquisition Model: Expected Improvement
 
         Args:
