@@ -6,23 +6,33 @@ build-backend = "poetry.core.masonry.api"
 name = "partx"
 version = "0.2.0"
 description = ""
-authors = [{name = "daittan", email = "tkhandai@asu.edu"}]
-packages = [{include="partx", from="src"}]
+authors = [
+    { name = "Tanmay Khandait", email = "tkhandai@asu.edu" }
+]
+requires-python = ">=3.10,<3.11"
+dependencies = [
+    "scikit-learn >=1.1.1,<2",
+    "scipy >=1.8.1,<2",
+    "scikit-optimize >=0.9.0,<0.10",
+    "treelib >=1.6.1,<2",
+    "pandas >=1.4.3,<2",
+    "psy-taliro >=1.0.0,<2",
+    "numpy >=1.22.4,<2",
+    "pathos >=0.3.3,<0.4",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.10,<3.11"
-scikit-learn = "^1.1.1"
-scipy = "^1.8.1"
-scikit-optimize = "^0.9.0"
-coverage = "^6.4"
-matplotlib = "^3.5.2"
-treelib = "^1.6.1"
-pandas = "^1.4.3"
-Sphinx = "^5.3.0"
-psy-taliro = {version = "^1.0.0", extras = ["rtamt"]}
-pytest = "^8.3.4"
-numpy = "^1.22.4"
-pathos = "^0.3.3"
+[tool.poetry]
+packages = [
+    {include="partx", from="src"}
+]
+
+[tool.poetry.requires-plugins]
+poethepoet = { version = "^0.32.2", extras = ["poetry_plugin"] }
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.14.1"
+ruff = "^0.9.3"
+pandas-stubs = "^2.2.3.241126"
 
 [tool.poetry.group.docs.dependencies]
 Sphinx = "^5.3.0"
