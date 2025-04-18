@@ -1,3 +1,10 @@
 *.pyc
 *.pkl
 *.log
+.mypy_cache
+.poetry
+.pytest_cache
+NLF/
+NLF*/
+*.png
+__pycache__

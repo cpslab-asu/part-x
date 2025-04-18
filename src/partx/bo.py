@@ -1,13 +1,15 @@
-from typing import Callable, Tuple
-from numpy.typing import NDArray
-import numpy as np
 from abc import ABC, abstractmethod
+from typing import Callable, Tuple
+
+import numpy as np
+from numpy.typing import NDArray
 from scipy.optimize import minimize
 from scipy.stats import norm
 
 from .gpr import GPR, GPRSkeleton
 from .sampling import uniform_sampling
-from .utils import compute_robustness, OracleCreator, Fn
+from .utils import Fn, OracleCreator, compute_robustness
+
 
 class BO_Interface(ABC):
     @abstractmethod

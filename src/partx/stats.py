@@ -1,13 +1,16 @@
-from scipy import stats
 from typing import Tuple
+import warnings
+
 import numpy as np
 from numpy.typing import NDArray
+from scipy import stats
 
 from .gpr import GPR
-from .sampling import uniform_sampling, lhs_sampling
+from .sampling import lhs_sampling, uniform_sampling
 from .utils import calculate_volume
 
-def conf_interval(x: NDArray, conf_at: float):
+
+def conf_interval(x: NDArray[np.float_], conf_at: float) -> tuple[float, float]:
     """Calculate Confidence interval
 
     Args:
@@ -18,11 +21,13 @@ def conf_interval(x: NDArray, conf_at: float):
         [type]: [description]
     """
     if x.shape[0] <= 1:
-        raise ValueError(f"Elements in the input samples vector <= 1. Elements shape is {x.shape}")
+        warnings.warn(f"Elements in the input samples vector <= 1. Elements shape is {x.shape}")
+        # raise ValueError(f"Elements in the input samples vector <= 1. Elements shape is {x.shape}")
+        return 0,0
     mean, std = x.mean(), x.std(ddof=1)
-    conf_intveral = stats.norm.interval(conf_at, loc=mean, scale=std)
+    # conf_intveral = stats.norm.interval(conf_at, loc=mean, scale=std)
     
-    return conf_intveral
+    return stats.norm.interval(conf_at, loc=mean, scale=std)
 
 def calculate_mc_integral(x_train, y_train, region_support, tf_dim, R, M, gpr_model, oracle_info, rng, sampling_type):
     model = GPR(gpr_model)
@@ -147,11 +152,11 @@ def mc_step(x_train, y_train, region_support, tf_dim, alpha, R, M, gpr_model, or
     
     minQuantile = np.zeros((R, 1))
     maxQuantile = np.zeros((R, 1))
-    
+    model = GPR(gpr_model)
+    model.fit(x_train, y_train)
     for iterate in range(R):
         # model = OK_Rmodel_kd_nugget(X, Y, 0, 2, gpr_params)
-        model = GPR(gpr_model)
-        model.fit(x_train, y_train)
+        
         
         if sampling_type == "lhs_sampling":
             samples = lhs_sampling(M, region_support, tf_dim, oracle_info, rng)

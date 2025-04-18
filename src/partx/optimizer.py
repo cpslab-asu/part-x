@@ -1,40 +1,35 @@
-import time
-import numpy as np
-import pickle
 import logging
+import pickle
+import time
 from copy import deepcopy
 from pathlib import Path
+from typing import Any, Callable, Tuple
+
+import numpy as np
+from numpy.random import Generator
+from numpy.typing import NDArray
 from treelib import Tree
 from treelib.node import Node
-from typing import Callable, Tuple
-from numpy.typing import NDArray
-from numpy.random import Generator
 
-from .sampling import lhs_sampling, uniform_sampling, OOBError
-from .utils import (
-    compute_robustness, 
-    calculate_volume, 
-    branch_region, 
-    divide_points, 
-    OracleCreator, 
-    Fn
-)
-from .stats import (
-    estimate_quantiles, 
-    classification,
-    calculate_mc_integral,
-    assign_budgets
-)
-from .gpr import GPRSkeleton
 from .bo import BO_Interface, BOSampling
+from .gpr import GPRSkeleton
 from .results import fv_using_gp
-
+from .sampling import OOBError, lhs_sampling, uniform_sampling
+from .stats import assign_budgets, calculate_mc_integral, classification, estimate_quantiles
+from .utils import (
+    Fn,
+    OracleCreator,
+    branch_region,
+    calculate_volume,
+    compute_robustness,
+    divide_points,
+)
 
 
 class PartXOptions:
     def __init__(self, 
                  BENCHMARK_NAME:str, 
-                 init_reg_sup:NDArray, 
+                 init_reg_sup:NDArray[np.float_], 
                  tf_dim: int,
                  max_budget: int, 
                  init_budget:int, 
@@ -44,7 +39,7 @@ class PartXOptions:
                  R:int, 
                  M:int, 
                  delta:float, 
-                 fv_quantiles_for_gp:list, 
+                 fv_quantiles_for_gp:list[float], 
                  branching_factor:int, 
                  uniform_partitioning:bool, 
                  start_seed:int, 
@@ -136,7 +131,7 @@ class PartXNode:
         self.branch_dir = branch_dir
         
 
-    def samples_management_unclassified(self, test_function: Fn, options: PartXOptions, oracle_info: OracleCreator, rng: Generator):
+    def samples_management_unclassified(self, test_function: Fn, options: PartXOptions, oracle_info: OracleCreator, rng: Generator) -> str:
         """Method to manage samples in subregion which is unclassified (r, r+, r-)
 
         Args:
@@ -189,7 +184,7 @@ class PartXNode:
             self.region_class = "i"
         return self.new_region_class
     
-    def samples_management_classified(self, num_samples: int, test_function: Fn, options: PartXOptions, oracle_info: OracleCreator, rng: Generator, fin_cs: bool = False):
+    def samples_management_classified(self, num_samples: int, test_function: Fn, options: PartXOptions, oracle_info: OracleCreator, rng: Generator, fin_cs: bool = False) -> str:
         """Method to manage samples in where continued sampling is to be performed.
 
         Args:
@@ -229,7 +224,8 @@ class PartXNode:
 
         return self.new_region_class
 
-def run_single_replication(inputs: Tuple[int, PartXOptions, Callable[[NDArray], float], OracleCreator, Path]):
+def run_single_replication(inputs: tuple[int, PartXOptions, Callable[[NDArray[np.float_]], float], OracleCreator, Path])->tuple[Any, Any,Any, Any]:
+    
     replication_number, options, test_function, oracle_info, benchmark_result_directory = inputs
 
     seed = options.start_seed + replication_number
@@ -253,20 +249,20 @@ def run_single_replication(inputs: Tuple[int, PartXOptions, Callable[[NDArray], 
 
     fh.setFormatter(formatter)
     log.addHandler(fh)
-    log.info("Information about Replication {}".format(replication_number))
-    log.info("Running {} Replication {} with seed {}".format(BENCHMARK_NAME, replication_number, seed))
+    log.info(f"Information about Replication {replication_number}")
+    log.info(f"Running {BENCHMARK_NAME} Replication {replication_number} with seed {seed}")
     log.info("**************************************************")
     log.info("Options File:")
     options_results = vars(options)
     for key, value in options_results.items():
-        log.info("{} : {}".format(key, value))
+        log.info(f"{key} : {value}")
     log.info("**************************************************")
-    log.info("Budget Used = {}".format(tf_wrapper.count))
-    log.info("Budget Available (Max Budget) = {}".format(options.max_budget))
+    log.info(f"Budget Used = {tf_wrapper.count}")
+    log.info(f"Budget Available (Max Budget) = {options.max_budget}")
     log.info("**************************************************")
     log.info("**************************************************")
     log.info("***************Replication Start******************")
-    print("Started replication {}".format(replication_number))
+    print(f"Started replication {replication_number}")
 
 
     rng = np.random.default_rng(seed)

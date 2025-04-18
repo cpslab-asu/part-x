@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import Callable, List, Tuple
 import numpy as np
 from numpy.typing import NDArray
 import time
@@ -15,14 +15,14 @@ class PointHistory:
     output: float
 
 class Fn:
-    def __init__(self, func):
+    def __init__(self, func: Callable[[NDArray[np.float_]], float]) -> None:
         self.func = func
         self.count = 0
         self.point_history = []
         self.point_history2 = []
         self.simultation_time = []
 
-    def __call__(self, *args, **kwargs):        
+    def __call__(self, *args, **kwargs) -> float:        
         self.count = self.count + 1
         sim_time_start = time.perf_counter()
         rob_val = self.func(*args)

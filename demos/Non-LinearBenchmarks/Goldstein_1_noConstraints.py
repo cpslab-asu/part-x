@@ -29,13 +29,13 @@ init_reg_sup = np.array([[-1., 1.], [-1., 1.]])
 tf_dim = 2
 
 # Max Budget is set to 500
-max_budget = 500
+max_budget = 2000
 
 # Initial Sampling in the subregion is set to 20
-init_budget = 20
+init_budget = 10
 
 # BO sampling in each subregion is set to 20
-bo_budget = 20
+bo_budget = 10
 
 # Continued Sampling for subregions is set to 100
 cs_budget = 100
@@ -48,8 +48,8 @@ n_tries_BO = 1
 alpha = 0.05
 
 # R and M for quantile estimation in subregions is set 10 and 100 respectively
-R = 10
-M = 100
+R = 20
+M = 500
 
 # Minimum subregion cutoff is set 0.001. Anything less than 0.001 of the voulme of the hypercube will be calssified as unknown
 delta = 0.001
@@ -71,21 +71,21 @@ gpr_model = InternalGPR()
 bo_model = InternalBO()
 
 # Defining the sampling types
-init_sampling_type = "lhs_sampling"
-cs_sampling_type = "lhs_sampling"
-q_estim_sampling = "lhs_sampling"
-mc_integral_sampling_type = "lhs_sampling"
-results_sampling_type = "lhs_sampling"
+init_sampling_type = "uniform_sampling"
+cs_sampling_type = "uniform_sampling"
+q_estim_sampling = "uniform_sampling"
+mc_integral_sampling_type = "uniform_sampling"
+results_sampling_type = "uniform_sampling"
 results_at_confidence = 0.95
 
 # Run Part-X for 5 macro-replications
-num_macro_reps = 4
+num_macro_reps = 1
 
 # All benchmarks will be stored in this folder
-results_folder_name = "NLF"
+results_folder_name = "NLF3"
 
 # Run all the replication serially. If > 1, will run the replications parallaly.
-num_cores = 4
+num_cores = 1
 
 # Run Part-X
 results = run_partx(BENCHMARK_NAME, test_function, oracle_fn, num_macro_reps, init_reg_sup, tf_dim,

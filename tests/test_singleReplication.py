@@ -138,7 +138,7 @@ def test3_single_replication(oracle_info:OracleCreator, data_path: pathlib.Path)
     inputs = (0, options, internal_function, oracle_info, pathlib.Path("tests/optimizer"))
     t = time.time()
     run_single_replication(inputs)
-    with open("./tests/optimizer/Testing_t3_result_generating_files/Testing_t3_0.pkl", "rb") as f:
+    with open("tests/optimizer/Testing_t3_result_generating_files/Testing_t3_0.pkl", "rb") as f:
         
         ftree = pickle.load(f)
 

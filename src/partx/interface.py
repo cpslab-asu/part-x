@@ -1,23 +1,23 @@
-import pickle
-import pathlib
-import os
-import time
 import csv
+import os
+import pathlib
+import pickle
+import time
+from dataclasses import dataclass
+from typing import Callable, Dict, List, Tuple, Union
+
 import numpy as np
-from typing import Callable, Dict, Tuple, Union
 from numpy.typing import NDArray
 from pathos.multiprocessing import ProcessingPool as Pool
-from dataclasses import dataclass
-from typing import Any, List, Sequence, Callable
-from treelib import Tree
-from staliro import Sample
 from staliro.optimizers import ObjFunc, Optimizer
+from treelib import Tree
 
-from .gpr import GPRSkeleton
 from .bo import BO_Interface
+from .gpr import GPRSkeleton
 from .optimizer import PartXOptions, run_single_replication
 from .results import generate_statistics
 from .utils import OracleCreator
+
 
 def run_partx(BENCHMARK_NAME:str, test_function:Callable[[NDArray], float], oracle_function, num_macro_reps:int, init_reg_sup:NDArray, tf_dim:int,
                 max_budget:int, init_budget:int, bo_budget:int, cs_budget:int, 
